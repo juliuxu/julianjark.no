@@ -41,3 +41,6 @@ jobs:
           UNRAID_HTTP_PASSWORD: ${{ secrets.UNRAID_HTTP_PASSWORD }}
           UNRAID_USERNAME: ${{ secrets.UNRAID_USERNAME }}
           UNRAID_PASSWORD: ${{ secrets.UNRAID_PASSWORD }}
+
+      - name: Purge cache from URL's
+        run: bash ./scripts/cachePurge.bash
