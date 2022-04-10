@@ -32,4 +32,4 @@ jobs:
           platforms: linux/amd64
           # platforms: linux/amd64,linux/arm64
           push: true
-          tags: ghcr.io/juliuxu/julianjark.no:latest
+          tags: ghcr.io/${{ github.repository }}:latest
