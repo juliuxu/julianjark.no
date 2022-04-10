@@ -6,7 +6,7 @@ on:
       - "main"
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -33,3 +33,11 @@ jobs:
           # platforms: linux/amd64,linux/arm64
           push: true
           tags: ghcr.io/${{ github.repository }}:latest
+
+      - name: Deploy to unRaid server
+        run: bash ./updateLatestDockerOnUnraid.bash
+        env:
+          UNRAID_HTTP_USERNAME: ${{ secrets.UNRAID_HTTP_USERNAME }}
+          UNRAID_HTTP_PASSWORD: ${{ secrets.UNRAID_HTTP_PASSWORD }}
+          UNRAID_USERNAME: ${{ secrets.UNRAID_USERNAME }}
+          UNRAID_PASSWORD: ${{ secrets.UNRAID_PASSWORD }}
