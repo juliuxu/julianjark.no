@@ -11,5 +11,8 @@ routes=(
 for route in ${routes[@]}; do
     url=$baseUrl$route
     echo "Purging 🔥: $url"
-    curl $url -H 'Cache-Purge: 1' -I
+    curl $url -H 'Cache-Purge: 1' -I -s &
 done
+
+sleep 1
+echo "✅ Done"
