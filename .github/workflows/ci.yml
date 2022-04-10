@@ -35,7 +35,7 @@ jobs:
           tags: ghcr.io/${{ github.repository }}:latest
 
       - name: Deploy to unRaid server
-        run: bash ./updateLatestDockerOnUnraid.bash
+        run: bash ./scripts/updateLatestDockerOnUnraid.bash
         env:
           UNRAID_HTTP_USERNAME: ${{ secrets.UNRAID_HTTP_USERNAME }}
           UNRAID_HTTP_PASSWORD: ${{ secrets.UNRAID_HTTP_PASSWORD }}
