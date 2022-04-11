@@ -7,6 +7,7 @@ import {
   Scripts,
   ScrollRestoration,
 } from "@remix-run/react";
+import picoCss from "@picocss/pico/css/pico.classless.min.css";
 
 export const meta: MetaFunction = () => ({
   charset: "utf-8",
@@ -18,7 +19,7 @@ export function links() {
   return [
     {
       rel: "stylesheet",
-      href: "https://unpkg.com/@picocss/pico@latest/css/pico.classless.min.css",
+      href: picoCss,
     },
   ];
 }
