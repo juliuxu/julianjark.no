@@ -9,12 +9,13 @@ export const getDatabase = async (databaseId: string) => {
   const response = await notion.databases.query({
     database_id: databaseId,
   });
-  return response.results;
+
+  return onlyDatabasePages(response.results);
 };
 
 export const getPage = async (pageId: string) => {
   const response = await notion.pages.retrieve({ page_id: pageId });
-  return response;
+  return assertPageResponse(response);
 };
 
 export const getBlocks = async (blockId: string) => {
@@ -78,6 +79,31 @@ function isBlockObjectResponse(block: Block): block is BlockObjectResponse {
 
 type BlockObjectResponseWithChildren = BlockObjectResponse & {
   children?: BlockObjectResponseWithChildren;
+};
+
+// Database
+export type MaybeDatabasePageResponse = Awaited<
+  ReturnType<typeof notion.databases.query>
+>["results"][number];
+export type DatabasePageResponse = ReturnType<typeof onlyDatabasePages>[number];
+const onlyDatabasePages = (databasePages: MaybeDatabasePageResponse[]) => {
+  const result = [];
+  for (let databasePage of databasePages) {
+    if ("properties" in databasePage) {
+      result.push(databasePage);
+    }
+  }
+  return result;
+};
+
+// Page
+export type MaybePageResponse = Awaited<
+  ReturnType<typeof notion.pages.retrieve>
+>;
+export type PageResponse = ReturnType<typeof assertPageResponse>;
+const assertPageResponse = (page: MaybePageResponse) => {
+  if ("properties" in page) return page;
+  throw new Error("passed page is not a PageResponse");
 };
 
 // Duplicate all `rich_text` keys with `text` to fix react-notion-renderer

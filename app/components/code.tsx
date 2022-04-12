@@ -21,3 +21,13 @@ export default function Code({ code, language }: Props) {
     </div>
   );
 }
+
+type CollapsedCodeProps = Props & {
+  title?: React.ReactNode;
+};
+export const CollapsedCode = (props: CollapsedCodeProps) => (
+  <details>
+    <summary>{props.title ?? "Show code"}</summary>
+    <Code {...props} />
+  </details>
+);
