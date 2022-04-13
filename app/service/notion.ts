@@ -26,6 +26,29 @@ export const getTitle = (fromPage: PageResponse | DatabasePage) => {
     throw new Error("Could not get title from passed notion page");
   return title.title[0].plain_text;
 };
+export const getText = (name: string, fromPage: DatabasePage) => {
+  const property = fromPage.properties[name];
+  if (property?.type === "rich_text") {
+    return property.rich_text
+      .map((richTextBlock) => richTextBlock.plain_text)
+      .join("");
+  }
+  return undefined;
+};
+export const getCheckbox = (name: string, fromPage: DatabasePage) => {
+  const property = fromPage.properties[name];
+  if (property?.type === "checkbox") {
+    return property.checkbox;
+  }
+  return undefined;
+};
+export const getSelect = (name: string, fromPage: DatabasePage) => {
+  const property = fromPage.properties[name];
+  if (property?.type === "select") {
+    return property.select?.name;
+  }
+  return undefined;
+};
 
 export const findPageBySlugPredicate =
   (slug: string) => (page: PageResponse | DatabasePage) =>
