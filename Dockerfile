@@ -9,6 +9,7 @@ FROM base as deps
 WORKDIR /myapp
 
 ADD package.json package-lock.json ./
+ADD ./patches ./patches
 RUN npm install --production=false
 
 # Setup production node_modules
