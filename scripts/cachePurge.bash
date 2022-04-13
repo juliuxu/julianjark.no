@@ -2,16 +2,16 @@
 
 baseUrl=https://julianjark.no
 
-# Manual list of routes to purge caches on 
-routes=(
-    "/"
-    "/cacheme"
-)
+echo "🌍 Fetching sitemap"
+response=$(curl -H 'Cache-Purge: 1' -s --fail $baseUrl/sitemap.list)
+if [ $? -ne 0 ]; then
+    echo "❌ Failed fetching sitemap"
+    exit 1
+fi
 
-for route in ${routes[@]}; do
-    url=$baseUrl$route
-    echo "Purging 🔥: $url"
-    curl $url -H 'Cache-Purge: 1' -I -s &
+for url in $response; do
+    echo "🔥 Purging: $url"
+    curl $url -H 'Cache-Purge: 1' -I -s & > /dev/null
 done
 
 sleep 1
