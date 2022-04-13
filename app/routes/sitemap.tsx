@@ -8,7 +8,7 @@ import config from "~/config.server";
 import { meta as indexMeta } from "~/routes/index";
 import { meta as presentasjonerMeta } from "~/routes/presentasjoner/index";
 
-interface Page {
+export interface Page {
   title: string;
   path: string;
   children: Page[];
@@ -56,12 +56,31 @@ const pagesFromNotionDatabase = async (
   return result;
 };
 
-export const loader: LoaderFunction = async ({ request }) => {
+export function flattenDepthFirst<T extends { children: T[] }>(root: T) {
+  const result: T[] = [];
+
+  const stack: T[] = [];
+  let current: T | undefined = root;
+  while (current !== undefined) {
+    const currentWithoutChildren = { ...current, children: [] };
+    result.push(currentWithoutChildren);
+    stack.unshift(...current.children);
+    current = stack.shift();
+  }
+
+  return result;
+}
+
+export const asUrlList = (rootPage: Page): string[] =>
+  flattenDepthFirst(rootPage).map((page) => `${config.baseUrl}${page.path}`);
+
+export const loader: LoaderFunction = async () => {
   const sitemapTree = await getSitemapTree();
-  return json(sitemapTree);
+  return json({ sitemapTree, urlList: asUrlList(sitemapTree) });
 };
 
 export const links: LinksFunction = () => [...commonLinks()];
+
 export default function Sitemap() {
   const data = useLoaderData();
   return <Code code={JSON.stringify(data, null, 2)} language={"json"} />;
