@@ -22,11 +22,9 @@ export const loader: LoaderFunction = async () => {
 };
 
 export const links: LinksFunction = () => [...commonLinks()];
-export const meta: MetaFunction = () => {
-  return {
-    title: "Julian Jark",
-  };
-};
+export const meta: MetaFunction = () => ({
+  title: "Julian Jark",
+});
 
 export default function Index() {
   const { landingPageBlocks, topLevelMenuData } = useLoaderData();

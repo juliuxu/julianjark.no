@@ -1,4 +1,9 @@
-import { json, LinksFunction, LoaderFunction } from "@remix-run/node";
+import {
+  json,
+  LinksFunction,
+  LoaderFunction,
+  MetaFunction,
+} from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
 import { getPresentasjoner, getTitle, slugify } from "~/service/notion";
 import { DatabasePage } from "~/service/notionApi.server";
@@ -17,6 +22,9 @@ export const loader: LoaderFunction = async () => {
   });
 };
 
+export const meta: MetaFunction = () => ({
+  title: "Presentasjoner",
+});
 export const links: LinksFunction = () => [...commonLinks()];
 
 export default function Index() {
