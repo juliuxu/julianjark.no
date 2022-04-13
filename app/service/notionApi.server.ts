@@ -5,9 +5,22 @@ const notion = new Client({
   auth: process.env.NOTION_TOKEN,
 });
 
-export const getDatabase = async (databaseId: string) => {
+type DatabaseSort =
+  | {
+      property: string;
+      direction: "ascending" | "descending";
+    }
+  | {
+      timestamp: "created_time" | "last_edited_time";
+      direction: "ascending" | "descending";
+    };
+export const getDatabasePages = async (
+  databaseId: string,
+  sorts?: DatabaseSort[]
+) => {
   const response = await notion.databases.query({
     database_id: databaseId,
+    sorts,
   });
 
   return onlyDatabasePages(response.results);
@@ -37,7 +50,7 @@ export const getBlocks = async (blockId: string) => {
 
 export const getBlocksWithChildren = async (
   blockId: string
-): Promise<BlockObjectResponseWithChildren[]> => {
+): Promise<BlockWithChildren[]> => {
   const blocks = await getBlocks(blockId);
   // Retrieve block children for nested blocks (one level deep), for example toggle blocks
   // https://developers.notion.com/docs/working-with-page-content#reading-nested-blocks
@@ -61,31 +74,31 @@ export const getBlocksWithChildren = async (
       )?.children;
     }
     return innerBlock;
-  }) as BlockObjectResponseWithChildren[];
+  }) as BlockWithChildren[];
 
   return blocksWithChildren;
 };
 
 // Some typescript magic to extract the correct type
-type Block = ListBlockChildrenResponse["results"][number];
-const assertBlockObjectResponse = (block: Block) => {
+type MaybeBlockResponse = ListBlockChildrenResponse["results"][number];
+const assertBlockObjectResponse = (block: MaybeBlockResponse) => {
   if ("type" in block) return block;
   throw new Error("passed block is not a BlockObjeectResponse");
 };
-type BlockObjectResponse = ReturnType<typeof assertBlockObjectResponse>;
-function isBlockObjectResponse(block: Block): block is BlockObjectResponse {
+type Block = ReturnType<typeof assertBlockObjectResponse>;
+function isBlockObjectResponse(block: MaybeBlockResponse): block is Block {
   return "type" in block;
 }
 
-type BlockObjectResponseWithChildren = BlockObjectResponse & {
-  children?: BlockObjectResponseWithChildren;
+type BlockWithChildren = Block & {
+  children?: BlockWithChildren;
 };
 
 // Database
 export type MaybeDatabasePageResponse = Awaited<
   ReturnType<typeof notion.databases.query>
 >["results"][number];
-export type DatabasePageResponse = ReturnType<typeof onlyDatabasePages>[number];
+export type DatabasePage = ReturnType<typeof onlyDatabasePages>[number];
 const onlyDatabasePages = (databasePages: MaybeDatabasePageResponse[]) => {
   const result = [];
   for (let databasePage of databasePages) {
@@ -108,7 +121,7 @@ const assertPageResponse = (page: MaybePageResponse) => {
 
 // Duplicate all `rich_text` keys with `text` to fix react-notion-renderer
 // as it is not currently updated to the new format
-const fixRichTextToText = (block: BlockObjectResponse) => {
+const fixRichTextToText = (block: Block) => {
   const innerBlock = block as Record<string, any>;
   return Object.keys(innerBlock).reduce((acc, key) => {
     const current = innerBlock[key];
@@ -118,5 +131,5 @@ const fixRichTextToText = (block: BlockObjectResponse) => {
       acc[key] = current;
     }
     return acc;
-  }, {} as Record<string, any>) as BlockObjectResponse;
+  }, {} as Record<string, any>) as Block;
 };

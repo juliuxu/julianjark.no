@@ -1,5 +1,5 @@
 import { NavLink } from "@remix-run/react";
-import { getTitle, notionDrivenPages, slugify } from "~/service/notion";
+import { getTitle, getNotionDrivenPages, slugify } from "~/service/notion";
 
 interface Page {
   title: string;
@@ -18,7 +18,7 @@ export const getTopLevelPages = async () => {
   result.push({ title: "Drinker", path: "/drinker" });
   result.push({ title: "Presentasjoner", path: "/presentasjoner" });
 
-  for (const notionDrivenPage of await notionDrivenPages()) {
+  for (const notionDrivenPage of await getNotionDrivenPages()) {
     const title = getTitle(notionDrivenPage);
     result.push({
       title,
@@ -30,31 +30,30 @@ export const getTopLevelPages = async () => {
 };
 
 // TODO: Perhaps this should be a page instead?
-export const loader = async (): Promise<Props> => {
-  const topLevelPages = await getTopLevelPages();
-  return { topLevelPages };
-};
+export const loader = async (): Promise<Page[]> => await getTopLevelPages();
 
 interface Props {
   topLevelPages: Page[];
 }
 export default function TopLevelMenu({ topLevelPages }: Props) {
   return (
-    <nav>
-      <ul>
-        {topLevelPages.slice(0, 1).map((page) => (
-          <li key={page.path}>
-            <NavLink to={page.path}>{page.title}</NavLink>
-          </li>
-        ))}
-      </ul>
-      <ul>
-        {topLevelPages.slice(1).map((page) => (
-          <li key={page.path}>
-            <NavLink to={page.path}>{page.title}</NavLink>
-          </li>
-        ))}
-      </ul>
-    </nav>
+    <header>
+      <nav>
+        <ul>
+          {topLevelPages.slice(0, 1).map((page) => (
+            <li key={page.path}>
+              <NavLink to={page.path}>{page.title}</NavLink>
+            </li>
+          ))}
+        </ul>
+        <ul>
+          {topLevelPages.slice(1).map((page) => (
+            <li key={page.path}>
+              <NavLink to={page.path}>{page.title}</NavLink>
+            </li>
+          ))}
+        </ul>
+      </nav>
+    </header>
   );
 }

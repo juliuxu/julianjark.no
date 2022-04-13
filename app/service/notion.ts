@@ -1,8 +1,8 @@
 import config from "~/config.server";
 import {
-  DatabasePageResponse,
+  DatabasePage,
   getBlocksWithChildren,
-  getDatabase,
+  getDatabasePages,
   PageResponse,
 } from "./notionApi.server";
 
@@ -18,7 +18,7 @@ export function slugify(text: string) {
 }
 
 // Notion/Domain helpers
-export const getTitle = (fromPage: PageResponse | DatabasePageResponse) => {
+export const getTitle = (fromPage: PageResponse | DatabasePage) => {
   const title = Object.values(fromPage.properties).find(
     (property) => property.type === "title"
   );
@@ -27,21 +27,33 @@ export const getTitle = (fromPage: PageResponse | DatabasePageResponse) => {
   return title.title[0].plain_text;
 };
 
-export const notionDrivenPages = memoAsync(
-  "notionDrivenPages",
-  async () => await getDatabase(config.notionDrivenPagesDatabaseId)
-);
+export const findPageBySlugPredicate =
+  (slug: string) => (page: PageResponse | DatabasePage) =>
+    slugify(getTitle(page)) === slug;
 
-export const landingPage = memoAsync(
+// Async
+export const getLandingPage = memoAsync(
   "landingPage",
   async () => await getBlocksWithChildren(config.landingPageId)
+);
+
+export const getNotionDrivenPages = memoAsync(
+  "notionDrivenPages",
+  async () => await getDatabasePages(config.notionDrivenPagesDatabaseId)
+);
+
+export const getPresentasjoner = memoAsync(
+  "presentasjoner",
+  async () =>
+    await getDatabasePages(config.presentasjonerDatabaseId, [
+      { timestamp: "created_time", direction: "ascending" },
+    ])
 );
 
 // Util
 // Simple memo for async functions
 // TODO: This might be a bit hacky and cause problems
 function memoAsync<T>(name: string, fn: () => Promise<T>): () => Promise<T> {
-  console.log("memoAsync called for ", name);
   let previousResult: Promise<T> | undefined;
   const resultFn = async () => {
     if (previousResult !== undefined) return previousResult;

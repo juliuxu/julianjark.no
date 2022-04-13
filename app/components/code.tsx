@@ -23,10 +23,11 @@ export default function Code({ code, language }: Props) {
 }
 
 type CollapsedCodeProps = Props & {
+  open?: boolean;
   title?: React.ReactNode;
 };
 export const CollapsedCode = (props: CollapsedCodeProps) => (
-  <details>
+  <details open={props.open}>
     <summary>{props.title ?? "Show code"}</summary>
     <Code {...props} />
   </details>

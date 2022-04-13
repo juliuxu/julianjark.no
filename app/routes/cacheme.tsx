@@ -1,5 +1,8 @@
-import { json } from "@remix-run/node";
+import { json, LinksFunction } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
+import { commonLinks } from "~/common";
+
+export const links: LinksFunction = () => [...commonLinks()];
 
 export async function loader() {
   await new Promise((r) => setTimeout(r, 1000));

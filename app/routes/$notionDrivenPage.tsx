@@ -1,24 +1,30 @@
 import { Render } from "@9gustin/react-notion-render";
-import { json, LoaderFunction, MetaFunction } from "@remix-run/node";
+import {
+  json,
+  LinksFunction,
+  LoaderFunction,
+  MetaFunction,
+} from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { CollapsedCode } from "~/components/code";
-import { getTitle, notionDrivenPages, slugify } from "~/service/notion";
+import TopLevelMenu, {
+  loader as topLevelMenuLoader,
+} from "~/components/topLevelMenu";
+import {
+  getTitle,
+  getNotionDrivenPages,
+  findPageBySlugPredicate,
+} from "~/service/notion";
 import { getBlocksWithChildren } from "~/service/notionApi.server";
+import { assertItemFound, commonLinks } from "~/common";
 
 export const loader: LoaderFunction = async ({
-  params: { notionDrivenPage: requestedNotionDrivenPageSlug },
+  params: { notionDrivenPage: requestedNotionDrivenPageSlug = "" },
 }) => {
-  const currentNotionPage = (await notionDrivenPages()).find(
-    (notionDrivenPage) =>
-      slugify(getTitle(notionDrivenPage)) === requestedNotionDrivenPageSlug
+  const currentNotionPage = (await getNotionDrivenPages()).find(
+    findPageBySlugPredicate(requestedNotionDrivenPageSlug)
   );
-
-  // 404 on MISS
-  if (!currentNotionPage) {
-    throw new Response("Not Found", {
-      status: 404,
-    });
-  }
+  assertItemFound(currentNotionPage);
 
   // Get current page blocks
   const currentNotionPageBlocks = await getBlocksWithChildren(
@@ -27,8 +33,11 @@ export const loader: LoaderFunction = async ({
   return json({
     currentNotionPage,
     currentNotionPageBlocks,
+    topLevelMenuData: await topLevelMenuLoader(),
   });
 };
+
+export const links: LinksFunction = () => [...commonLinks()];
 
 export const meta: MetaFunction = ({ data }) => {
   return {
@@ -39,9 +48,12 @@ export const meta: MetaFunction = ({ data }) => {
 export default function NotionDrivenPage() {
   const data = useLoaderData();
   return (
-    <main>
-      <Render blocks={data.currentNotionPageBlocks} />
-      <CollapsedCode language="json" code={JSON.stringify(data, null, 2)} />
-    </main>
+    <>
+      <TopLevelMenu topLevelPages={data.topLevelMenuData} />
+      <main>
+        <Render blocks={data.currentNotionPageBlocks} />
+        <CollapsedCode language="json" code={JSON.stringify(data, null, 2)} />
+      </main>
+    </>
   );
 }
