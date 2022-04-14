@@ -46,6 +46,9 @@ type PresentationProperties = {
   "Slide number": boolean;
   Transition: Transition;
   "Hide progress bar": boolean;
+  "Hide controls": boolean;
+
+  "Show debug slide": boolean;
 };
 
 const parsePresentationProperties = (
@@ -64,8 +67,9 @@ const parsePresentationProperties = (
       : defaultTransition,
 
     "Slide number": getCheckbox("Slide number", page) ?? false,
-
     "Hide progress bar": getCheckbox("Hide progress bar", page) ?? false,
+    "Hide controls": getCheckbox("Hide controls", page) ?? false,
+    "Show debug slide": getCheckbox("Show debug slide", page) ?? false,
   };
   return result;
 };

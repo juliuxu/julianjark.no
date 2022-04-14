@@ -4,6 +4,7 @@ import Reveal from "reveal.js";
 import RevealNotes from "reveal.js/plugin/notes/notes";
 
 import type { PreparedData } from "~/routes/presentasjoner/$presentasjon";
+import Code from "./code";
 
 type Props = PreparedData;
 export default function NotionRevealPresentation({
@@ -17,6 +18,7 @@ export default function NotionRevealPresentation({
       slideNumber: properties["Slide number"],
       transition: properties.Transition,
       progress: !properties["Hide progress bar"],
+      controls: !properties["Hide controls"],
       plugins: [RevealNotes],
     });
     setDeck(newDeck);
@@ -27,9 +29,9 @@ export default function NotionRevealPresentation({
   return (
     <div className="reveal">
       <div className="slides">
-        {process.env.NODE_ENV === "development" && (
-          <section data-visibility="shown">
-            {/* <Code language="json" code={JSON.stringify(properties, null, 2)} /> */}
+        {properties["Show debug slide"] && (
+          <section>
+            <Code language="json" code={JSON.stringify(properties, null, 2)} />
           </section>
         )}
 
