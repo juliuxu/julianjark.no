@@ -1,3 +1,4 @@
+declare module "reveal.js/plugin/notes/notes";
 declare module "reveal.js" {
   export = R.RevealClass;
 
