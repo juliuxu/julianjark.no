@@ -19,14 +19,40 @@ import { assertItemFound } from "~/common";
 
 import { Block } from "~/service/notion.types";
 
-import revealCss from "reveal.js/dist/reveal.css";
-import { defaultTheme, Theme, themeKeys } from "./theme[.]css";
 import prismStyles from "prismjs/themes/prism-tomorrow.css";
+import revealCss from "reveal.js/dist/reveal.css";
+import blackRevealTheme from "reveal.js/dist/theme/black.css";
+import whiteRevealTheme from "reveal.js/dist/theme/white.css";
+import leagueRevealTheme from "reveal.js/dist/theme/league.css";
+import beigeRevealTheme from "reveal.js/dist/theme/beige.css";
+import skyRevealTheme from "reveal.js/dist/theme/sky.css";
+import nightRevealTheme from "reveal.js/dist/theme/night.css";
+import serifRevealTheme from "reveal.js/dist/theme/serif.css";
+import simpleRevealTheme from "reveal.js/dist/theme/simple.css";
+import solarizedRevealTheme from "reveal.js/dist/theme/solarized.css";
+import bloodRevealTheme from "reveal.js/dist/theme/blood.css";
+import moonRevealTheme from "reveal.js/dist/theme/moon.css";
+
+const themes = {
+  black: blackRevealTheme,
+  white: whiteRevealTheme,
+  league: leagueRevealTheme,
+  beige: beigeRevealTheme,
+  sky: skyRevealTheme,
+  night: nightRevealTheme,
+  serif: serifRevealTheme,
+  simple: simpleRevealTheme,
+  solarized: solarizedRevealTheme,
+  blood: bloodRevealTheme,
+  moon: moonRevealTheme,
+} as const;
+export type Theme = keyof typeof themes;
+export const themeKeys = Object.keys(themes) as Theme[];
+export const defaultTheme: Theme = "black";
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: prismStyles },
   { rel: "stylesheet", href: revealCss },
-  { rel: "stylesheet", href: "theme.css" },
 ];
 
 const transitions = [
@@ -148,5 +174,10 @@ const prepare = (data: Data): PreparedData => {
 
 export default function Presentasjon() {
   const data = useLoaderData<Data>();
-  return <NotionRevealPresentation {...prepare(data)} />;
+  return (
+    <>
+      <link rel="stylesheet" href={themes[data.properties.Theme]} />
+      <NotionRevealPresentation {...prepare(data)} />
+    </>
+  );
 }
