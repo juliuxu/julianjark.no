@@ -187,11 +187,13 @@ const prepare = (data: Data): PreparedData => {
 
     // Take while we have not encountered a h2_heading
     while (true) {
-      const current = blockListInner.shift();
-      if (current === undefined || current.type === "heading_2") {
+      if (
+        blockListInner[0] === undefined ||
+        blockListInner[0].type === "heading_2"
+      ) {
         break;
       }
-      content.push(current);
+      content.push(blockListInner.shift()!);
     }
 
     // Group the rest based on h2 headings into subSlides
