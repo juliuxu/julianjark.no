@@ -147,7 +147,9 @@ const groupByBlockType = (type: Block["type"], blocks: Block[]) => {
     }
     currentGroup.push(block);
   }
-  groups.push(currentGroup);
+  if (currentGroup.length > 0) {
+    groups.push(currentGroup);
+  }
 
   return groups;
 };
