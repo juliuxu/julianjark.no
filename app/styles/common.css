@@ -1,0 +1,4 @@
+/* Override picocss */
+:where(:root) {
+  cursor: unset;
+}

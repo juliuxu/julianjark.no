@@ -1,11 +1,16 @@
 import { LinksFunction } from "@remix-run/node";
 import picoCss from "@picocss/pico/css/pico.classless.min.css";
+import commonStyles from "~/styles/common.css";
 import { links as codeLinks } from "./components/code";
 
 export const commonLinks: LinksFunction = () => [
   {
     rel: "stylesheet",
     href: picoCss,
+  },
+  {
+    rel: "stylesheet",
+    href: commonStyles,
   },
 
   // Showing code with prismjs
