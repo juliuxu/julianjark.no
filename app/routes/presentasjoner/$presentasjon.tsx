@@ -116,14 +116,7 @@ export const loader: LoaderFunction = async ({
   const properties = parsePresentationProperties(page);
   const blocks = await getBlocks(page.id);
 
-  return json<Data>(
-    { page, properties, blocks },
-    {
-      headers: {
-        "set-cookie": `presentation-theme=${properties.Theme}; Max-Age=60`,
-      },
-    }
-  );
+  return json<Data>({ page, properties, blocks });
 };
 
 export const meta: MetaFunction = ({ data }) => {
