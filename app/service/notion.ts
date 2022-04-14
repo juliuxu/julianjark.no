@@ -55,23 +55,16 @@ export const findPageBySlugPredicate =
     slugify(getTitle(page)) === slug;
 
 // Async
-export const getLandingPage = memoAsync(
-  "landingPage",
-  async () => await getBlocksWithChildren(config.landingPageId)
-);
+export const getLandingPage = async () =>
+  await getBlocksWithChildren(config.landingPageId);
 
-export const getNotionDrivenPages = memoAsync(
-  "notionDrivenPages",
-  async () => await getDatabasePages(config.notionDrivenPagesDatabaseId)
-);
+export const getNotionDrivenPages = async () =>
+  await getDatabasePages(config.notionDrivenPagesDatabaseId);
 
-export const getPresentasjoner = memoAsync(
-  "presentasjoner",
-  async () =>
-    await getDatabasePages(config.presentasjonerDatabaseId, [
-      { timestamp: "created_time", direction: "ascending" },
-    ])
-);
+export const getPresentasjoner = async () =>
+  await getDatabasePages(config.presentasjonerDatabaseId, [
+    { timestamp: "created_time", direction: "ascending" },
+  ]);
 
 // Util
 // Simple memo for async functions

@@ -18,7 +18,7 @@ export const loader: LoaderFunction = async () => {
 
   return json({
     presentasjoner,
-    topLevelMenuData: await topLevelMenuLoader(),
+    ...(await topLevelMenuLoader()),
   });
 };
 
@@ -32,7 +32,7 @@ export default function Index() {
   const presentasjoner = data.presentasjoner as DatabasePage[];
   return (
     <>
-      <TopLevelMenu topLevelPages={data.topLevelMenuData} />
+      <TopLevelMenu sitemapTree={data.sitemapTree} />
       <main>
         <h1>Presentasjoner</h1>
         <ul>

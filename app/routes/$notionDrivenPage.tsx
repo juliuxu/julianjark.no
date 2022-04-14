@@ -33,7 +33,7 @@ export const loader: LoaderFunction = async ({
   return json({
     currentNotionPage,
     currentNotionPageBlocks,
-    topLevelMenuData: await topLevelMenuLoader(),
+    ...(await topLevelMenuLoader()),
   });
 };
 
@@ -49,7 +49,7 @@ export default function NotionDrivenPage() {
   const data = useLoaderData();
   return (
     <>
-      <TopLevelMenu topLevelPages={data.topLevelMenuData} />
+      <TopLevelMenu sitemapTree={data.sitemapTree} />
       <main>
         <Render blocks={data.currentNotionPageBlocks} />
         <CollapsedCode language="json" code={JSON.stringify(data, null, 2)} />

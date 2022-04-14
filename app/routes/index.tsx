@@ -17,7 +17,7 @@ export const loader: LoaderFunction = async () => {
   const landingPageBlocks = await getLandingPage();
   return json({
     landingPageBlocks,
-    topLevelMenuData: await topLevelMenuLoader(),
+    ...(await topLevelMenuLoader()),
   });
 };
 
@@ -27,16 +27,18 @@ export const meta: MetaFunction = () => ({
 });
 
 export default function Index() {
-  const { landingPageBlocks, topLevelMenuData } = useLoaderData();
+  const data = useLoaderData();
   return (
     <>
-      <TopLevelMenu topLevelPages={topLevelMenuData} />
+      <TopLevelMenu sitemapTree={data.sitemapTree} />
       <main>
-        <Render blocks={landingPageBlocks} />
+        <Render blocks={data.landingPageBlocks} />
         <CollapsedCode
           language="json"
-          code={JSON.stringify(landingPageBlocks, null, 2)}
-          title={`Response (${JSON.stringify(landingPageBlocks).length} bytes)`}
+          code={JSON.stringify(data.landingPageBlocks, null, 2)}
+          title={`Response (${
+            JSON.stringify(data.landingPageBlocks).length
+          } bytes)`}
         />
       </main>
     </>
