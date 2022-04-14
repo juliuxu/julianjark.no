@@ -20,6 +20,10 @@ export default function NotionRevealPresentation({
       progress: !properties["Hide progress bar"],
       controls: !properties["Hide controls"],
       plugins: [RevealNotes],
+
+      // This would get really annoying during a live presentation
+      // It will start nudging at the first vertical slide
+      controlsTutorial: false,
     });
     setDeck(newDeck);
 

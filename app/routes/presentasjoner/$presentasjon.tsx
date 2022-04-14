@@ -32,6 +32,7 @@ import simpleRevealTheme from "reveal.js/dist/theme/simple.css";
 import solarizedRevealTheme from "reveal.js/dist/theme/solarized.css";
 import bloodRevealTheme from "reveal.js/dist/theme/blood.css";
 import moonRevealTheme from "reveal.js/dist/theme/moon.css";
+import capraRevealTheme from "~/styles/capraRevealTheme.css";
 
 const themes = {
   black: blackRevealTheme,
@@ -45,6 +46,7 @@ const themes = {
   solarized: solarizedRevealTheme,
   blood: bloodRevealTheme,
   moon: moonRevealTheme,
+  capra: capraRevealTheme,
 } as const;
 export type Theme = keyof typeof themes;
 export const themeKeys = Object.keys(themes) as Theme[];
@@ -53,6 +55,13 @@ export const defaultTheme: Theme = "black";
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: prismStyles },
   { rel: "stylesheet", href: revealCss },
+
+  // Source sans is used a lot in the the themes
+  // As well as the capra theme
+  // Remix doesn't work well with fontsource, so have to inline it
+  { rel: "stylesheet", href: "/fontsource/source-sans-pro/index.css" },
+  { rel: "stylesheet", href: "/fontsource/source-sans-pro/400.css" },
+  { rel: "stylesheet", href: "/fontsource/source-sans-pro/700.css" },
 ];
 
 const transitions = [
@@ -131,7 +140,7 @@ const groupByBlockType = (type: Block["type"], blocks: Block[]) => {
   let currentGroup: Block[] = [];
   for (const block of blocks) {
     if (block.type === type) {
-      if (currentGroup.length > 1) {
+      if (currentGroup.length > 0) {
         groups.push(currentGroup);
       }
       currentGroup = [];
