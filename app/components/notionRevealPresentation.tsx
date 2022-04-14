@@ -29,10 +29,20 @@ export default function NotionRevealPresentation({
   return (
     <div className="reveal">
       <div className="slides">
-        {properties["Show debug slide"] && (
-          <section>
-            <Code language="json" code={JSON.stringify(properties, null, 2)} />
-          </section>
+        {properties["Show debug slides"] && (
+          <>
+            <section>
+              <h2>Properties</h2>
+              <Code
+                language="json"
+                code={JSON.stringify(properties, null, 2)}
+              />
+            </section>
+            <section>
+              <h2>Slides</h2>
+              <Code language="json" code={JSON.stringify(slides, null, 2)} />
+            </section>
+          </>
         )}
 
         {slides.map((slide) => (
@@ -41,6 +51,16 @@ export default function NotionRevealPresentation({
               <Render blocks={slide.notes as any} />
             </aside>
             <Render blocks={slide.content as any} />
+
+            {/* Vertical subslides */}
+            {slide.subSlides.map((subSlide) => (
+              <section>
+                <aside className="notes">
+                  <Render blocks={subSlide.notes as any} />
+                </aside>
+                <Render blocks={subSlide.content as any} />
+              </section>
+            ))}
           </section>
         ))}
       </div>

@@ -1,4 +1,5 @@
 import config from "~/config.server";
+import { RichTextItem } from "./notion.types";
 import {
   DatabasePage,
   getBlocksWithChildren,
@@ -29,9 +30,7 @@ export const getTitle = (fromPage: PageResponse | DatabasePage) => {
 export const getText = (name: string, fromPage: DatabasePage) => {
   const property = fromPage.properties[name];
   if (property?.type === "rich_text") {
-    return property.rich_text
-      .map((richTextBlock) => richTextBlock.plain_text)
-      .join("");
+    return getTextFromRichText(property.rich_text);
   }
   return undefined;
 };
@@ -49,6 +48,9 @@ export const getSelect = (name: string, fromPage: DatabasePage) => {
   }
   return undefined;
 };
+
+export const getTextFromRichText = (richText: RichTextItem[]) =>
+  richText.map((richTextBlock) => richTextBlock.plain_text).join("");
 
 export const findPageBySlugPredicate =
   (slug: string) => (page: PageResponse | DatabasePage) =>
