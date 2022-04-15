@@ -8,11 +8,11 @@ fieldset .debugButton {
   /* transition: visibility var(--transition); */
   visibility: hidden;
   opacity: 0;
-  transition: visibility 0s ease-in-out 0.2s, opacity 0.2s ease-in-out;
+  transition: opacity var(--transition);
 }
-fieldset::active .debugButton,
+fieldset:active .debugButton,
 fieldset:hover .debugButton {
   visibility: visible;
   opacity: 1;
-  transition: visibility 0s linear 0s, opacity 0.2s ease-in-out;
+  transition: opacity var(--transition);
 }
