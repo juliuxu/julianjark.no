@@ -1,5 +1,6 @@
 import { NavLink } from "@remix-run/react";
 import { getSitemapTree } from "~/routes/sitemap";
+import { DebugToggle } from "./debug";
 
 export const loader = async () => ({ sitemapTree: await getSitemapTree() });
 
@@ -13,17 +14,7 @@ export default function TopLevelMenu({ sitemapTree }: Props) {
             <NavLink to={sitemapTree.path}>{sitemapTree.title}</NavLink>
           </li>
           <li>
-            <fieldset>
-              <label htmlFor="debugMode" className="debugButton">
-                🧑‍💻
-                <input
-                  type="checkbox"
-                  id="debugMode"
-                  name="debugMode"
-                  role="switch"
-                />
-              </label>
-            </fieldset>
+            <DebugToggle />
           </li>
         </ul>
         <ul>
