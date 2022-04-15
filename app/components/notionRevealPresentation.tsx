@@ -3,8 +3,8 @@ import { useEffect, useState } from "react";
 import Reveal from "reveal.js";
 import RevealNotes from "reveal.js/plugin/notes/notes";
 
-import type { PreparedData } from "~/routes/presentasjoner/$presentasjon";
 import Code from "./code";
+import type { PreparedData } from "./notionRevealPrepare";
 
 type Props = PreparedData;
 export default function NotionRevealPresentation({

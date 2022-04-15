@@ -10,14 +10,21 @@ import NotionRevealPresentation from "~/components/notionRevealPresentation";
 import {
   findPageBySlugPredicate,
   getPresentasjoner,
-  getText,
   getTitle,
 } from "~/service/notion";
-import { getCheckbox, getSelect, getTextFromRichText } from "~/service/notion";
 import { DatabasePage, getBlocks } from "~/service/notionApi.server";
 import { assertItemFound } from "~/common";
 
 import { Block } from "~/service/notion.types";
+
+import type {
+  PresentationProperties,
+  Slide,
+} from "~/components/notionRevealPrepare";
+import {
+  prepareSlides,
+  parsePresentationProperties,
+} from "~/components/notionRevealPrepare";
 
 import prismStyles from "prismjs/themes/prism-tomorrow.css";
 import revealCss from "reveal.js/dist/reveal.css";
@@ -49,8 +56,12 @@ const themes = {
   capra: capraRevealTheme,
 } as const;
 export type Theme = keyof typeof themes;
-export const themeKeys = Object.keys(themes) as Theme[];
-export const defaultTheme: Theme = "black";
+const themeKeys = Object.keys(themes) as Theme[];
+const defaultTheme: Theme = "black";
+export const getThemeOrDefault = (maybeTheme: string) =>
+  themeKeys.includes(maybeTheme as Theme)
+    ? (maybeTheme as Theme)
+    : defaultTheme;
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: prismStyles },
@@ -64,56 +75,12 @@ export const links: LinksFunction = () => [
   { rel: "stylesheet", href: "/fontsource/source-sans-pro/700.css" },
 ];
 
-const transitions = [
-  "none",
-  "fade",
-  "slide",
-  "convex",
-  "concave",
-  "zoom",
-] as const;
-type Transition = typeof transitions[number];
-const defaultTransition: Transition = "slide";
-
-type PresentationProperties = {
-  Ingress?: string;
-  Theme: Theme;
-  "Slide number": boolean;
-  Transition: Transition;
-  "Hide progress bar": boolean;
-  "Hide controls": boolean;
-
-  "Show debug slides": boolean;
-};
-
-const parsePresentationProperties = (
-  page: DatabasePage
-): PresentationProperties => {
-  const themeProperty = getSelect("Theme", page) ?? "";
-  const transitionProperty = getSelect("Transition", page) ?? "";
-  const result: PresentationProperties = {
-    Ingress: getText("Ingress", page),
-    Theme: themeKeys.includes(themeProperty as Theme)
-      ? (themeProperty as Theme)
-      : defaultTheme,
-
-    Transition: transitions.includes(transitionProperty as Transition)
-      ? (transitionProperty as Transition)
-      : defaultTransition,
-
-    "Slide number": getCheckbox("Slide number", page) ?? false,
-    "Hide progress bar": getCheckbox("Hide progress bar", page) ?? false,
-    "Hide controls": getCheckbox("Hide controls", page) ?? false,
-    "Show debug slides": getCheckbox("Show debug slides", page) ?? false,
-  };
-  return result;
-};
-
-type Data = {
+interface Data {
   page: DatabasePage;
   properties: PresentationProperties;
+  slides: Slide[];
   blocks: Block[];
-};
+}
 export const loader: LoaderFunction = async ({
   params: { presentasjon = "" },
 }) => {
@@ -124,135 +91,16 @@ export const loader: LoaderFunction = async ({
 
   const properties = parsePresentationProperties(page);
   const blocks = await getBlocks(page.id);
+  const slides = prepareSlides(blocks);
 
-  return json<Data>({ page, properties, blocks });
+  return json<Data>({ page, blocks, properties, slides });
 };
 
-export const meta: MetaFunction = ({ data }) => {
+export const meta: MetaFunction = ({ data }: { data: Data }) => {
   return {
     title: getTitle(data.page),
-    description: data.properties.Ingress ?? "YOLOLO",
+    description: data.properties.Ingress,
   };
-};
-
-const groupByBlockType = (type: Block["type"], blocks: Block[]) => {
-  const groups: Block[][] = [];
-  let currentGroup: Block[] = [];
-  for (const block of blocks) {
-    if (block.type === type) {
-      if (currentGroup.length > 0) {
-        groups.push(currentGroup);
-      }
-      currentGroup = [];
-    }
-    currentGroup.push(block);
-  }
-  if (currentGroup.length > 0) {
-    groups.push(currentGroup);
-  }
-
-  return groups;
-};
-export interface Slide {
-  notes: Block[];
-  content: Block[];
-  subSlides: SubSlide[];
-}
-export interface SubSlide {
-  notes: Block[];
-  content: Block[];
-}
-interface SlideWithoutNotes {
-  content: Block[];
-  subSlides: SubSlideWithoutNotes[];
-}
-interface SubSlideWithoutNotes {
-  content: Block[];
-}
-export interface PreparedData {
-  properties: PresentationProperties;
-  slides: Slide[];
-}
-const prepare = (data: Data): PreparedData => {
-  // Remove unsupported blocks
-  const filteredBlocks = data.blocks.filter(
-    (block) => block.type !== "divider" && block.type !== "table_of_contents"
-  );
-
-  // Group level 1
-  let level1 = groupByBlockType("heading_1", filteredBlocks);
-
-  // Group level 2
-  let level2 = level1.map((blockList): SlideWithoutNotes => {
-    const blockListInner = blockList.slice();
-    let content: Block[] = [];
-
-    // Take while we have not encountered a h2_heading
-    while (true) {
-      if (
-        blockListInner[0] === undefined ||
-        blockListInner[0].type === "heading_2"
-      ) {
-        break;
-      }
-      content.push(blockListInner.shift()!);
-    }
-
-    // Group the rest based on h2 headings into subSlides
-    const subSlides = groupByBlockType("heading_2", blockListInner).map(
-      (content) => ({ content })
-    );
-
-    return {
-      content,
-      subSlides,
-    };
-  });
-
-  // Extract notes
-  const NOTES_BLOCK_TYPE = "callout";
-  const extractNotes = (
-    withoutNotes: SlideWithoutNotes | SubSlideWithoutNotes
-  ) => {
-    const notes = withoutNotes.content.filter(
-      (block) => block.type === NOTES_BLOCK_TYPE
-    );
-    const content = withoutNotes.content.filter(
-      (block) => block.type !== NOTES_BLOCK_TYPE
-    );
-    return { notes, content };
-  };
-
-  let slides: Slide[] = level2.map((slideWithoutNotes) => ({
-    ...extractNotes(slideWithoutNotes),
-    subSlides: slideWithoutNotes.subSlides.map(extractNotes),
-  }));
-
-  // Remove heading blocks containing `—`
-  // They mean we don't want a visible heading
-  const HIDE_HEADING_TOKEN = "—";
-  const removeHiddenHeadingsPredicate = (block: Block) => {
-    if (
-      (block.type === "heading_1" &&
-        getTextFromRichText(block.heading_1.rich_text) ===
-          HIDE_HEADING_TOKEN) ||
-      (block.type === "heading_2" &&
-        getTextFromRichText(block.heading_2.rich_text) === HIDE_HEADING_TOKEN)
-    ) {
-      return false;
-    }
-    return true;
-  };
-  slides = slides.map((slide) => ({
-    notes: slide.notes,
-    content: slide.content.filter(removeHiddenHeadingsPredicate),
-    subSlides: slide.subSlides.map((subSlide) => ({
-      ...subSlide,
-      content: subSlide.content.filter(removeHiddenHeadingsPredicate),
-    })),
-  }));
-
-  return { slides, properties: data.properties };
 };
 
 export default function Presentasjon() {
@@ -260,7 +108,7 @@ export default function Presentasjon() {
   return (
     <>
       <link rel="stylesheet" href={themes[data.properties.Theme]} />
-      <NotionRevealPresentation {...prepare(data)} />
+      <NotionRevealPresentation {...data} />
     </>
   );
 }

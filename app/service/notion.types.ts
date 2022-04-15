@@ -4,7 +4,7 @@ import type { ListBlockChildrenResponse } from "@notionhq/client/build/src/api-e
 type MaybeBlockResponse = ListBlockChildrenResponse["results"][number];
 const assertBlockObjectResponse = (block: MaybeBlockResponse) => {
   if ("type" in block) return block;
-  throw new Error("passed block is not a BlockObjeectResponse");
+  throw new Error("passed block is not a BlockObjectResponse");
 };
 export type Block = ReturnType<typeof assertBlockObjectResponse>;
 
