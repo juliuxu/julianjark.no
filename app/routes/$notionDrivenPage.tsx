@@ -6,7 +6,6 @@ import {
   MetaFunction,
 } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
-import { CollapsedCode } from "~/components/code";
 import TopLevelMenu, {
   loader as topLevelMenuLoader,
 } from "~/components/topLevelMenu";
@@ -17,6 +16,7 @@ import {
 } from "~/service/notion";
 import { getBlocksWithChildren } from "~/service/notionApi.server";
 import { assertItemFound, commonLinks } from "~/common";
+import Debug from "~/components/debug";
 
 export const loader: LoaderFunction = async ({
   params: { notionDrivenPage: requestedNotionDrivenPageSlug = "" },
@@ -52,7 +52,7 @@ export default function NotionDrivenPage() {
       <TopLevelMenu sitemapTree={data.sitemapTree} />
       <main>
         <Render blocks={data.currentNotionPageBlocks} />
-        <CollapsedCode language="json" code={JSON.stringify(data, null, 2)} />
+        <Debug pageData={data} />
       </main>
     </>
   );

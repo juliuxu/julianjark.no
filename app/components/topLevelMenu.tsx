@@ -9,8 +9,21 @@ export default function TopLevelMenu({ sitemapTree }: Props) {
     <header>
       <nav>
         <ul>
-          <li key={sitemapTree.path}>
+          <li>
             <NavLink to={sitemapTree.path}>{sitemapTree.title}</NavLink>
+          </li>
+          <li>
+            <fieldset>
+              <label htmlFor="debugMode" className="debugButton">
+                🧑‍💻
+                <input
+                  type="checkbox"
+                  id="debugMode"
+                  name="debugMode"
+                  role="switch"
+                />
+              </label>
+            </fieldset>
           </li>
         </ul>
         <ul>

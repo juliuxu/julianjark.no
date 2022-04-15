@@ -7,7 +7,7 @@ import {
 } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import { commonLinks } from "~/common";
-import { CollapsedCode } from "~/components/code";
+import Debug from "~/components/debug";
 import TopLevelMenu, {
   loader as topLevelMenuLoader,
 } from "~/components/topLevelMenu";
@@ -33,13 +33,7 @@ export default function Index() {
       <TopLevelMenu sitemapTree={data.sitemapTree} />
       <main>
         <Render blocks={data.landingPageBlocks} />
-        <CollapsedCode
-          language="json"
-          code={JSON.stringify(data.landingPageBlocks, null, 2)}
-          title={`Response (${
-            JSON.stringify(data.landingPageBlocks).length
-          } bytes)`}
-        />
+        <Debug pageData={data.landingPageBlocks} />
       </main>
     </>
   );

@@ -10,8 +10,8 @@ import { DatabasePage } from "~/service/notionApi.server";
 import TopLevelMenu, {
   loader as topLevelMenuLoader,
 } from "~/components/topLevelMenu";
-import { CollapsedCode } from "~/components/code";
 import { commonLinks } from "~/common";
+import Debug from "~/components/debug";
 
 export const loader: LoaderFunction = async () => {
   const presentasjoner = await getPresentasjoner();
@@ -44,10 +44,7 @@ export default function Index() {
             </li>
           ))}
         </ul>
-        <CollapsedCode
-          language="json"
-          code={JSON.stringify(presentasjoner, null, 2)}
-        />
+        <Debug pageData={presentasjoner} />
       </main>
     </>
   );
