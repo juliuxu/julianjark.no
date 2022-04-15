@@ -14,31 +14,36 @@ const isDebugMode = () => {
   }
   return false;
 };
+
+// Just set this cookie client side.
+// It's not sensitive and thus not signed
+// That way we can reload and whatever page the user is on gets the updates
+// 🤔 Would this work by using an action to set the cookie?
+// Would the page loader and render update accordingly?
 const setDebugMode = (value: boolean) => {
   // https://developer.mozilla.org/en-US/docs/Web/API/Document/cookie
   document.cookie = `debugMode=${value}`;
 };
 
 export const DebugToggle = () => {
-  const onToggle = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // Just set this cookie client side.
-    // It's not sensitive and thus not signed
-    // That way we can reload and whatever page the user is on gets the updates
-    // 🤔 Would this work by using an action to set the cookie?
-    // Would the page loader and render update accordingly?
-    setDebugMode(e.target.checked);
+  const onToggle: React.MouseEventHandler<HTMLInputElement> = (
+    e: React.MouseEvent<HTMLInputElement, MouseEvent>
+  ) => {
+    setDebugMode((e.target as any).checked);
     document.location.reload();
   };
   return (
     <fieldset>
-      <label htmlFor="debugMode" className="debugButton">
+      <label htmlFor="debugModeSwitch" className="debugButton">
         🧑‍💻
         <input
           type="checkbox"
-          id="debugMode"
-          name="debugMode"
+          id="debugModeSwitch"
+          name="debugModeSwitch"
           role="switch"
-          onChange={onToggle}
+          // onChange doesn't always get called
+          // pretty strange!
+          onClick={onToggle}
           defaultChecked={isDebugMode()}
         />
       </label>
