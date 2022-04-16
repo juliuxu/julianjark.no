@@ -49,16 +49,16 @@ export default function NotionRevealPresentation({
           </>
         )}
 
-        {slides.map((slide) => (
-          <section>
+        {slides.map((slide, index) => (
+          <section key={index}>
             <aside className="notes">
               <Render blocks={slide.notes as any} />
             </aside>
             <Render blocks={slide.content as any} />
 
             {/* Vertical subslides */}
-            {slide.subSlides.map((subSlide) => (
-              <section>
+            {slide.subSlides.map((subSlide, index2) => (
+              <section key={index2}>
                 <aside className="notes">
                   <Render blocks={subSlide.notes as any} />
                 </aside>
