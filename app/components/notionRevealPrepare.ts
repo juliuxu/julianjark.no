@@ -101,8 +101,22 @@ export const prepareSlides = (blocks: Block[]): Slide[] => {
     (block) => block.type !== "divider" && block.type !== "table_of_contents"
   );
 
+  // Figure out if we are using h1 or h2 as slide dividers
+  const firstHeadingBlock = filteredBlocks.find(
+    (block) => block.type === "heading_1" || block.type === "heading_2"
+  );
+  let headingTypeLevel1: "heading_1" | "heading_2";
+  let headingTypeLevel2: "heading_2" | "heading_3";
+  if (firstHeadingBlock?.type === "heading_1") {
+    headingTypeLevel1 = "heading_1";
+    headingTypeLevel2 = "heading_2";
+  } else {
+    headingTypeLevel1 = "heading_2";
+    headingTypeLevel2 = "heading_3";
+  }
+
   // Group level 1
-  let level1 = groupByBlockType("heading_1", filteredBlocks);
+  let level1 = groupByBlockType(headingTypeLevel1, filteredBlocks);
 
   // Group level 2
   let level2 = level1.map((blockList): SlideWithoutNotes => {
@@ -113,7 +127,7 @@ export const prepareSlides = (blocks: Block[]): Slide[] => {
     while (true) {
       if (
         blockListInner[0] === undefined ||
-        blockListInner[0].type === "heading_2"
+        blockListInner[0].type === headingTypeLevel2
       ) {
         break;
       }
