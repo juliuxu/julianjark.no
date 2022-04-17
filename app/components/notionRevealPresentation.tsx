@@ -1,9 +1,9 @@
-import { Render } from "@9gustin/react-notion-render";
 import { useEffect, useState } from "react";
 import Reveal from "reveal.js";
 import RevealNotes from "reveal.js/plugin/notes/notes";
 
 import Code from "./code";
+import ExtendedNotionRender from "./ExtendedNotionRender";
 import type { PreparedData } from "./notionRevealPrepare";
 
 type Props = PreparedData;
@@ -52,17 +52,17 @@ export default function NotionRevealPresentation({
         {slides.map((slide, index) => (
           <section key={index}>
             <aside className="notes">
-              <Render blocks={slide.notes as any} />
+              <ExtendedNotionRender blocks={slide.notes} />
             </aside>
-            <Render blocks={slide.content as any} />
+            <ExtendedNotionRender blocks={slide.content} />
 
             {/* Vertical subslides */}
             {slide.subSlides.map((subSlide, index2) => (
               <section key={index2}>
                 <aside className="notes">
-                  <Render blocks={subSlide.notes as any} />
+                  <ExtendedNotionRender blocks={subSlide.notes} />
                 </aside>
-                <Render blocks={subSlide.content as any} />
+                <ExtendedNotionRender blocks={subSlide.content} />
               </section>
             ))}
           </section>

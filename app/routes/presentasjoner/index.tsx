@@ -33,7 +33,7 @@ export default function Index() {
   return (
     <>
       <TopLevelMenu sitemapTree={data.sitemapTree} />
-      <main>
+      <main className="container">
         <h1>Presentasjoner</h1>
         <ul>
           {presentasjoner.map((presentasjon) => (

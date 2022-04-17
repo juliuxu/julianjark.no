@@ -1,5 +1,5 @@
 import { LinksFunction } from "@remix-run/node";
-import picoCss from "@picocss/pico/css/pico.classless.min.css";
+import picoCss from "@picocss/pico/css/pico.min.css";
 import commonStyles from "~/styles/common.css";
 import { links as codeLinks } from "./components/code";
 

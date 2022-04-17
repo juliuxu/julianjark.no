@@ -7,7 +7,7 @@ export const loader = async () => ({ sitemapTree: await getSitemapTree() });
 type Props = Awaited<ReturnType<typeof loader>>;
 export default function TopLevelMenu({ sitemapTree }: Props) {
   return (
-    <header>
+    <header className="container">
       <nav>
         <ul>
           <li>

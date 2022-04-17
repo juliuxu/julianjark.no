@@ -9,7 +9,6 @@ const isDebugMode = () => {
       .split("; ")
       .find((row) => row.startsWith("debugMode="))
       ?.split("=")[1];
-    console.log("debugMode", debugMode, debugMode === "true");
     return debugMode === "true";
   }
   return false;

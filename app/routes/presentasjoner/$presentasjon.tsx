@@ -12,7 +12,10 @@ import {
   getPresentasjoner,
   getTitle,
 } from "~/service/notion";
-import { DatabasePage, getBlocks } from "~/service/notionApi.server";
+import {
+  DatabasePage,
+  getBlocksWithChildren,
+} from "~/service/notionApi.server";
 import { assertItemFound } from "~/common";
 
 import { Block } from "~/service/notion.types";
@@ -90,7 +93,7 @@ export const loader: LoaderFunction = async ({
   assertItemFound(page);
 
   const properties = parsePresentationProperties(page);
-  const blocks = await getBlocks(page.id);
+  const blocks = await getBlocksWithChildren(page.id);
   const slides = prepareSlides(blocks);
 
   return json<Data>({ page, blocks, properties, slides });

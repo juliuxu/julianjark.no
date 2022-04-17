@@ -1,4 +1,3 @@
-import { Render } from "@9gustin/react-notion-render";
 import {
   json,
   LinksFunction,
@@ -17,6 +16,7 @@ import {
 import { getBlocksWithChildren } from "~/service/notionApi.server";
 import { assertItemFound, commonLinks } from "~/common";
 import Debug from "~/components/debug";
+import ExtendedNotionRender from "~/components/ExtendedNotionRender";
 
 export const loader: LoaderFunction = async ({
   params: { notionDrivenPage: requestedNotionDrivenPageSlug = "" },
@@ -50,8 +50,8 @@ export default function NotionDrivenPage() {
   return (
     <>
       <TopLevelMenu sitemapTree={data.sitemapTree} />
-      <main>
-        <Render blocks={data.currentNotionPageBlocks} />
+      <main className="container">
+        <ExtendedNotionRender blocks={data.currentNotionPageBlocks} />
         <Debug pageData={data} />
       </main>
     </>

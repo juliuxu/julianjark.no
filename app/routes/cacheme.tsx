@@ -12,7 +12,7 @@ export async function loader() {
 export default function CacheMe() {
   const { time } = useLoaderData();
   return (
-    <main>
+    <main className="container">
       <h1>Cache me Please</h1>
       <code>{time}</code>
     </main>

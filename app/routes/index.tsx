@@ -8,10 +8,12 @@ import {
 import { useLoaderData } from "@remix-run/react";
 import { commonLinks } from "~/common";
 import Debug from "~/components/debug";
+import ExtendedNotionRender from "~/components/ExtendedNotionRender";
 import TopLevelMenu, {
   loader as topLevelMenuLoader,
 } from "~/components/topLevelMenu";
 import { getLandingPage } from "~/service/notion";
+import { Block } from "~/service/notion.types";
 
 export const loader: LoaderFunction = async () => {
   const landingPageBlocks = await getLandingPage();
@@ -28,12 +30,13 @@ export const meta: MetaFunction = () => ({
 
 export default function Index() {
   const data = useLoaderData();
+  const blocks = data.landingPageBlocks as Block[];
   return (
     <>
       <TopLevelMenu sitemapTree={data.sitemapTree} />
-      <main>
-        <Render blocks={data.landingPageBlocks} />
-        <Debug pageData={data.landingPageBlocks} />
+      <main className="container">
+        <ExtendedNotionRender blocks={blocks} />
+        <Debug pageData={blocks} />
       </main>
     </>
   );
