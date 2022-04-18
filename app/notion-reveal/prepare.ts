@@ -6,7 +6,7 @@ import { Block } from "~/service/notion.types";
 import {
   getThemeOrDefault,
   Theme,
-} from "~/routes/presentasjoner/$presentasjon";
+} from "~/routes/presentasjoner.$presentasjon";
 
 export interface PreparedData {
   slides: Slide[];

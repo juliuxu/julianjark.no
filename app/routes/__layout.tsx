@@ -4,20 +4,14 @@ import {
   LoaderFunction,
   MetaFunction,
 } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
+import { Outlet, useLoaderData } from "@remix-run/react";
 import { commonLinks } from "~/common";
-import Debug from "~/components/debug";
 import TopLevelMenu, {
   loader as topLevelMenuLoader,
 } from "~/components/topLevelMenu";
-import NotionRender from "~/notion-render";
-import { getLandingPage } from "~/service/notion";
-import { Block } from "~/service/notion.types";
 
 export const loader: LoaderFunction = async () => {
-  const landingPageBlocks = await getLandingPage();
   return json({
-    landingPageBlocks,
     ...(await topLevelMenuLoader()),
   });
 };
@@ -29,14 +23,14 @@ export const meta: MetaFunction = () => ({
 
 export default function Index() {
   const data = useLoaderData();
-  const blocks = data.landingPageBlocks as Block[];
   return (
     <>
-      <TopLevelMenu sitemapTree={data.sitemapTree} />
+      <header className="container">
+        <TopLevelMenu sitemapTree={data.sitemapTree} />
+      </header>
       <main className="container">
-        <NotionRender blocks={blocks} />
+        <Outlet />
       </main>
-      <Debug pageData={blocks} />
     </>
   );
 }

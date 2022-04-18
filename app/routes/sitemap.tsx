@@ -5,8 +5,8 @@ import Code from "~/components/code";
 import { commonLinks } from "~/common";
 import { getDatabasePages } from "~/service/notionApi.server";
 import config from "~/config.server";
-import { meta as indexMeta } from "~/routes/index";
-import { meta as presentasjonerMeta } from "~/routes/presentasjoner/index";
+import { meta as indexMeta } from "~/routes/__layout";
+import { meta as presentasjonerMeta } from "~/routes/__layout/presentasjoner/index";
 
 export interface Page {
   title: string;
@@ -19,8 +19,6 @@ export const getSitemapTree = async () => {
     title: indexMeta({} as any).title!,
     path: "/",
     children: [
-      // { title: "Drinker", path: "/drinker" }
-
       {
         title: presentasjonerMeta({} as any).title!,
         path: "/presentasjoner",

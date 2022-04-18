@@ -2,7 +2,6 @@ import config from "~/config.server";
 import { RichTextItem } from "./notion.types";
 import {
   DatabasePage,
-  getBlocksWithChildren,
   getDatabasePages,
   PageResponse,
 } from "./notionApi.server";
@@ -56,33 +55,7 @@ export const findPageBySlugPredicate =
   (slug: string) => (page: PageResponse | DatabasePage) =>
     slugify(getTitle(page)) === slug;
 
-// Async
-export const getLandingPage = async () =>
-  await getBlocksWithChildren(config.landingPageId);
-
-export const getNotionDrivenPages = async () =>
-  await getDatabasePages(config.notionDrivenPagesDatabaseId);
-
 export const getPresentasjoner = async () =>
   await getDatabasePages(config.presentasjonerDatabaseId, [
     { timestamp: "created_time", direction: "ascending" },
   ]);
-
-// Util
-// Simple memo for async functions
-// TODO: This might be a bit hacky and cause problems
-function memoAsync<T>(name: string, fn: () => Promise<T>): () => Promise<T> {
-  let previousResult: Promise<T> | undefined;
-  const resultFn = async () => {
-    if (previousResult !== undefined) return previousResult;
-    console.log("calling", name);
-    const pendingResult = fn();
-    previousResult = pendingResult;
-    const finalResult = await pendingResult;
-    previousResult = Promise.resolve(finalResult);
-
-    return finalResult;
-  };
-
-  return resultFn;
-}
