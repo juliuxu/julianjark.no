@@ -81,7 +81,11 @@ export const RichTextList = ({ richTextList }: RichTextListProps) => {
 export const H1 = ({ block }: BlockComponentProps) => {
   if (block.type !== "heading_1") return null;
   const element = (
-    <h1 className={ctx().classes.heading_1.root}>
+    <h1
+      className={`${ctx().classes[`color_${block.heading_1.color}`]} ${
+        ctx().classes.heading_1.root
+      }`}
+    >
       <RichTextList richTextList={block.heading_1.rich_text} />
     </h1>
   );
@@ -97,7 +101,11 @@ export const H1 = ({ block }: BlockComponentProps) => {
 export const H2 = ({ block }: BlockComponentProps) => {
   if (block.type !== "heading_2") return null;
   const element = (
-    <h2 className={ctx().classes.heading_2.root}>
+    <h2
+      className={`${ctx().classes[`color_${block.heading_2.color}`]} ${
+        ctx().classes.heading_1.root
+      }`}
+    >
       <RichTextList richTextList={block.heading_2.rich_text} />
     </h2>
   );
@@ -113,7 +121,11 @@ export const H2 = ({ block }: BlockComponentProps) => {
 export const H3 = ({ block }: BlockComponentProps) => {
   if (block.type !== "heading_3") return null;
   const element = (
-    <h3 className={ctx().classes.heading_3.root}>
+    <h3
+      className={`${ctx().classes[`color_${block.heading_3.color}`]} ${
+        ctx().classes.heading_1.root
+      }`}
+    >
       <RichTextList richTextList={block.heading_3.rich_text} />
     </h3>
   );
