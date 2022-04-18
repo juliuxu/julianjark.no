@@ -63,7 +63,9 @@ export const getPresentasjoner = async () =>
   ).filter(filterPublishedPredicate);
 
 export const getNotionDrivenPages = async () =>
-  await getDatabasePages(config.notionDrivenPagesDatabaseId);
+  (await getDatabasePages(config.notionDrivenPagesDatabaseId)).filter(
+    filterPublishedPredicate
+  );
 
 // ENV stuff
 type PublishedEnv = "PUBLISHED" | "DEV" | "UNPUBLISHED";
