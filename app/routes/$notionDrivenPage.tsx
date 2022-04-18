@@ -16,7 +16,7 @@ import {
 import { getBlocksWithChildren } from "~/service/notionApi.server";
 import { assertItemFound, commonLinks } from "~/common";
 import Debug from "~/components/debug";
-import ExtendedNotionRender from "~/components/ExtendedNotionRender";
+import NotionRender from "~/notion-render";
 
 export const loader: LoaderFunction = async ({
   params: { notionDrivenPage: requestedNotionDrivenPageSlug = "" },
@@ -51,7 +51,7 @@ export default function NotionDrivenPage() {
     <>
       <TopLevelMenu sitemapTree={data.sitemapTree} />
       <main className="container">
-        <ExtendedNotionRender blocks={data.currentNotionPageBlocks} />
+        <NotionRender blocks={data.currentNotionPageBlocks} />
         <Debug pageData={data} />
       </main>
     </>

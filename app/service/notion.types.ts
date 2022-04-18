@@ -7,6 +7,7 @@ const assertBlockObjectResponse = (block: MaybeBlockResponse) => {
   throw new Error("passed block is not a BlockObjectResponse");
 };
 export type Block = ReturnType<typeof assertBlockObjectResponse>;
+export type BlockType = Block["type"];
 
 export type BlockWithChildren = Block & {
   children?: BlockWithChildren;
@@ -16,5 +17,5 @@ export type RichText = Extract<Block, { type: "heading_1" }>["heading_1"];
 
 export type RichTextItem = Extract<
   Block,
-  { type: "heading_1" }
->["heading_1"]["rich_text"][number];
+  { type: "paragraph" }
+>["paragraph"]["rich_text"][number];

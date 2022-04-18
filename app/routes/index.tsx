@@ -1,4 +1,3 @@
-import { Render } from "@9gustin/react-notion-render";
 import {
   json,
   LinksFunction,
@@ -8,10 +7,10 @@ import {
 import { useLoaderData } from "@remix-run/react";
 import { commonLinks } from "~/common";
 import Debug from "~/components/debug";
-import ExtendedNotionRender from "~/components/ExtendedNotionRender";
 import TopLevelMenu, {
   loader as topLevelMenuLoader,
 } from "~/components/topLevelMenu";
+import NotionRender from "~/notion-render";
 import { getLandingPage } from "~/service/notion";
 import { Block } from "~/service/notion.types";
 
@@ -35,9 +34,9 @@ export default function Index() {
     <>
       <TopLevelMenu sitemapTree={data.sitemapTree} />
       <main className="container">
-        <ExtendedNotionRender blocks={blocks} />
-        <Debug pageData={blocks} />
+        <NotionRender blocks={blocks} />
       </main>
+      <Debug pageData={blocks} />
     </>
   );
 }
