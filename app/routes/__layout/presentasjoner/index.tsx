@@ -25,7 +25,7 @@ export default function Index() {
       <ul>
         {data.presentasjoner.map((presentasjon) => (
           <li key={presentasjon.id}>
-            <Link to={slugify(getTitle(presentasjon))}>
+            <Link to={slugify(getTitle(presentasjon))} prefetch="intent">
               {getTitle(presentasjon)}
             </Link>
           </li>

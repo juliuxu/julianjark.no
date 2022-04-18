@@ -19,7 +19,9 @@ export default function TopLevelMenu({ sitemapTree }: Props) {
       <ul>
         {sitemapTree.children.map((page) => (
           <li key={page.path}>
-            <NavLink to={page.path}>{page.title}</NavLink>
+            <NavLink to={page.path} prefetch="intent">
+              {page.title}
+            </NavLink>
           </li>
         ))}
       </ul>

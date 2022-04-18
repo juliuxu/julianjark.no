@@ -9,7 +9,6 @@ import type { PreparedData } from "./prepare";
 // Classes
 const classes: Partial<NotionRenderClasses> = {
   column_list: { root: "r-hstack" },
-  image: { root: "image" },
 };
 
 type Props = PreparedData;
