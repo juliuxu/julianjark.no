@@ -1,5 +1,5 @@
 import type { Block } from "~/service/notion.types";
-import { BlockComponentProps, Components } from ".";
+import { BlockComponentProps, DefaultComponents } from "./components";
 
 // Pseudo blocks
 export interface ListBlock {
@@ -15,7 +15,7 @@ export const BulletedList = ({ block }: BlockComponentProps) => {
   return (
     <ul>
       {block.children.map((block) => {
-        const Component = Components[block.type];
+        const Component = DefaultComponents[block.type];
         if (Component === undefined) return undefined;
         return <Component key={block.id} block={block} />;
       })}
@@ -27,7 +27,7 @@ export const NumberedList = ({ block }: BlockComponentProps) => {
   return (
     <ol>
       {block.children.map((block) => {
-        const Component = Components[block.type];
+        const Component = DefaultComponents[block.type];
         if (Component === undefined) return undefined;
         return <Component key={block.id} block={block} />;
       })}

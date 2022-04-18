@@ -1,84 +1,17 @@
-import React, { createContext, useContext } from "react";
-import { Block, BlockType } from "~/service/notion.types";
-import {
-  BulletedListItem,
-  NumberedListItem,
-  Paragraph,
-  H1,
-  H2,
-  H3,
-  Quote,
-  Todo,
-  Toggle,
-  Code,
-  Callout,
-  Divider,
-  ColumnList,
-  Column,
-  Image,
-} from "./components";
-import {
-  BulletedList,
-  ListBlock,
-  ListBlockType,
-  NumberedList,
-} from "./pseudoComponents";
-
-export type ExtendedBlock = Block | ListBlock;
-export interface BlockComponentProps {
-  block: ExtendedBlock;
-}
-export const Components: Record<
-  BlockType | ListBlockType,
-  React.ComponentType<BlockComponentProps> | undefined
-> = {
-  // These pseudo blocks are not part of the notion api
-  // but added here to make handling easier
-  bulleted_list: BulletedList,
-  numbered_list: NumberedList,
-
-  bulleted_list_item: BulletedListItem,
-  numbered_list_item: NumberedListItem,
-  paragraph: Paragraph,
-  heading_1: H1,
-  heading_2: H2,
-  heading_3: H3,
-  quote: Quote,
-  to_do: Todo,
-  toggle: Toggle,
-  template: undefined,
-  synced_block: undefined,
-  child_page: undefined,
-  child_database: undefined,
-  equation: undefined,
-  code: Code,
-  callout: Callout,
-  divider: Divider,
-  breadcrumb: undefined,
-  table_of_contents: undefined,
-  column_list: ColumnList,
-  column: Column,
-  link_to_page: undefined,
-  table: undefined,
-  table_row: undefined,
-  embed: undefined,
-  bookmark: undefined,
-  image: Image,
-  video: undefined,
-  pdf: undefined,
-  file: undefined,
-  audio: undefined,
-  link_preview: undefined,
-  unsupported: undefined,
-};
+import { useContext } from "react";
+import { Block } from "~/service/notion.types";
+import { Classes, EmptyClasses } from "./classes";
+import { DefaultComponents, ExtendedBlock } from "./components";
+import NotionRenderContext from "./context";
+import { ListBlock } from "./pseudoComponents";
 
 const filterUnsupportedBlocks = (
-  components: typeof Components,
+  components: typeof DefaultComponents,
   blocks: Block[]
 ) => blocks.filter((block) => components[block.type] !== undefined);
 
 export const renderBlock = (
-  components: typeof Components,
+  components: typeof DefaultComponents,
   block: ExtendedBlock
 ) => {
   const Component = components[block.type];
@@ -122,33 +55,18 @@ const extendBlocks = (blocks: Block[]): ExtendedBlock[] =>
     return acc;
   }, [] as ExtendedBlock[]);
 
-// Context
-interface NotionRenderContext {
-  components: typeof Components;
-  classes: {};
-}
-const NotionRenderContext = createContext<NotionRenderContext | undefined>(
-  undefined
-);
-export const useNotionRenderContext = () => {
-  const context = useContext(NotionRenderContext);
-  if (context === undefined)
-    throw new Error("useNotionRenderContext called without a Provider");
-  return context;
-};
-
 // Main render
 interface Props {
   blocks: Block[];
-  classes?: {};
-  components?: Partial<typeof Components>;
+  classes?: Partial<Classes>;
+  components?: Partial<typeof DefaultComponents>;
 }
 export default function NotionRender({ blocks, classes, components }: Props) {
   const context = useContext(NotionRenderContext);
 
-  const finalClasses = { ...classes };
+  const finalClasses = { ...EmptyClasses, ...context?.classes, ...classes };
   const finalComponents = {
-    ...Components,
+    ...DefaultComponents,
     ...context?.components,
     ...components,
   };

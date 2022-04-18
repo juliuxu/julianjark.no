@@ -1,5 +1,12 @@
-import { RichTextItem } from "~/service/notion.types";
-import NotionRender, { BlockComponentProps } from ".";
+import { Block, BlockType, RichTextItem } from "~/service/notion.types";
+import NotionRender from ".";
+import { useNotionRenderContext as ctx } from "./context";
+import {
+  ListBlock,
+  ListBlockType,
+  BulletedList,
+  NumberedList,
+} from "./pseudoComponents";
 
 /**
  * Rich Text
@@ -15,18 +22,40 @@ export const RichText = ({ richText }: RichTextProps) => {
   if (richText.type === "equation") return null;
   if (richText.type === "mention") return null;
 
-  let element: JSX.Element = <>{richText.text.content}</>;
+  const classes = ctx().classes;
+
+  let element: JSX.Element = (
+    <span className={classes[`color_${richText.annotations.color}`]}>
+      {richText.text.content}
+    </span>
+  );
   if (richText.annotations.bold) {
-    element = <strong>{richText.text.content}</strong>;
+    element = (
+      <strong className={classes.annotation_bold}>
+        {richText.text.content}
+      </strong>
+    );
   } else if (richText.annotations.code) {
-    element = <code>{richText.text.content}</code>;
+    element = (
+      <code className={classes.annotation_code}>{richText.text.content}</code>
+    );
   } else if (richText.annotations.italic) {
-    element = <em>{richText.text.content}</em>;
+    element = (
+      <em className={classes.annotation_italic}>{richText.text.content}</em>
+    );
   } else if (richText.annotations.strikethrough) {
-    element = <s>{richText.text.content}</s>;
+    element = (
+      <s className={classes.annotation_strikethrough}>
+        {richText.text.content}
+      </s>
+    );
   } else if (richText.annotations.underline) {
-    element = <u>{richText.text.content}</u>;
+    element = (
+      <u className={classes.annotation_underline}>{richText.text.content}</u>
+    );
   }
+
+  // TODO: Link style
   if (richText.href !== null) {
     element = <a href={richText.href}>{element}</a>;
   }
@@ -51,32 +80,56 @@ export const RichTextList = ({ richTextList }: RichTextListProps) => {
 
 export const H1 = ({ block }: BlockComponentProps) => {
   if (block.type !== "heading_1") return null;
-  return (
-    <h1>
+  const element = (
+    <h1 className={ctx().classes.heading_1.root}>
       <RichTextList richTextList={block.heading_1.rich_text} />
     </h1>
   );
+  if (block.has_children) {
+    return (
+      <ToggleInner heading={element}>
+        <NotionRender blocks={(block.heading_1 as any).children ?? []} />
+      </ToggleInner>
+    );
+  }
+  return element;
 };
 export const H2 = ({ block }: BlockComponentProps) => {
   if (block.type !== "heading_2") return null;
-  return (
-    <h2>
+  const element = (
+    <h2 className={ctx().classes.heading_2.root}>
       <RichTextList richTextList={block.heading_2.rich_text} />
     </h2>
   );
+  if (block.has_children) {
+    return (
+      <ToggleInner heading={element}>
+        <NotionRender blocks={(block.heading_2 as any).children ?? []} />
+      </ToggleInner>
+    );
+  }
+  return element;
 };
 export const H3 = ({ block }: BlockComponentProps) => {
   if (block.type !== "heading_3") return null;
-  return (
-    <h3>
+  const element = (
+    <h3 className={ctx().classes.heading_3.root}>
       <RichTextList richTextList={block.heading_3.rich_text} />
     </h3>
   );
+  if (block.has_children) {
+    return (
+      <ToggleInner heading={element}>
+        <NotionRender blocks={(block.heading_3 as any).children ?? []} />
+      </ToggleInner>
+    );
+  }
+  return element;
 };
 export const Paragraph = ({ block }: BlockComponentProps) => {
   if (block.type !== "paragraph") return null;
   return (
-    <p>
+    <p className={ctx().classes.paragraph.root}>
       <RichTextList richTextList={block.paragraph.rich_text} />
     </p>
   );
@@ -85,7 +138,7 @@ export const BulletedListItem = ({ block }: BlockComponentProps) => {
   if (block.type !== "bulleted_list_item") return null;
   return (
     <>
-      <li>
+      <li className={ctx().classes.bulleted_list_item.root}>
         <RichTextList richTextList={block.bulleted_list_item.rich_text} />
       </li>
       <NotionRender blocks={(block.bulleted_list_item as any).children ?? []} />
@@ -96,7 +149,7 @@ export const NumberedListItem = ({ block }: BlockComponentProps) => {
   if (block.type !== "numbered_list_item") return null;
   return (
     <>
-      <li>
+      <li className={ctx().classes.numbered_list_item.root}>
         <RichTextList richTextList={block.numbered_list_item.rich_text} />
       </li>
       <NotionRender blocks={(block.numbered_list_item as any).children ?? []} />
@@ -106,7 +159,7 @@ export const NumberedListItem = ({ block }: BlockComponentProps) => {
 export const Quote = ({ block }: BlockComponentProps) => {
   if (block.type !== "quote") return null;
   return (
-    <blockquote>
+    <blockquote className={ctx().classes.quote.root}>
       <RichTextList richTextList={block.quote.rich_text} />
     </blockquote>
   );
@@ -114,29 +167,39 @@ export const Quote = ({ block }: BlockComponentProps) => {
 export const Todo = ({ block }: BlockComponentProps) => {
   if (block.type !== "to_do") return null;
   return (
-    <div>
+    <div className={ctx().classes.to_do.root}>
       <input type="checkbox" checked={block.to_do.checked} readOnly />
       <RichTextList richTextList={block.to_do.rich_text} />
     </div>
   );
 };
+
+const ToggleInner = ({
+  heading,
+  children,
+}: {
+  heading: JSX.Element;
+  children: React.ReactNode;
+}) => (
+  <details className={ctx().classes.toggle.root}>
+    <summary>{heading}</summary>
+    <div>{children}</div>
+  </details>
+);
 export const Toggle = ({ block }: BlockComponentProps) => {
   if (block.type !== "toggle") return null;
   return (
-    <details>
-      <summary>
-        <RichTextList richTextList={block.toggle.rich_text} />
-      </summary>
-      <div>
-        <NotionRender blocks={(block.toggle as any).children ?? []} />
-      </div>
-    </details>
+    <ToggleInner
+      heading={<RichTextList richTextList={block.toggle.rich_text} />}
+    >
+      <NotionRender blocks={(block.toggle as any).children ?? []} />
+    </ToggleInner>
   );
 };
 export const Code = ({ block }: BlockComponentProps) => {
   if (block.type !== "code") return null;
   return (
-    <pre>
+    <pre className={ctx().classes.code.root}>
       <code className={`language-${block.code.language}`}>
         <RichTextList richTextList={block.code.rich_text} />
       </code>
@@ -146,7 +209,7 @@ export const Code = ({ block }: BlockComponentProps) => {
 export const Callout = ({ block }: BlockComponentProps) => {
   if (block.type !== "callout") return null;
   return (
-    <div>
+    <div className={ctx().classes.callout.root}>
       <div>
         <RichTextList richTextList={block.callout.rich_text} />
       </div>
@@ -155,12 +218,12 @@ export const Callout = ({ block }: BlockComponentProps) => {
 };
 export const Divider = ({ block }: BlockComponentProps) => {
   if (block.type !== "divider") return null;
-  return <hr />;
+  return <hr className={ctx().classes.divider.root} />;
 };
 export const ColumnList = ({ block }: BlockComponentProps) => {
   if (block.type !== "column_list") return null;
   return (
-    <div>
+    <div className={ctx().classes.column_list.root}>
       <NotionRender blocks={block.column_list.children} />
     </div>
   );
@@ -168,7 +231,7 @@ export const ColumnList = ({ block }: BlockComponentProps) => {
 export const Column = ({ block }: BlockComponentProps) => {
   if (block.type !== "column") return null;
   return (
-    <div>
+    <div className={ctx().classes.column.root}>
       <NotionRender blocks={block.column.children} />
     </div>
   );
@@ -186,6 +249,119 @@ export const Image = ({ block }: BlockComponentProps) => {
   }
 
   return (
-    <img alt={getPlainTextFromRichTextList(block.image.caption)} src={url} />
+    <img
+      className={ctx().classes.image.root}
+      alt={getPlainTextFromRichTextList(block.image.caption)}
+      src={url}
+    />
   );
+};
+export const Embed = ({ block }: BlockComponentProps) => {
+  if (block.type !== "embed") return null;
+  return (
+    <iframe
+      className={ctx().classes.embed.root}
+      src={block.embed.url}
+      title={getPlainTextFromRichTextList(block.embed.caption)}
+      style={{ border: 0 }}
+    ></iframe>
+  );
+};
+export const Video = ({ block }: BlockComponentProps) => {
+  if (block.type !== "video") return null;
+  if (block.video.type !== "external") return null;
+
+  const urlObject = new URL(block.video.external.url);
+
+  // Youtube
+  const youtubeDomains = [
+    "youtu.be",
+    "youtube.com",
+    "youtube-nocookie.com",
+    "www.youtu.be",
+    "www.youtube.com",
+    "www.youtube-nocookie.com",
+  ];
+
+  // https://gist.github.com/takien/4077195
+  function YouTubeGetID(url: string) {
+    const urlSplit = url.split(/(vi\/|v=|\/v\/|youtu\.be\/|\/embed\/)/);
+    return urlSplit[2] !== undefined
+      ? urlSplit[2].split(/[^0-9a-z_\-]/i)[0]
+      : urlSplit[0];
+  }
+
+  if (youtubeDomains.includes(urlObject.hostname)) {
+    return (
+      <iframe
+        className={ctx().classes.embed.root}
+        src={`https://www.youtube-nocookie.com/embed/${YouTubeGetID(
+          block.video.external.url
+        )}`}
+        title={getPlainTextFromRichTextList(block.video.caption)}
+        width="560"
+        height="315"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowFullScreen
+        style={{ border: 0 }}
+      />
+    );
+  }
+
+  // Generic video
+  return (
+    <iframe
+      className={ctx().classes.embed.root}
+      src={block.video.external.url}
+      title={getPlainTextFromRichTextList(block.video.caption)}
+    />
+  );
+};
+
+export type ExtendedBlock = Block | ListBlock;
+export interface BlockComponentProps {
+  block: ExtendedBlock;
+}
+export const DefaultComponents: Record<
+  BlockType | ListBlockType,
+  React.ComponentType<BlockComponentProps> | undefined
+> = {
+  // These pseudo blocks are not part of the notion api
+  // but added here to make handling easier
+  bulleted_list: BulletedList,
+  numbered_list: NumberedList,
+
+  bulleted_list_item: BulletedListItem,
+  numbered_list_item: NumberedListItem,
+  paragraph: Paragraph,
+  heading_1: H1,
+  heading_2: H2,
+  heading_3: H3,
+  quote: Quote,
+  to_do: Todo,
+  toggle: Toggle,
+  template: undefined,
+  synced_block: undefined,
+  child_page: undefined,
+  child_database: undefined,
+  equation: undefined,
+  code: Code,
+  callout: Callout,
+  divider: Divider,
+  breadcrumb: undefined,
+  table_of_contents: undefined,
+  column_list: ColumnList,
+  column: Column,
+  link_to_page: undefined,
+  table: undefined,
+  table_row: undefined,
+  embed: Embed,
+  bookmark: undefined,
+  image: Image,
+  video: Video,
+  pdf: undefined,
+  file: undefined,
+  audio: undefined,
+  link_preview: undefined,
+  unsupported: undefined,
 };

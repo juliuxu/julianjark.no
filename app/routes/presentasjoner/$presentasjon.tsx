@@ -6,7 +6,7 @@ import {
 } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 
-import NotionRevealPresentation from "~/components/notionRevealPresentation";
+import NotionReveal from "~/notion-reveal";
 import {
   findPageBySlugPredicate,
   getPresentasjoner,
@@ -20,14 +20,11 @@ import { assertItemFound } from "~/common";
 
 import { Block } from "~/service/notion.types";
 
-import type {
-  PresentationProperties,
-  Slide,
-} from "~/components/notionRevealPrepare";
+import type { PresentationProperties, Slide } from "~/notion-reveal/prepare";
 import {
   prepareSlides,
   parsePresentationProperties,
-} from "~/components/notionRevealPrepare";
+} from "~/notion-reveal/prepare";
 
 import prismStyles from "prismjs/themes/prism-tomorrow.css";
 import revealCss from "reveal.js/dist/reveal.css";
@@ -111,7 +108,7 @@ export default function Presentasjon() {
   return (
     <>
       <link rel="stylesheet" href={themes[data.properties.Theme]} />
-      <NotionRevealPresentation {...data} />
+      <NotionReveal {...data} />
     </>
   );
 }

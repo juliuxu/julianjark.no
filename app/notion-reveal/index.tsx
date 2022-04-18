@@ -1,17 +1,22 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Reveal from "reveal.js";
 import RevealNotes from "reveal.js/plugin/notes/notes";
+import Code from "~/components/code";
 import NotionRender from "~/notion-render";
+import { Classes as NotionRenderClasses } from "~/notion-render/classes";
+import type { PreparedData } from "./prepare";
 
-import Code from "./code";
-import type { PreparedData } from "./notionRevealPrepare";
+// Classes
+const classes: Partial<NotionRenderClasses> = {
+  column_list: { root: "r-hstack" },
+};
 
 type Props = PreparedData;
 export default function NotionRevealPresentation({
   slides,
   properties,
 }: Props) {
-  const [_, setDeck] = useState<Reveal | undefined>(undefined);
+  const deck = useRef<Reveal>();
   useEffect(() => {
     let newDeck = new Reveal({
       hash: true,
@@ -25,9 +30,8 @@ export default function NotionRevealPresentation({
       // It will start nudging at the first vertical slide
       controlsTutorial: false,
     });
-    setDeck(newDeck);
-
     newDeck.initialize();
+    deck.current = newDeck;
   }, []);
 
   return (
@@ -52,17 +56,17 @@ export default function NotionRevealPresentation({
         {slides.map((slide, index) => (
           <section key={index}>
             <aside className="notes">
-              <NotionRender blocks={slide.notes} />
+              <NotionRender classes={classes} blocks={slide.notes} />
             </aside>
-            <NotionRender blocks={slide.content} />
+            <NotionRender classes={classes} blocks={slide.content} />
 
             {/* Vertical subslides */}
             {slide.subSlides.map((subSlide, index2) => (
               <section key={index2}>
                 <aside className="notes">
-                  <NotionRender blocks={subSlide.notes} />
+                  <NotionRender classes={classes} blocks={subSlide.notes} />
                 </aside>
-                <NotionRender blocks={subSlide.content} />
+                <NotionRender classes={classes} blocks={subSlide.content} />
               </section>
             ))}
           </section>
