@@ -21,7 +21,7 @@ export const meta: MetaFunction = () => ({
   title: "Julian Jark",
 });
 
-export default function Index() {
+export default function Layout() {
   const data = useLoaderData();
   return (
     <>
