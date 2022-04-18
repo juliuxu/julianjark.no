@@ -1,6 +1,7 @@
 import { LinksFunction } from "@remix-run/node";
 import picoCss from "@picocss/pico/css/pico.min.css";
 import commonStyles from "~/styles/common.css";
+import notionRenderStyles from "~/styles/notionRender.css";
 import { links as codeLinks } from "./components/code";
 
 export const commonLinks: LinksFunction = () => [
@@ -11,6 +12,10 @@ export const commonLinks: LinksFunction = () => [
   {
     rel: "stylesheet",
     href: commonStyles,
+  },
+  {
+    rel: "stylesheet",
+    href: notionRenderStyles,
   },
 
   // Showing code with prismjs

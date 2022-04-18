@@ -11,6 +11,15 @@ import Debug from "~/components/debug";
 import NotionRender from "~/notion-render";
 import { Block } from "~/service/notion.types";
 import config from "~/config.server";
+import { Classes as NotionRenderClasses } from "~/notion-render/classes";
+
+// Notion Render Settings
+export const myNotionRenderClasses: Partial<NotionRenderClasses> = {
+  column_list: { root: "grid" },
+  color_blue: "color_blue",
+  color_green: "color_green",
+  color_orange: "color_orange",
+};
 
 type Data = { page: PageResponse; blocks: Block[] };
 export const loader: LoaderFunction = async ({
@@ -39,7 +48,7 @@ export default function NotionDrivenPage() {
   const data = useLoaderData<Data>();
   return (
     <>
-      <NotionRender blocks={data.blocks} />
+      <NotionRender classes={myNotionRenderClasses} blocks={data.blocks} />
       <Debug pageData={data} />
     </>
   );

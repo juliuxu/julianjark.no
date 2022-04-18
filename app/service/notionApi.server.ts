@@ -45,7 +45,7 @@ export const getBlocks = async (blockId: string) => {
     }
     cursor = next_cursor;
   }
-  return blocks.filter(isBlockObjectResponse).map(fixRichTextToText);
+  return blocks.filter(isBlockObjectResponse);
 };
 
 export const getBlocksWithChildren = async (
@@ -117,19 +117,4 @@ export type PageResponse = ReturnType<typeof assertPageResponse>;
 const assertPageResponse = (page: MaybePageResponse) => {
   if ("properties" in page) return page;
   throw new Error("passed page is not a PageResponse");
-};
-
-// Duplicate all `rich_text` keys with `text` to fix react-notion-renderer
-// as it is not currently updated to the new format
-const fixRichTextToText = (block: Block) => {
-  const innerBlock = block as Record<string, any>;
-  return Object.keys(innerBlock).reduce((acc, key) => {
-    const current = innerBlock[key];
-    if (typeof current === "object" && "rich_text" in current) {
-      acc[key] = { ...current, text: current["rich_text"] };
-    } else {
-      acc[key] = current;
-    }
-    return acc;
-  }, {} as Record<string, any>) as Block;
 };
