@@ -135,7 +135,7 @@ export const prepareSlides = (blocks: Block[]): Slide[] => {
     }
 
     // Group the rest based on h2 headings into subSlides
-    const subSlides = groupByBlockType("heading_2", blockListInner).map(
+    const subSlides = groupByBlockType(headingTypeLevel2, blockListInner).map(
       (content) => ({ content })
     );
 

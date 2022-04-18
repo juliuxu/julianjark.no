@@ -25,6 +25,7 @@ import {
   prepareSlides,
   parsePresentationProperties,
 } from "~/notion-reveal/prepare";
+import notionRevealStyles from "~/notion-reveal/styles.css";
 
 import prismStyles from "prismjs/themes/prism-tomorrow.css";
 import revealCss from "reveal.js/dist/reveal.css";
@@ -66,6 +67,7 @@ export const getThemeOrDefault = (maybeTheme: string) =>
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: prismStyles },
   { rel: "stylesheet", href: revealCss },
+  { rel: "stylesheet", href: notionRevealStyles },
 
   // Source sans is used a lot in the the themes
   // As well as the capra theme

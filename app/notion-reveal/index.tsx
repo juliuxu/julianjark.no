@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import Reveal from "reveal.js";
 import RevealNotes from "reveal.js/plugin/notes/notes";
 import Code from "~/components/code";
@@ -9,6 +9,7 @@ import type { PreparedData } from "./prepare";
 // Classes
 const classes: Partial<NotionRenderClasses> = {
   column_list: { root: "r-hstack" },
+  image: { root: "image" },
 };
 
 type Props = PreparedData;
