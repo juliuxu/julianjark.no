@@ -56,6 +56,31 @@ export const findPageBySlugPredicate =
     slugify(getTitle(page)) === slug;
 
 export const getPresentasjoner = async () =>
-  await getDatabasePages(config.presentasjonerDatabaseId, [
-    { timestamp: "created_time", direction: "ascending" },
-  ]);
+  (
+    await getDatabasePages(config.presentasjonerDatabaseId, [
+      { timestamp: "created_time", direction: "ascending" },
+    ])
+  ).filter(filterPublishedPredicate);
+
+export const getNotionDrivenPages = async () =>
+  await getDatabasePages(config.notionDrivenPagesDatabaseId);
+
+// ENV stuff
+type PublishedEnv = "PUBLISHED" | "DEV" | "UNPUBLISHED";
+const getPublisedProperty = (fromPage: DatabasePage): PublishedEnv => {
+  const property = getSelect("Published", fromPage);
+  if (property === "PUBLISHED") return property;
+  if (property === "DEV") return property;
+  return "UNPUBLISHED";
+};
+const getEnv = () => {
+  if (process.env.NODE_ENV === "production") return "PROD";
+  else if (process.env.NODE_ENV === "development") return "DEV";
+};
+export const filterPublishedPredicate = (page: DatabasePage) => {
+  const published = getPublisedProperty(page);
+  if (getEnv() === "PROD") return published === "PUBLISHED";
+  if (getEnv() === "DEV")
+    return published === "PUBLISHED" || published === "DEV";
+  return false;
+};

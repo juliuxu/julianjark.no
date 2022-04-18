@@ -1,9 +1,14 @@
 import { json, LinksFunction, LoaderFunction } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
-import { slugify, getTitle } from "~/service/notion";
+import {
+  slugify,
+  getTitle,
+  getPresentasjoner,
+  getNotionDrivenPages,
+} from "~/service/notion";
 import Code from "~/components/code";
 import { commonLinks } from "~/common";
-import { getDatabasePages } from "~/service/notionApi.server";
+import { DatabasePage } from "~/service/notionApi.server";
 import config from "~/config.server";
 import { meta as indexMeta } from "~/routes/__layout";
 import { meta as presentasjonerMeta } from "~/routes/__layout/presentasjoner/index";
@@ -22,37 +27,28 @@ export const getSitemapTree = async () => {
       {
         title: presentasjonerMeta({} as any).title!,
         path: "/presentasjoner",
-        children: await pagesFromNotionDatabase(
-          "/presentasjoner/",
-          config.presentasjonerDatabaseId
+        children: (await getPresentasjoner()).map(
+          databasePagesToPage("/presentasjoner/")
         ),
       },
 
-      ...(await pagesFromNotionDatabase(
-        "/",
-        config.notionDrivenPagesDatabaseId
-      )),
+      ...(await getNotionDrivenPages()).map(databasePagesToPage("/")),
     ],
   };
 
   return landing;
 };
 
-const pagesFromNotionDatabase = async (
-  parentPath: string,
-  databaseId: string
-) => {
-  const result: Page[] = [];
-  for (const databasePage of await getDatabasePages(databaseId)) {
-    const title = getTitle(databasePage);
-    result.push({
+const databasePagesToPage =
+  (parentPath: string) =>
+  (page: DatabasePage): Page => {
+    const title = getTitle(page);
+    return {
       title,
       path: `${parentPath}${slugify(title)}`,
       children: [], // Fow now we don't allow child pages
-    });
-  }
-  return result;
-};
+    };
+  };
 
 export function flattenDepthFirst<T extends { children: T[] }>(root: T) {
   const result: T[] = [];

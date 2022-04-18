@@ -1,16 +1,18 @@
 import { json, LoaderFunction, MetaFunction } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
-import { getTitle, findPageBySlugPredicate } from "~/service/notion";
+import {
+  getTitle,
+  findPageBySlugPredicate,
+  getNotionDrivenPages,
+} from "~/service/notion";
 import {
   getBlocksWithChildren,
-  getDatabasePages,
   PageResponse,
 } from "~/service/notionApi.server";
 import { assertItemFound } from "~/common";
 import Debug from "~/components/debug";
 import NotionRender from "~/notion-render";
 import { Block } from "~/service/notion.types";
-import config from "~/config.server";
 import { Classes as NotionRenderClasses } from "~/notion-render/classes";
 
 // Notion Render Settings
@@ -25,9 +27,9 @@ type Data = { page: PageResponse; blocks: Block[] };
 export const loader: LoaderFunction = async ({
   params: { notionDrivenPage: requestedNotionDrivenPageSlug = "" },
 }) => {
-  const page = (
-    await getDatabasePages(config.notionDrivenPagesDatabaseId)
-  ).find(findPageBySlugPredicate(requestedNotionDrivenPageSlug));
+  const page = (await getNotionDrivenPages()).find(
+    findPageBySlugPredicate(requestedNotionDrivenPageSlug)
+  );
   assertItemFound(page);
 
   // Get current page blocks
