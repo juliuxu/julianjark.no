@@ -3,7 +3,7 @@ import { CollapsedCode } from "~/components/code";
 
 // This is really hacky.
 // The data is still being transfered to the browser, even when it's hidden
-const isDebugMode = () => {
+export const isDebugMode = () => {
   if (typeof document !== "undefined") {
     const debugMode = document.cookie
       .split("; ")
@@ -50,10 +50,7 @@ export const DebugToggle = () => {
   );
 };
 
-interface Props {
-  pageData: any;
-}
-export default function Debug(props: Props) {
+export const OnlyDebugMode: React.FC<any> = ({ children }) => {
   // A bit hacky...
   const [debugMode, setDebugModeState] = useState(false);
   useEffect(() => {
@@ -61,12 +58,18 @@ export default function Debug(props: Props) {
   }, []);
   if (!debugMode) return null;
 
+  return <>{children}</>;
+};
+interface Props {
+  pageData: any;
+}
+export default function Debug(props: Props) {
   return (
-    <>
+    <OnlyDebugMode>
       <CollapsedCode
         language="json"
         code={JSON.stringify(props.pageData, null, 2)}
       />
-    </>
+    </OnlyDebugMode>
   );
 }
