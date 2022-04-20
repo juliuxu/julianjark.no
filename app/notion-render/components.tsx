@@ -377,3 +377,4 @@ export const DefaultComponents: Record<
   link_preview: undefined,
   unsupported: undefined,
 };
+export type Components = typeof DefaultComponents;
