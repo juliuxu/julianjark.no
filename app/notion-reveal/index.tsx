@@ -3,12 +3,27 @@ import Reveal from "reveal.js";
 import RevealNotes from "reveal.js/plugin/notes/notes";
 import Code from "~/components/code";
 import NotionRender from "~/notion-render";
-import { Classes as NotionRenderClasses } from "~/notion-render/classes";
-import type { PreparedData } from "./prepare";
+import type { Classes as NotionRenderClasses } from "~/notion-render/classes";
+import {
+  Components as NotionRenderComponents,
+  getPlainTextFromRichTextList,
+} from "~/notion-render/components";
+import type { PreparedData, Slide, SubSlide } from "./prepare";
 
 // Classes
 const classes: Partial<NotionRenderClasses> = {
   column_list: { root: "r-hstack" },
+};
+const components: Partial<NotionRenderComponents> = {
+  code: ({ block }) => {
+    if (block.type !== "code") return null;
+    return (
+      <Code
+        language={block.code.language}
+        code={getPlainTextFromRichTextList(block.code.rich_text)}
+      />
+    );
+  },
 };
 
 type Props = PreparedData;
@@ -34,6 +49,28 @@ export default function NotionRevealPresentation({
     deck.current = newDeck;
   }, []);
 
+  const renderSlide = (slide: Slide | SubSlide, index: number) => (
+    <section key={index}>
+      {slide.notes && (
+        <aside className="notes">
+          <NotionRender
+            components={components}
+            classes={classes}
+            blocks={slide.notes}
+          />
+        </aside>
+      )}
+      <NotionRender
+        components={components}
+        classes={classes}
+        blocks={slide.content}
+      />
+
+      {/* Vertical subslides */}
+      {"subSlides" in slide && slide.subSlides.map(renderSlide)}
+    </section>
+  );
+
   return (
     <div className="reveal">
       <div className="slides">
@@ -53,24 +90,7 @@ export default function NotionRevealPresentation({
           </>
         )}
 
-        {slides.map((slide, index) => (
-          <section key={index}>
-            <aside className="notes">
-              <NotionRender classes={classes} blocks={slide.notes} />
-            </aside>
-            <NotionRender classes={classes} blocks={slide.content} />
-
-            {/* Vertical subslides */}
-            {slide.subSlides.map((subSlide, index2) => (
-              <section key={index2}>
-                <aside className="notes">
-                  <NotionRender classes={classes} blocks={subSlide.notes} />
-                </aside>
-                <NotionRender classes={classes} blocks={subSlide.content} />
-              </section>
-            ))}
-          </section>
-        ))}
+        {slides.map(renderSlide)}
       </div>
     </div>
   );

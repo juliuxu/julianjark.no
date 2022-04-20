@@ -13,14 +13,28 @@ import { assertItemFound } from "~/common";
 import Debug from "~/components/debug";
 import NotionRender from "~/notion-render";
 import { Block } from "~/service/notion.types";
-import { Classes as NotionRenderClasses } from "~/notion-render/classes";
+import type { Classes as NotionRenderClasses } from "~/notion-render/classes";
+import type { Components as NotionRenderComponents } from "~/notion-render/components";
+import { getPlainTextFromRichTextList } from "~/notion-render/components";
+import Code from "~/components/code";
 
 // Notion Render Settings
-export const myNotionRenderClasses: Partial<NotionRenderClasses> = {
+export const notionRenderClasses: Partial<NotionRenderClasses> = {
   column_list: { root: "grid" },
   color_blue: "color_blue",
   color_green: "color_green",
   color_orange: "color_orange",
+};
+export const notionRenderComponents: Partial<NotionRenderComponents> = {
+  code: ({ block }) => {
+    if (block.type !== "code") return null;
+    return (
+      <Code
+        language={block.code.language}
+        code={getPlainTextFromRichTextList(block.code.rich_text)}
+      />
+    );
+  },
 };
 
 type Data = { page: PageResponse; blocks: Block[] };
@@ -50,7 +64,11 @@ export default function NotionDrivenPage() {
   const data = useLoaderData<Data>();
   return (
     <>
-      <NotionRender classes={myNotionRenderClasses} blocks={data.blocks} />
+      <NotionRender
+        components={notionRenderComponents}
+        classes={notionRenderClasses}
+        blocks={data.blocks}
+      />
       <Debug pageData={data} />
     </>
   );

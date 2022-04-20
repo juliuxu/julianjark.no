@@ -1,24 +1,34 @@
-import { useEffect } from "react";
-import Prism from "prismjs";
-import "prismjs/components/prism-json";
-import styles from "prismjs/themes/prism-tomorrow.css";
+import Highlight, { Prism } from "prism-react-renderer";
+import vsDark from "prism-react-renderer/themes/vsDark";
 
-export const links = () => [{ rel: "stylesheet", href: styles }];
+const themes = { vsDark } as const;
+type Theme = keyof typeof themes | undefined;
 
 interface Props {
   code: string;
   language: string;
+  theme?: Theme;
 }
-export default function Code({ code, language }: Props) {
-  useEffect(() => {
-    Prism.highlightAll();
-  }, []);
+export default function Code({ code, language, theme }: Props) {
   return (
-    <div className="Code">
-      <pre>
-        <code className={`language-${language}`}>{code}</code>
-      </pre>
-    </div>
+    <Highlight
+      Prism={Prism}
+      theme={theme ? themes[theme] : undefined}
+      code={code}
+      language={language as any}
+    >
+      {({ className, style, tokens, getLineProps, getTokenProps }) => (
+        <pre className={className} style={style}>
+          {tokens.map((line, i) => (
+            <div {...getLineProps({ line, key: i })}>
+              {line.map((token, key) => (
+                <span {...getTokenProps({ token, key })} />
+              ))}
+            </div>
+          ))}
+        </pre>
+      )}
+    </Highlight>
   );
 }
 

@@ -73,7 +73,10 @@ const getPublisedProperty = (fromPage: DatabasePage): PublishedEnv => {
   const property = getSelect("Published", fromPage);
   if (property === "PUBLISHED") return property;
   if (property === "DEV") return property;
-  return "UNPUBLISHED";
+  if (property === "UNPUBLISHED") return property;
+
+  // Default
+  return "PUBLISHED";
 };
 const getEnv = () => {
   if (process.env.NODE_ENV === "production") return "PROD";

@@ -5,7 +5,10 @@ import config from "~/config.server";
 import NotionRender from "~/notion-render";
 import { Block } from "~/service/notion.types";
 import { getBlocksWithChildren } from "~/service/notionApi.server";
-import { myNotionRenderClasses } from "./$notionDrivenPage";
+import {
+  notionRenderClasses,
+  notionRenderComponents,
+} from "./$notionDrivenPage";
 
 type Data = { blocks: Block[] };
 export const loader: LoaderFunction = async () => {
@@ -22,7 +25,11 @@ export default function Index() {
   const data = useLoaderData<Data>();
   return (
     <>
-      <NotionRender classes={myNotionRenderClasses} blocks={data.blocks} />
+      <NotionRender
+        components={notionRenderComponents}
+        classes={notionRenderClasses}
+        blocks={data.blocks}
+      />
       <Debug pageData={data.blocks} />
     </>
   );

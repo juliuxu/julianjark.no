@@ -1,8 +1,13 @@
 import { json, LinksFunction } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
-import { commonLinks } from "~/common";
+import picoCss from "@picocss/pico/css/pico.min.css";
 
-export const links: LinksFunction = () => [...commonLinks()];
+export const links: LinksFunction = () => [
+  {
+    rel: "stylesheet",
+    href: picoCss,
+  },
+];
 
 export async function loader() {
   await new Promise((r) => setTimeout(r, 1000));

@@ -1,9 +1,9 @@
 import { createContext, useContext } from "react";
-import { DefaultComponents } from ".";
-import { Classes } from "./classes";
+import type { Components } from "./components";
+import type { Classes } from "./classes";
 
 interface NotionRenderContext {
-  components: typeof DefaultComponents;
+  components: Components;
   classes: Classes;
 }
 export const Context = createContext<NotionRenderContext | undefined>(

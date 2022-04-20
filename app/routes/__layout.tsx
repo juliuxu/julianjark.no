@@ -5,10 +5,31 @@ import {
   MetaFunction,
 } from "@remix-run/node";
 import { Outlet, useLoaderData } from "@remix-run/react";
-import { commonLinks } from "~/common";
 import TopLevelMenu, {
   loader as topLevelMenuLoader,
 } from "~/components/topLevelMenu";
+import prismTomorrow from "prismjs/themes/prism-tomorrow.css";
+
+import picoCss from "@picocss/pico/css/pico.min.css";
+
+import commonStyles from "~/styles/common.css";
+import notionRenderStyles from "~/styles/notionRender.css";
+
+export const links: LinksFunction = () => [
+  {
+    rel: "stylesheet",
+    href: picoCss,
+  },
+  { rel: "stylesheet", href: prismTomorrow },
+  {
+    rel: "stylesheet",
+    href: commonStyles,
+  },
+  {
+    rel: "stylesheet",
+    href: notionRenderStyles,
+  },
+];
 
 export const loader: LoaderFunction = async () => {
   return json({
@@ -16,7 +37,6 @@ export const loader: LoaderFunction = async () => {
   });
 };
 
-export const links: LinksFunction = () => [...commonLinks()];
 export const meta: MetaFunction = () => ({
   title: "Julian Jark",
 });

@@ -7,7 +7,6 @@ import {
   getNotionDrivenPages,
 } from "~/service/notion";
 import Code from "~/components/code";
-import { commonLinks } from "~/common";
 import { DatabasePage } from "~/service/notionApi.server";
 import config from "~/config.server";
 import { meta as indexMeta } from "~/routes/__layout";
@@ -72,8 +71,6 @@ export const loader: LoaderFunction = async () => {
   const sitemapTree = await getSitemapTree();
   return json({ sitemapTree, urlList: asUrlList(sitemapTree) });
 };
-
-export const links: LinksFunction = () => [...commonLinks()];
 
 export default function Sitemap() {
   const data = useLoaderData();
