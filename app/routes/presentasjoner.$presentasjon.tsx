@@ -25,10 +25,7 @@ import {
   prepareSlides,
   parsePresentationProperties,
 } from "~/notion-reveal/prepare";
-import notionRevealStyles from "~/notion-reveal/styles.css";
 
-import prismStyles from "prismjs/themes/prism-tomorrow.css";
-import revealCss from "reveal.js/dist/reveal.css";
 import blackRevealTheme from "reveal.js/dist/theme/black.css";
 import whiteRevealTheme from "reveal.js/dist/theme/white.css";
 import leagueRevealTheme from "reveal.js/dist/theme/league.css";
@@ -64,18 +61,18 @@ export const getThemeOrDefault = (maybeTheme: string) =>
     ? (maybeTheme as Theme)
     : defaultTheme;
 
-export const links: LinksFunction = () => [
-  { rel: "stylesheet", href: prismStyles },
-  { rel: "stylesheet", href: revealCss },
-  { rel: "stylesheet", href: notionRevealStyles },
+// export const links: LinksFunction = () => [
+//   { rel: "stylesheet", href: prismStyles },
+//   { rel: "stylesheet", href: revealCss },
+//   { rel: "stylesheet", href: notionRevealStyles },
 
-  // Source sans is used a lot in the the themes
-  // As well as the capra theme
-  // Remix doesn't work well with fontsource, so have to inline it
-  { rel: "stylesheet", href: "/fontsource/source-sans-pro/index.css" },
-  { rel: "stylesheet", href: "/fontsource/source-sans-pro/400.css" },
-  { rel: "stylesheet", href: "/fontsource/source-sans-pro/700.css" },
-];
+//   // Source sans is used a lot in the the themes
+//   // As well as the capra theme
+//   // Remix doesn't work well with fontsource, so have to inline it
+//   { rel: "stylesheet", href: "/fontsource/source-sans-pro/index.css" },
+//   { rel: "stylesheet", href: "/fontsource/source-sans-pro/400.css" },
+//   { rel: "stylesheet", href: "/fontsource/source-sans-pro/700.css" },
+// ];
 
 interface Data {
   page: DatabasePage;
@@ -109,7 +106,7 @@ export default function Presentasjon() {
   const data = useLoaderData<Data>();
   return (
     <>
-      <link rel="stylesheet" href={themes[data.properties.Theme]} />
+      {/* <link rel="stylesheet" href={themes[data.properties.Theme]} /> */}
       <NotionReveal {...data} />
     </>
   );
