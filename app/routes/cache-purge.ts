@@ -12,5 +12,8 @@ export const loader: LoaderFunction = async () => {
     )
   );
 
-  return json({ purged: true });
+  return json(
+    { purged: true },
+    { status: 200, headers: { "cache-control": "no-cache" } }
+  );
 };
