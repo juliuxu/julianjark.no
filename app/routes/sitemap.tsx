@@ -1,4 +1,4 @@
-import { json, LinksFunction, LoaderFunction } from "@remix-run/node";
+import { json, LoaderFunction } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import {
   slugify,
@@ -6,7 +6,7 @@ import {
   getPresentasjoner,
   getNotionDrivenPages,
 } from "~/service/notion";
-import Code from "~/components/code";
+import Code from "~/components/prismCode";
 import { DatabasePage } from "~/service/notionApi.server";
 import config from "~/config.server";
 import { meta as indexMeta } from "~/routes/__layout";

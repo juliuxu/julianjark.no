@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import Reveal from "reveal.js";
 import RevealNotes from "reveal.js/plugin/notes/notes";
-import Code from "~/components/code";
+import Code from "~/components/prismCode";
 import NotionRender from "~/notion-render";
 import type { Classes as NotionRenderClasses } from "~/notion-render/classes";
 import {

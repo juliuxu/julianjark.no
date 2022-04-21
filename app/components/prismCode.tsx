@@ -1,15 +1,18 @@
 import Highlight, { Prism } from "prism-react-renderer";
 import vsDark from "prism-react-renderer/themes/vsDark";
+import prismTomorrow from "prismjs/themes/prism-tomorrow.css";
+
+export const prismStyles = prismTomorrow;
 
 const themes = { vsDark } as const;
 type Theme = keyof typeof themes | undefined;
 
-interface Props {
+interface PrismCodeProps {
   code: string;
   language: string;
   theme?: Theme;
 }
-export default function Code({ code, language, theme }: Props) {
+function PrismCode({ code, language, theme = "vsDark" }: PrismCodeProps) {
   return (
     <Highlight
       Prism={Prism}
@@ -18,7 +21,7 @@ export default function Code({ code, language, theme }: Props) {
       language={language as any}
     >
       {({ className, style, tokens, getLineProps, getTokenProps }) => (
-        <pre className={className} style={style}>
+        <pre className={className} style={{ ...style, padding: "1rem" }}>
           {tokens.map((line, i) => (
             <div {...getLineProps({ line, key: i })}>
               {line.map((token, key) => (
@@ -31,12 +34,19 @@ export default function Code({ code, language, theme }: Props) {
     </Highlight>
   );
 }
+interface Props {
+  code: string;
+  language: string;
+}
+export default function Code(props: Props) {
+  return <PrismCode {...props} />;
+}
 
-type CollapsedCodeProps = Props & {
+type CollapsedCodeProps = PrismCodeProps & {
   open?: boolean;
   title?: React.ReactNode;
 };
-export const CollapsedCode = (props: CollapsedCodeProps) => (
+export const CollapsedPrismCode = (props: CollapsedCodeProps) => (
   <details open={props.open}>
     <summary>{props.title ?? "Show code"}</summary>
     <Code {...props} />

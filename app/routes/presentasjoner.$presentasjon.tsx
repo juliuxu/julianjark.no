@@ -27,7 +27,6 @@ import {
 } from "~/notion-reveal/prepare";
 import notionRevealStyles from "~/notion-reveal/styles.css";
 
-import prismStyles from "prismjs/themes/prism-tomorrow.css";
 import revealCss from "reveal.js/dist/reveal.css";
 import blackRevealTheme from "reveal.js/dist/theme/black.css";
 import whiteRevealTheme from "reveal.js/dist/theme/white.css";
@@ -65,7 +64,6 @@ export const getThemeOrDefault = (maybeTheme: string) =>
     : defaultTheme;
 
 export const links: LinksFunction = () => [
-  { rel: "stylesheet", href: prismStyles },
   { rel: "stylesheet", href: revealCss },
   { rel: "stylesheet", href: notionRevealStyles },
 

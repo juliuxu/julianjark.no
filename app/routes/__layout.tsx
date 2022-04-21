@@ -8,7 +8,6 @@ import { Outlet, useLoaderData } from "@remix-run/react";
 import TopLevelMenu, {
   loader as topLevelMenuLoader,
 } from "~/components/topLevelMenu";
-import prismTomorrow from "prismjs/themes/prism-tomorrow.css";
 
 import picoCss from "@picocss/pico/css/pico.min.css";
 
@@ -20,7 +19,6 @@ export const links: LinksFunction = () => [
     rel: "stylesheet",
     href: picoCss,
   },
-  { rel: "stylesheet", href: prismTomorrow },
   {
     rel: "stylesheet",
     href: commonStyles,

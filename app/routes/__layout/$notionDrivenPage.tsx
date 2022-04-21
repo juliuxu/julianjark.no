@@ -16,7 +16,7 @@ import { Block } from "~/service/notion.types";
 import type { Classes as NotionRenderClasses } from "~/notion-render/classes";
 import type { Components as NotionRenderComponents } from "~/notion-render/components";
 import { getPlainTextFromRichTextList } from "~/notion-render/components";
-import Code from "~/components/code";
+import Code from "~/components/prismCode";
 
 // Notion Render Settings
 export const notionRenderClasses: Partial<NotionRenderClasses> = {

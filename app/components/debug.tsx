@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { CollapsedCode } from "~/components/code";
+import { CollapsedPrismCode } from "~/components/prismCode";
 
 // This is really hacky.
 // The data is still being transfered to the browser, even when it's hidden
@@ -31,9 +31,21 @@ export const DebugToggle = () => {
     setDebugMode((e.target as any).checked);
     document.location.reload();
   };
+  const debugMode = useIsDebugMode();
   return (
     <fieldset>
-      <label htmlFor="debugModeSwitch" className="debugButton">
+      <label
+        htmlFor="debugModeSwitch"
+        className="debugButton"
+        style={
+          debugMode
+            ? {
+                opacity: 1,
+                visibility: "visible",
+              }
+            : undefined
+        }
+      >
         🧑‍💻
         <input
           type="checkbox"
@@ -43,21 +55,24 @@ export const DebugToggle = () => {
           // onChange doesn't always get called
           // pretty strange!
           onClick={onToggle}
-          defaultChecked={isDebugMode()}
+          defaultChecked={debugMode}
         />
       </label>
     </fieldset>
   );
 };
 
-export const OnlyDebugMode: React.FC<any> = ({ children }) => {
-  // A bit hacky...
+// A bit hacky
+const useIsDebugMode = () => {
   const [debugMode, setDebugModeState] = useState(false);
   useEffect(() => {
     setDebugModeState(isDebugMode());
   }, []);
-  if (!debugMode) return null;
+  return debugMode;
+};
 
+export const OnlyDebugMode: React.FC<any> = ({ children }) => {
+  if (!useIsDebugMode()) return null;
   return <>{children}</>;
 };
 interface Props {
@@ -66,7 +81,7 @@ interface Props {
 export default function Debug(props: Props) {
   return (
     <OnlyDebugMode>
-      <CollapsedCode
+      <CollapsedPrismCode
         language="json"
         code={JSON.stringify(props.pageData, null, 2)}
       />
