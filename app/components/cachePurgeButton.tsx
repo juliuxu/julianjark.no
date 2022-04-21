@@ -8,7 +8,7 @@ export default function CachePurgeButton() {
     <OnlyDebugMode>
       <cachePurge.Form
         style={{ display: isDebugMode() ? "unset" : "none" }}
-        method="get"
+        method="post"
         action="/cache-purge"
       >
         <button

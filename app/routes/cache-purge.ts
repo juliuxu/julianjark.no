@@ -1,8 +1,8 @@
-import { json, LoaderFunction } from "@remix-run/node";
+import { json, ActionFunction } from "@remix-run/node";
 import { asUrlList, getSitemapTree } from "./sitemap";
 const baseUrl = "https://julianjark.no";
 
-export const loader: LoaderFunction = async () => {
+export const action: ActionFunction = async () => {
   const sitemapTree = await getSitemapTree();
   const urlList = asUrlList(sitemapTree);
 
