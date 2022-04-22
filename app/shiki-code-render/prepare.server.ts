@@ -1,11 +1,11 @@
 import * as shiki from "shiki";
-import type { HighlighterOptions, Lang, Theme } from "shiki";
+import type { Lang, Theme } from "shiki";
 
 interface LineOption {
   line: number;
   classes?: string[];
 }
-interface Options {
+export interface Options {
   lang: Lang;
   theme?: Theme;
   lineOptions?: LineOption[];

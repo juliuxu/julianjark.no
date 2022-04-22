@@ -1,13 +1,14 @@
 import { useEffect, useRef } from "react";
 import Reveal from "reveal.js";
 import RevealNotes from "reveal.js/plugin/notes/notes";
-import Code from "~/components/prismCode";
+import PrismCode from "~/components/prismCode";
 import NotionRender from "~/notion-render";
 import type { Classes as NotionRenderClasses } from "~/notion-render/classes";
 import {
   Components as NotionRenderComponents,
   getPlainTextFromRichTextList,
 } from "~/notion-render/components";
+import { ShikiNotionCode } from "~/shiki-code-render/shiki-notion";
 import type { PreparedData, Slide, SubSlide } from "./prepare";
 
 // Classes
@@ -15,15 +16,7 @@ const classes: Partial<NotionRenderClasses> = {
   column_list: { root: "r-hstack" },
 };
 const components: Partial<NotionRenderComponents> = {
-  code: ({ block }) => {
-    if (block.type !== "code") return null;
-    return (
-      <Code
-        language={block.code.language}
-        code={getPlainTextFromRichTextList(block.code.rich_text)}
-      />
-    );
-  },
+  code: ShikiNotionCode,
 };
 
 type Props = PreparedData;
@@ -78,14 +71,17 @@ export default function NotionRevealPresentation({
           <>
             <section>
               <h2>Properties</h2>
-              <Code
+              <PrismCode
                 language="json"
                 code={JSON.stringify(properties, null, 2)}
               />
             </section>
             <section>
               <h2>Slides</h2>
-              <Code language="json" code={JSON.stringify(slides, null, 2)} />
+              <PrismCode
+                language="json"
+                code={JSON.stringify(slides, null, 2)}
+              />
             </section>
           </>
         )}

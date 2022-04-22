@@ -4,6 +4,7 @@ import { useLoaderData } from "@remix-run/react";
 import prepareCodeHtml from "~/shiki-code-render/prepare.server";
 import ShikiCode from "~/shiki-code-render/shikiCode";
 import PrismCode from "~/components/prismCode";
+import { useEffect, useState } from "react";
 
 export const links: LinksFunction = () => [
   {
@@ -42,10 +43,22 @@ export const loader: LoaderFunction = async () => {
 
 export default function CodeTest() {
   const data = useLoaderData();
+  // const [x, setX] = useState("");
+  // useEffect(() => {
+  //   isoPrepare(data.codeText, { lang: "tsx" }).then((codeHtml) => {
+  //     alert("done with prepare");
+  //     setX(codeHtml);
+  //   });
+  // }, []);
+
   return (
     <main className="container">
       <h1>Code</h1>
       <div className="grid">
+        {/* <div>
+          <h2>Using Shiki</h2>
+          <ShikiCode codeHtml={x} />
+        </div> */}
         <div>
           <h2>Using Shiki (server rendered)</h2>
           <ShikiCode codeHtml={data.codeHtml} />

@@ -15,8 +15,22 @@ import NotionRender from "~/notion-render";
 import { Block } from "~/service/notion.types";
 import type { Classes as NotionRenderClasses } from "~/notion-render/classes";
 import type { Components as NotionRenderComponents } from "~/notion-render/components";
+import {
+  ShikiNotionCode,
+  prepareNotionBlocks,
+} from "~/shiki-code-render/shiki-notion";
+import PrismCode from "~/components/prismCode";
 import { getPlainTextFromRichTextList } from "~/notion-render/components";
-import Code from "~/components/prismCode";
+
+export const PrismNotionCode: NotionRenderComponents["code"] = ({ block }) => {
+  if (block.type !== "code") return null;
+  return (
+    <PrismCode
+      language={block.code.language}
+      code={getPlainTextFromRichTextList(block.code.rich_text)}
+    />
+  );
+};
 
 // Notion Render Settings
 export const notionRenderClasses: Partial<NotionRenderClasses> = {
@@ -26,15 +40,8 @@ export const notionRenderClasses: Partial<NotionRenderClasses> = {
   color_orange: "color_orange",
 };
 export const notionRenderComponents: Partial<NotionRenderComponents> = {
-  code: ({ block }) => {
-    if (block.type !== "code") return null;
-    return (
-      <Code
-        language={block.code.language}
-        code={getPlainTextFromRichTextList(block.code.rich_text)}
-      />
-    );
-  },
+  code: ShikiNotionCode,
+  // code: PrismNotionCode,
 };
 
 type Data = { page: PageResponse; blocks: Block[] };
@@ -48,6 +55,8 @@ export const loader: LoaderFunction = async ({
 
   // Get current page blocks
   const blocks = await getBlocksWithChildren(page.id);
+  await prepareNotionBlocks(blocks, { theme: "dark-plus" });
+
   return json<Data>({
     page,
     blocks,

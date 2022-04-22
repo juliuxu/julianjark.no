@@ -40,6 +40,7 @@ import solarizedRevealTheme from "reveal.js/dist/theme/solarized.css";
 import bloodRevealTheme from "reveal.js/dist/theme/blood.css";
 import moonRevealTheme from "reveal.js/dist/theme/moon.css";
 import capraRevealTheme from "~/styles/capraRevealTheme.css";
+import { prepareNotionBlocks } from "~/shiki-code-render/shiki-notion";
 
 const themes = {
   black: blackRevealTheme,
@@ -91,6 +92,7 @@ export const loader: LoaderFunction = async ({
 
   const properties = parsePresentationProperties(page);
   const blocks = await getBlocksWithChildren(page.id);
+  await prepareNotionBlocks(blocks, { theme: "dark-plus" });
   const slides = prepareSlides(blocks);
 
   return json<Data>({ page, blocks, properties, slides });
