@@ -17,16 +17,14 @@ export const ShikiNotionCode: NotionRenderComponents["code"] = ({ block }) => {
 };
 
 const parseCaption = (caption: string): { language?: string } => {
+  const keys = ["language"] as const;
   const optionsList = caption.split(" ");
   const options: ReturnType<typeof parseCaption> = {};
   optionsList.forEach((option) => {
     const s = option.split("=");
     if (s.length !== 2) return;
-
-    if (s[0] === "language") {
-      options["language"] = s[1];
-    } else if (s[0] === "somethingelse") {
-      // TODO
+    if (keys.includes(s[0] as typeof keys[number])) {
+      options[s[0] as typeof keys[number]] = s[1];
     }
   });
   return options;
