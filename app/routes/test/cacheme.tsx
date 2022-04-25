@@ -55,3 +55,31 @@ proxy_ignore_headers Vary;
 etag on;
 
 `;
+
+const onlyNginxConfig = `
+location / {
+  include conf.d/include/proxy.conf;
+  
+  proxy_cache super-cache;
+  proxy_cache_key $host$request_uri;
+  proxy_cache_valid 200 1m;
+  proxy_cache_use_stale updating error timeout http_500 http_502 http_503 http_504;
+  proxy_cache_background_update on;
+  proxy_cache_bypass $http_cache_purge;
+  add_header X-Cache-Status $upstream_cache_status;
+  proxy_ignore_headers Vary;
+}
+`;
+
+const cacheEnabledButControlledByApp = `
+location / {
+  include conf.d/include/proxy.conf;
+  
+  proxy_cache super-cache;
+  proxy_cache_key $host$request_uri;
+  proxy_cache_background_update on;
+  proxy_cache_bypass $http_cache_purge;
+  add_header X-Cache-Status $upstream_cache_status;
+  proxy_ignore_headers Vary;
+}
+`;
