@@ -14,6 +14,13 @@ export default function handleRequest(
 
   responseHeaders.set("Content-Type", "text/html");
 
+  // Global cache headers for all content
+  // Very dangerous!
+  responseHeaders.set(
+    "Cache-Control",
+    `public, s-maxage=${60 * 60}, stale-while-revalidate=${60 * 60 * 24 * 365}`
+  );
+
   return new Response("<!DOCTYPE html>" + markup, {
     status: responseStatusCode,
     headers: responseHeaders,

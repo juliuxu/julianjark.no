@@ -1,6 +1,5 @@
 import { json, ActionFunction } from "@remix-run/node";
 import { asUrlList, getSitemapTree } from "./sitemap";
-const baseUrl = "https://julianjark.no";
 
 export const action: ActionFunction = async () => {
   const sitemapTree = await getSitemapTree();
@@ -14,6 +13,6 @@ export const action: ActionFunction = async () => {
 
   return json(
     { purged: true },
-    { status: 200, headers: { "cache-control": "no-cache" } }
+    { status: 200, headers: { "cache-control": "no-store" } }
   );
 };
