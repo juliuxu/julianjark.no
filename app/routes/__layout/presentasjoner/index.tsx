@@ -3,14 +3,18 @@ import { Link, useLoaderData } from "@remix-run/react";
 import { getPresentasjoner, getTitle, slugify } from "~/service/notion";
 import { DatabasePage } from "~/service/notionApi.server";
 import Debug from "~/components/debug";
+import config from "~/config.server";
 
 type Data = { presentasjoner: DatabasePage[] };
 export const loader: LoaderFunction = async () => {
   const presentasjoner = await getPresentasjoner();
 
-  return json({
-    presentasjoner,
-  });
+  return json(
+    {
+      presentasjoner,
+    },
+    { headers: config.cacheControlHeaders }
+  );
 };
 
 export const meta: MetaFunction = () => ({

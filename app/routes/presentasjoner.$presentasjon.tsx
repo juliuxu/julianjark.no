@@ -42,6 +42,7 @@ import bloodRevealTheme from "reveal.js/dist/theme/blood.css";
 import moonRevealTheme from "reveal.js/dist/theme/moon.css";
 import capraRevealTheme from "~/styles/capraRevealTheme.css";
 import { prepareNotionBlocks } from "~/shiki-code-render/shiki-notion";
+import config from "~/config.server";
 
 const themes = {
   black: blackRevealTheme,
@@ -96,21 +97,20 @@ export const loader: LoaderFunction = async ({
   await prepareNotionBlocks(blocks, { theme: "dark-plus" });
   const slides = prepareSlides(blocks);
 
-  return json<Data>({ page, blocks, properties, slides });
+  return json<Data>(
+    { page, blocks, properties, slides },
+    { headers: config.cacheControlHeaders }
+  );
+};
+
+export const headers: HeadersFunction = ({ loaderHeaders }) => {
+  return loaderHeaders;
 };
 
 export const meta: MetaFunction = ({ data }: { data: Data }) => {
   return {
     title: getTitle(data.page),
     description: data.properties.Ingress,
-  };
-};
-
-export const headers: HeadersFunction = () => {
-  return {
-    "Cache-Control": `public, s-maxage=${60}, stale-while-revalidate=${
-      60 * 60 * 24 * 365
-    }`,
   };
 };
 

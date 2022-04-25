@@ -21,6 +21,7 @@ import {
 } from "~/shiki-code-render/shiki-notion";
 import PrismCode from "~/components/prismCode";
 import { getPlainTextFromRichTextList } from "~/notion-render/components";
+import config from "~/config.server";
 
 export const PrismNotionCode: NotionRenderComponents["code"] = ({ block }) => {
   if (block.type !== "code") return null;
@@ -57,10 +58,13 @@ export const loader: LoaderFunction = async ({
   const blocks = await getBlocksWithChildren(page.id);
   await prepareNotionBlocks(blocks, { theme: "dark-plus" });
 
-  return json<Data>({
-    page,
-    blocks,
-  });
+  return json<Data>(
+    {
+      page,
+      blocks,
+    },
+    { headers: config.cacheControlHeaders }
+  );
 };
 
 export const meta: MetaFunction = ({ data }: { data: Data }) => {

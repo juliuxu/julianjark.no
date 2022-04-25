@@ -15,9 +15,12 @@ type Data = { blocks: Block[] };
 export const loader: LoaderFunction = async () => {
   const blocks = await getBlocksWithChildren(config.landingPageId);
   await prepareNotionBlocks(blocks, { theme: "dark-plus" });
-  return json<Data>({
-    blocks,
-  });
+  return json<Data>(
+    {
+      blocks,
+    },
+    { headers: config.cacheControlHeaders }
+  );
 };
 
 export const meta: MetaFunction = () => ({

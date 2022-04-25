@@ -9,10 +9,10 @@ export const links: LinksFunction = () => [
   },
 ];
 
-export async function loader() {
+export const loader = async () => {
   await new Promise((r) => setTimeout(r, 1000));
   return json({ time: new Date().toTimeString() });
-}
+};
 
 export default function CacheMe() {
   const { time } = useLoaderData();

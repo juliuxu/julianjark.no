@@ -14,6 +14,7 @@ import picoCss from "@picocss/pico/css/pico.min.css";
 
 import commonStyles from "~/styles/common.css";
 import notionRenderStyles from "~/styles/notionRender.css";
+import config from "~/config.server";
 
 export const links: LinksFunction = () => [
   {
@@ -31,9 +32,12 @@ export const links: LinksFunction = () => [
 ];
 
 export const loader: LoaderFunction = async () => {
-  return json({
-    ...(await topLevelMenuLoader()),
-  });
+  return json(
+    {
+      ...(await topLevelMenuLoader()),
+    },
+    { headers: config.cacheControlHeaders }
+  );
 };
 
 export const meta: MetaFunction = () => ({
@@ -42,9 +46,7 @@ export const meta: MetaFunction = () => ({
 
 export const headers: HeadersFunction = () => {
   return {
-    "Cache-Control": `public, s-maxage=${60 * 60}, stale-while-revalidate=${
-      60 * 60 * 24 * 365
-    }`,
+    ...config.cacheControlHeaders,
   };
 };
 
