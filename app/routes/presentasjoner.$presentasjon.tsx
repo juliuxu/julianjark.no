@@ -3,6 +3,7 @@ import {
   json,
   MetaFunction,
   LinksFunction,
+  HeadersFunction,
 } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 
@@ -102,6 +103,14 @@ export const meta: MetaFunction = ({ data }: { data: Data }) => {
   return {
     title: getTitle(data.page),
     description: data.properties.Ingress,
+  };
+};
+
+export const headers: HeadersFunction = () => {
+  return {
+    "Cache-Control": `public, s-maxage=${60}, stale-while-revalidate=${
+      60 * 60 * 24 * 365
+    }`,
   };
 };
 

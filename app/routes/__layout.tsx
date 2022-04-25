@@ -1,4 +1,5 @@
 import {
+  HeadersFunction,
   json,
   LinksFunction,
   LoaderFunction,
@@ -38,6 +39,14 @@ export const loader: LoaderFunction = async () => {
 export const meta: MetaFunction = () => ({
   title: "Julian Jark",
 });
+
+export const headers: HeadersFunction = () => {
+  return {
+    "Cache-Control": `public, s-maxage=${60 * 60}, stale-while-revalidate=${
+      60 * 60 * 24 * 365
+    }`,
+  };
+};
 
 export default function Layout() {
   const data = useLoaderData();
