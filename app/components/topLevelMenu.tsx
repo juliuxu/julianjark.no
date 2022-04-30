@@ -1,6 +1,9 @@
 import { NavLink } from "@remix-run/react";
 import { getSitemapTree } from "~/routes/sitemap";
-import CachePurgeButton from "./cachePurgeButton";
+import {
+  CachePurgeAllPagesButton,
+  CachePurgeCurrenPageButton,
+} from "./cachePurgeButton";
 import { DebugToggle } from "./debug";
 
 export const loader = async () => ({ sitemapTree: await getSitemapTree() });
@@ -17,7 +20,8 @@ export default function TopLevelMenu({ sitemapTree }: Props) {
           <DebugToggle />
         </li>
         <li>
-          <CachePurgeButton />
+          <CachePurgeCurrenPageButton />
+          <CachePurgeAllPagesButton />
         </li>
       </ul>
       <ul>
