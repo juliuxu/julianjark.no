@@ -1,4 +1,9 @@
-import { json, LoaderFunction, MetaFunction } from "@remix-run/node";
+import {
+  HeadersFunction,
+  json,
+  LoaderFunction,
+  MetaFunction,
+} from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import Debug from "~/components/debug";
 import config from "~/config.server";
@@ -21,6 +26,9 @@ export const loader: LoaderFunction = async () => {
     },
     { headers: config.cacheControlHeaders }
   );
+};
+export const headers: HeadersFunction = ({ loaderHeaders }) => {
+  return loaderHeaders;
 };
 
 export const meta: MetaFunction = () => ({

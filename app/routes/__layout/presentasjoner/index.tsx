@@ -1,4 +1,9 @@
-import { json, LoaderFunction, MetaFunction } from "@remix-run/node";
+import {
+  HeadersFunction,
+  json,
+  LoaderFunction,
+  MetaFunction,
+} from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
 import { getPresentasjoner, getTitle, slugify } from "~/service/notion";
 import { DatabasePage } from "~/service/notionApi.server";
@@ -15,6 +20,9 @@ export const loader: LoaderFunction = async () => {
     },
     { headers: config.cacheControlHeaders }
   );
+};
+export const headers: HeadersFunction = ({ loaderHeaders }) => {
+  return loaderHeaders;
 };
 
 export const meta: MetaFunction = () => ({
