@@ -37,7 +37,11 @@ export default function Index() {
       <ul>
         {data.presentasjoner.map((presentasjon) => (
           <li key={presentasjon.id}>
-            <Link to={slugify(getTitle(presentasjon))} prefetch="intent">
+            <Link
+              reloadDocument
+              to={slugify(getTitle(presentasjon))}
+              prefetch="intent"
+            >
               {getTitle(presentasjon)}
             </Link>
           </li>

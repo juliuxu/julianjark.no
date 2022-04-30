@@ -27,7 +27,7 @@ export default function TopLevelMenu({ sitemapTree }: Props) {
       <ul>
         {sitemapTree.children.map((page) => (
           <li key={page.path}>
-            <NavLink to={page.path} prefetch="intent">
+            <NavLink to={page.path} prefetch="intent" reloadDocument>
               {page.title}
             </NavLink>
           </li>
