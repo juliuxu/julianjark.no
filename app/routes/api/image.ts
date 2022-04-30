@@ -77,7 +77,14 @@ export const loader: LoaderFunction = async ({ request }) => {
     // Resize if requested
     const { width: metaWidth, height: metaHeight } =
       await transformer.metadata();
-    if (width && height && metaWidth && metaHeight) {
+    if (
+      width &&
+      height &&
+      metaWidth &&
+      metaHeight &&
+      metaWidth > width &&
+      metaHeight > height
+    ) {
     } else if (width && metaWidth && metaWidth > width) {
       transformer.resize(width);
     } else if (height && metaHeight && metaHeight > height) {
