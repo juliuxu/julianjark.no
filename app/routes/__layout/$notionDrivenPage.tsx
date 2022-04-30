@@ -22,6 +22,7 @@ import {
 import PrismCode from "~/components/prismCode";
 import { getPlainTextFromRichTextList } from "~/packages/notion-render/components";
 import config from "~/config.server";
+import { OptimizedNotionImage } from "~/components/notionComponents";
 
 export const PrismNotionCode: NotionRenderComponents["code"] = ({ block }) => {
   if (block.type !== "code") return null;
@@ -41,8 +42,9 @@ export const notionRenderClasses: Partial<NotionRenderClasses> = {
   color_orange: "color_orange",
 };
 export const notionRenderComponents: Partial<NotionRenderComponents> = {
-  code: ShikiNotionCode,
   // code: PrismNotionCode,
+  code: ShikiNotionCode,
+  image: OptimizedNotionImage,
 };
 
 type Data = { page: PageResponse; blocks: Block[] };

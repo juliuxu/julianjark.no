@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import Reveal from "reveal.js";
 import RevealNotes from "reveal.js/plugin/notes/notes";
+import { OptimizedNotionImage } from "~/components/notionComponents";
 import PrismCode from "~/components/prismCode";
 import NotionRender from "~/packages/notion-render";
 import type { Classes as NotionRenderClasses } from "~/packages/notion-render/classes";
@@ -14,6 +15,7 @@ const classes: Partial<NotionRenderClasses> = {
 };
 const components: Partial<NotionRenderComponents> = {
   code: ShikiNotionCode,
+  image: OptimizedNotionImage,
 };
 
 type Props = PreparedData;
