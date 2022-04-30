@@ -5,23 +5,21 @@ import { CollapsedPrismCode } from "~/components/prismCode";
 // The data is still being transfered to the browser, even when it's hidden
 export const isDebugMode = () => {
   if (typeof document !== "undefined") {
-    const debugMode = document.cookie
-      .split("; ")
-      .find((row) => row.startsWith("debugMode="))
-      ?.split("=")[1];
+    // const debugMode = document.cookie
+    //   .split("; ")
+    //   .find((row) => row.startsWith("debugMode="))
+    //   ?.split("=")[1];
+    const debugMode = sessionStorage.getItem("debugMode");
     return debugMode === "true";
   }
   return false;
 };
 
-// Just set this cookie client side.
-// It's not sensitive and thus not signed
-// That way we can reload and whatever page the user is on gets the updates
-// 🤔 Would this work by using an action to set the cookie?
-// Would the page loader and render update accordingly?
 const setDebugMode = (value: boolean) => {
   // https://developer.mozilla.org/en-US/docs/Web/API/Document/cookie
-  document.cookie = `debugMode=${value}`;
+  // document.cookie = `debugMode=${value}`;
+
+  sessionStorage.setItem("debugMode", String(value));
 };
 
 export const DebugToggle = () => {
