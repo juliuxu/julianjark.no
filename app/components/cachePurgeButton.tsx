@@ -22,7 +22,7 @@ export function CachePurgeCurrenPageButton() {
         disabled={isSubmitting}
         aria-busy={isSubmitting}
       >
-        {!isSubmitting && "↺"}
+        {!isSubmitting && "↻"}
       </button>
     </OnlyDebugMode>
   );
