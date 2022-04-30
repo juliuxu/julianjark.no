@@ -2,7 +2,7 @@ import { json, LoaderFunction, MetaFunction } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import Debug from "~/components/debug";
 import config from "~/config.server";
-import NotionRender from "~/notion-render";
+import NotionRender from "~/packages/notion-render";
 import { Block } from "~/service/notion.types";
 import { getBlocksWithChildren } from "~/service/notionApi.server";
 import { prepareNotionBlocks } from "~/shiki-code-render/shiki-notion";

@@ -4,7 +4,6 @@ import { useLoaderData } from "@remix-run/react";
 import prepareCodeHtml from "~/shiki-code-render/prepare.server";
 import ShikiCode from "~/shiki-code-render/shikiCode";
 import PrismCode from "~/components/prismCode";
-import { useEffect, useState } from "react";
 
 export const links: LinksFunction = () => [
   {

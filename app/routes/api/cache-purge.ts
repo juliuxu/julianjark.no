@@ -1,5 +1,5 @@
 import { json, ActionFunction } from "@remix-run/node";
-import { asUrlList, getSitemapTree } from "./sitemap";
+import { asUrlList, getSitemapTree } from "../sitemap";
 
 export const action: ActionFunction = async () => {
   const sitemapTree = await getSitemapTree();

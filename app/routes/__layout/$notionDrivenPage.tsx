@@ -11,16 +11,16 @@ import {
 } from "~/service/notionApi.server";
 import { assertItemFound } from "~/common";
 import Debug from "~/components/debug";
-import NotionRender from "~/notion-render";
+import NotionRender from "~/packages/notion-render";
 import { Block } from "~/service/notion.types";
-import type { Classes as NotionRenderClasses } from "~/notion-render/classes";
-import type { Components as NotionRenderComponents } from "~/notion-render/components";
+import type { Classes as NotionRenderClasses } from "~/packages/notion-render/classes";
+import type { Components as NotionRenderComponents } from "~/packages/notion-render/components";
 import {
   ShikiNotionCode,
   prepareNotionBlocks,
 } from "~/shiki-code-render/shiki-notion";
 import PrismCode from "~/components/prismCode";
-import { getPlainTextFromRichTextList } from "~/notion-render/components";
+import { getPlainTextFromRichTextList } from "~/packages/notion-render/components";
 import config from "~/config.server";
 
 export const PrismNotionCode: NotionRenderComponents["code"] = ({ block }) => {

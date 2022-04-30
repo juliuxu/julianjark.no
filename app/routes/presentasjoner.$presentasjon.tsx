@@ -7,7 +7,7 @@ import {
 } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 
-import NotionReveal from "~/notion-reveal";
+import NotionReveal from "~/packages/notion-reveal";
 import {
   findPageBySlugPredicate,
   getPresentasjoner,
@@ -21,12 +21,15 @@ import { assertItemFound } from "~/common";
 
 import { Block } from "~/service/notion.types";
 
-import type { PresentationProperties, Slide } from "~/notion-reveal/prepare";
+import type {
+  PresentationProperties,
+  Slide,
+} from "~/packages/notion-reveal/prepare";
 import {
   prepareSlides,
   parsePresentationProperties,
-} from "~/notion-reveal/prepare";
-import notionRevealStyles from "~/notion-reveal/styles.css";
+} from "~/packages/notion-reveal/prepare";
+import notionRevealStyles from "~/packages/notion-reveal/styles.css";
 
 import revealCss from "reveal.js/dist/reveal.css";
 import blackRevealTheme from "reveal.js/dist/theme/black.css";

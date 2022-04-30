@@ -1,7 +1,7 @@
 import * as shiki from "shiki";
 import type { Block } from "~/service/notion.types";
-import { getPlainTextFromRichTextList } from "~/notion-render/components";
-import type { Components as NotionRenderComponents } from "~/notion-render/components";
+import { getPlainTextFromRichTextList } from "~/packages/notion-render/components";
+import type { Components as NotionRenderComponents } from "~/packages/notion-render/components";
 import { ShikiCode } from ".";
 import { Options } from "./prepare.server";
 

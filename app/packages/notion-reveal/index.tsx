@@ -2,12 +2,9 @@ import { useEffect, useRef } from "react";
 import Reveal from "reveal.js";
 import RevealNotes from "reveal.js/plugin/notes/notes";
 import PrismCode from "~/components/prismCode";
-import NotionRender from "~/notion-render";
-import type { Classes as NotionRenderClasses } from "~/notion-render/classes";
-import {
-  Components as NotionRenderComponents,
-  getPlainTextFromRichTextList,
-} from "~/notion-render/components";
+import NotionRender from "~/packages/notion-render";
+import type { Classes as NotionRenderClasses } from "~/packages/notion-render/classes";
+import { Components as NotionRenderComponents } from "~/packages/notion-render/components";
 import { ShikiNotionCode } from "~/shiki-code-render/shiki-notion";
 import type { PreparedData, Slide, SubSlide } from "./prepare";
 

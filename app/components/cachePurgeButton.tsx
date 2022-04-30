@@ -9,7 +9,7 @@ export default function CachePurgeButton() {
       <cachePurge.Form
         style={{ display: isDebugMode() ? "unset" : "none" }}
         method="post"
-        action="/cache-purge"
+        action="/api/cache-purge"
       >
         <button
           type="submit"
