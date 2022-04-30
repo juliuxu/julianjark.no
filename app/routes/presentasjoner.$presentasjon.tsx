@@ -102,7 +102,7 @@ export const loader: LoaderFunction = async ({
 
   return json<Data>(
     { page, blocks, properties, slides },
-    { headers: config.cacheControlHeaders }
+    { headers: config.cacheControlHeadersDynamic(page.last_edited_time) }
   );
 };
 

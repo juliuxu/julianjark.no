@@ -70,7 +70,7 @@ export const loader: LoaderFunction = async ({
       page,
       blocks,
     },
-    { headers: config.cacheControlHeaders }
+    { headers: config.cacheControlHeadersDynamic(page.last_edited_time) }
   );
 };
 export const headers: HeadersFunction = ({ loaderHeaders }) => {

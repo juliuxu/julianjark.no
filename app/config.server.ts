@@ -3,6 +3,8 @@ if (process.env.NODE_ENV === "development") baseUrl = "http://localhost:3000";
 else if (process.env.BASE_URL !== undefined) baseUrl = process.env.BASE_URL;
 else baseUrl = "https://julianjark.no";
 
+const MONTH_IN_SECONDS = 60 * 60 * 24 * 30;
+const YEAR_IN_SECONDS = 60 * 60 * 24 * 365;
 const config = {
   baseUrl,
   landingPageId: "86ff219a78b94a7a8654d096d9f3096d",
@@ -10,9 +12,34 @@ const config = {
   notionDrivenPagesDatabaseId: "f61d11c80e4b40e2a4329cde350bb31a",
 
   cacheControlHeaders: {
-    "Cache-Control": `public, s-maxage=${60}, stale-while-revalidate=${
-      60 * 60 * 24 * 365
-    }`,
+    "Cache-Control": `public, s-maxage=${60}, stale-while-revalidate=${YEAR_IN_SECONDS}, stale-if-error=${MONTH_IN_SECONDS}`,
+  },
+
+  // Dynamic cache control headers based on the last updated time
+  // The idea is that if the page was recently edited, chances are that it will be edited again soon
+  cacheControlHeadersDynamic: (lastUpdated: string) => {
+    const diff = Math.abs(
+      new Date().getTime() - new Date(lastUpdated).getTime()
+    );
+
+    const thresholds = [
+      // Less than 60 seconds since last edit, cache for 5 seconds. Probably don't need cache then
+      [60, 5],
+      [60 * 5, 30],
+      [60 * 60, 60],
+      [60 * 60 * 24, 60 * 5],
+      [60 * 60 * 24 * 7, 60 * 30],
+
+      // For the rest, keep cache for 4 hours
+      // If this is a problem we can always nuke the cache
+      [Infinity, 60 * 60 * 4],
+    ] as const;
+    const serverCacheMaxAge = thresholds.find(
+      ([threshold]) => diff < threshold
+    )![1];
+    return {
+      "Cache-Control": `public, s-maxage=${serverCacheMaxAge}, stale-while-revalidate=${YEAR_IN_SECONDS}, stale-if-error=${MONTH_IN_SECONDS}`,
+    };
   },
 } as const;
 
