@@ -40,6 +40,7 @@ export const loader: LoaderFunction = async ({ request }) => {
     const width = getIntOrNull(url.searchParams.get("width"));
     const height = getIntOrNull(url.searchParams.get("height"));
     const quality = getIntOrNull(url.searchParams.get("quality")) ?? 75;
+    const blur = getIntOrNull(url.searchParams.get("blur"));
 
     // Fetch image
     const upstreamRes = await fetch(href);
@@ -97,6 +98,11 @@ export const loader: LoaderFunction = async ({ request }) => {
       transformer.png({ quality });
     } else if (upstreamType === JPEG) {
       transformer.jpeg({ quality, mozjpeg: true });
+    }
+
+    // Blur
+    if (blur) {
+      transformer.blur(blur);
     }
 
     const optimizedBuffer = await transformer.toBuffer();
