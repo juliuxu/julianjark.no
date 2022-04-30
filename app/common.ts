@@ -8,15 +8,17 @@ export function assertItemFound<T>(item: T | undefined): asserts item is T {
 // See api/image.ts
 export const optimizedImageUrl = (
   url: string,
-  options?: {
+  options: {
     quality?: number | string;
     width?: number | string;
     height?: number | string;
-  }
+  } = {}
 ) => {
   const imageOptimizeUrl = `/api/image`;
   const optionsParams = new URLSearchParams(
-    options as Record<string, string>
+    Object.entries(options)
+      .filter(([key, value]) => key && value)
+      .map(([key, value]) => [key, String(value)])
   ).toString();
   return `${imageOptimizeUrl}?src=${btoa(url)}&${optionsParams}`;
 };
