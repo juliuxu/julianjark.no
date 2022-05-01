@@ -4,7 +4,7 @@ import {
   CachePurgeAllPagesButton,
   CachePurgeCurrenPageButton,
 } from "./cachePurgeButton";
-import { DebugToggle } from "./debug";
+import { DebugToggle, OnlyDebugMode } from "./debug";
 
 export const loader = async () => ({ sitemapTree: await getSitemapTree() });
 
@@ -20,8 +20,10 @@ export default function TopLevelMenu({ sitemapTree }: Props) {
           <DebugToggle />
         </li>
         <li>
-          <CachePurgeCurrenPageButton />
-          <CachePurgeAllPagesButton />
+          <OnlyDebugMode>
+            <CachePurgeCurrenPageButton />
+            <CachePurgeAllPagesButton />
+          </OnlyDebugMode>
         </li>
       </ul>
       <ul>

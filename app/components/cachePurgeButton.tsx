@@ -1,6 +1,6 @@
 import { useFetcher } from "@remix-run/react";
 import { useState } from "react";
-import { isDebugMode, OnlyDebugMode } from "./debug";
+import { isDebugMode } from "./debug";
 
 export function CachePurgeCurrenPageButton() {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -14,17 +14,15 @@ export function CachePurgeCurrenPageButton() {
     window.location.reload();
   };
   return (
-    <OnlyDebugMode>
-      <button
-        type="button"
-        onClick={onClick}
-        className="secondary outline"
-        disabled={isSubmitting}
-        aria-busy={isSubmitting}
-      >
-        {!isSubmitting && "↻"}
-      </button>
-    </OnlyDebugMode>
+    <button
+      type="button"
+      onClick={onClick}
+      className="secondary outline"
+      disabled={isSubmitting}
+      aria-busy={isSubmitting}
+    >
+      {!isSubmitting && "↻"}
+    </button>
   );
 }
 
@@ -32,21 +30,15 @@ export function CachePurgeAllPagesButton() {
   const cachePurge = useFetcher();
   const isSubmitting = cachePurge.state === "submitting";
   return (
-    <OnlyDebugMode>
-      <cachePurge.Form
-        style={{ display: isDebugMode() ? "unset" : "none" }}
-        method="post"
-        action="/api/cache-purge"
+    <cachePurge.Form method="post" action="/api/cache-purge">
+      <button
+        type="submit"
+        className="secondary outline"
+        disabled={isSubmitting}
+        aria-busy={isSubmitting}
       >
-        <button
-          type="submit"
-          className="secondary outline"
-          disabled={isSubmitting}
-          aria-busy={isSubmitting}
-        >
-          {!isSubmitting && "🔥"}
-        </button>
-      </cachePurge.Form>
-    </OnlyDebugMode>
+        {!isSubmitting && "🔥"}
+      </button>
+    </cachePurge.Form>
   );
 }
