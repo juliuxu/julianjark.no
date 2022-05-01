@@ -11,7 +11,7 @@ export const links: LinksFunction = () => [
 
 export default function CodeTest() {
   return (
-    <main className="container" style={{ height: 200 }}>
+    <main className="container">
       <CachePurgeAllPagesButton />
     </main>
   );
