@@ -43,7 +43,7 @@
   background-color: green;
 }
 .color_blue_background {
-  background-color: blue;
+  background-color: rgba(51, 160, 200, 0.498);
 }
 .color_purple_background {
   background-color: purple;
