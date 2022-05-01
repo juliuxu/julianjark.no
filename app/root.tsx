@@ -12,6 +12,20 @@ export const meta: MetaFunction = () => ({
   charset: "utf-8",
   title: "Julian Jark",
   viewport: "width=device-width,initial-scale=1",
+
+  // "theme-color": [
+  //   {
+  //     name: "theme-color",
+  //     content: "#11191f",
+  //     media: "(prefers-color-scheme: dark)",
+  //   },
+  //   {
+  //     name: "theme-color",
+  //     content: "#fff",
+  //     media: "(prefers-color-scheme: light)",
+  //   },
+  // ],
+  "theme-color": "#11191f",
 });
 
 export const links: LinksFunction = () => [
@@ -33,7 +47,7 @@ export const links: LinksFunction = () => [
 
 export default function App() {
   return (
-    <html lang="no">
+    <html lang="no" data-theme="dark">
       <head>
         <Meta />
         <Links />
