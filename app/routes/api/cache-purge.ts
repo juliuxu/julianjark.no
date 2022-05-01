@@ -1,14 +1,37 @@
 import { json, ActionFunction } from "@remix-run/node";
-import { asUrlList, getSitemapTree } from "../sitemap";
+import config from "~/config.server";
+import { flattenDepthFirst, getSitemapTree } from "../sitemap";
 
-export const action: ActionFunction = async () => {
+export const action: ActionFunction = async ({ request }) => {
   const sitemapTree = await getSitemapTree();
-  const urlList = asUrlList(sitemapTree);
+
+  const onlyEditedLastNSeconds = new URL(request.url).searchParams.get(
+    "onlyEditedLastNSeconds"
+  );
+  const seconds =
+    onlyEditedLastNSeconds && Number.parseInt(onlyEditedLastNSeconds);
 
   await Promise.all(
-    urlList.map((url) =>
-      fetch(url, { method: "HEAD", headers: { "Cache-Purge": "1" } })
-    )
+    flattenDepthFirst(sitemapTree)
+      // If onlyEditedLastNSeconds is given correctly, only purge sites edited during the given time period
+      .filter((page) => {
+        if (Number.isInteger(seconds) && page.lastmod !== undefined) {
+          const diff = Math.abs(
+            Math.floor(
+              (new Date().getTime() - new Date(page.lastmod).getTime()) / 1000
+            )
+          );
+          return diff < (seconds as number);
+        }
+        return true;
+      })
+      .map((page) => {
+        console.log(`🔥 purging ${page.path}`);
+        return fetch(`${config.baseUrl}${page.path}`, {
+          method: "HEAD",
+          headers: { "Cache-Purge": "1" },
+        });
+      })
   );
 
   return json(

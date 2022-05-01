@@ -16,6 +16,7 @@ export interface Page {
   title: string;
   path: string;
   children: Page[];
+  lastmod?: string;
 }
 
 export const getSitemapTree = async () => {
@@ -46,6 +47,7 @@ const databasePagesToPage =
       title,
       path: `${parentPath}${slugify(title)}`,
       children: [], // Fow now we don't allow child pages
+      lastmod: page.last_edited_time,
     };
   };
 

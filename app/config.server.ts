@@ -19,7 +19,7 @@ const config = {
   // The idea is that if the page was recently edited, chances are that it will be edited again soon
   cacheControlHeadersDynamic: (lastUpdated: string) => {
     const diff = Math.abs(
-      new Date().getTime() - new Date(lastUpdated).getTime()
+      Math.floor(new Date().getTime() - new Date(lastUpdated).getTime() / 1000)
     );
 
     const thresholds = [

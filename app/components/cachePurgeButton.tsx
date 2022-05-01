@@ -26,18 +26,31 @@ export function CachePurgeCurrenPageButton() {
   );
 }
 
-export function CachePurgeAllPagesButton() {
+export function CachePurgeAllPagesButton({
+  onlyEditedLastNSeconds,
+  children = "🔥",
+}: {
+  onlyEditedLastNSeconds?: number;
+  children?: React.ReactNode;
+}) {
   const cachePurge = useFetcher();
   const isSubmitting = cachePurge.state === "submitting";
   return (
-    <cachePurge.Form method="post" action="/api/cache-purge">
+    <cachePurge.Form
+      method="post"
+      action={
+        onlyEditedLastNSeconds
+          ? `/api/cache-purge?onlyEditedLastNSeconds=${onlyEditedLastNSeconds}`
+          : "/api/cache-purge"
+      }
+    >
       <button
         type="submit"
         className="secondary outline"
         disabled={isSubmitting}
         aria-busy={isSubmitting}
       >
-        {!isSubmitting && "🔥"}
+        {!isSubmitting && children}
       </button>
     </cachePurge.Form>
   );
