@@ -44,10 +44,12 @@ export const meta: MetaFunction = () => ({
   title: "Julian Jark",
   "theme-color": [
     {
+      name: "theme-color",
       content: "#11191f",
       media: "(prefers-color-scheme: dark)",
     },
     {
+      name: "theme-color",
       content: "#fff",
       media: "(prefers-color-scheme: light)",
     },
