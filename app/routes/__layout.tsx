@@ -42,6 +42,16 @@ export const loader: LoaderFunction = async () => {
 
 export const meta: MetaFunction = () => ({
   title: "Julian Jark",
+  "theme-color": [
+    {
+      content: "#11191f",
+      media: "(prefers-color-scheme: dark)",
+    },
+    {
+      content: "#fff",
+      media: "(prefers-color-scheme: light)",
+    },
+  ],
 });
 
 export const headers: HeadersFunction = () => {
