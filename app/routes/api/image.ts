@@ -34,8 +34,7 @@ export const loader: LoaderFunction = async ({ request }) => {
     if (!href) {
       return badImageResponse();
     }
-    // base64 decode
-    href = atob(href);
+    href = decodeURIComponent(href);
 
     const width = getIntOrNull(url.searchParams.get("width"));
     const height = getIntOrNull(url.searchParams.get("height"));

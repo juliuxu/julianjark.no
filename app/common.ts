@@ -20,7 +20,7 @@ export const optimizedImageUrl = (
       .filter(([key, value]) => key && value)
       .map(([key, value]) => [key, String(value)])
   ).toString();
-  return `${imageOptimizeUrl}?src=${btoa(url)}&${optionsParams}`;
+  return `${imageOptimizeUrl}?src=${encodeURIComponent(url)}&${optionsParams}`;
 };
 
 export function getKeyValueOptions<T extends Record<string, string>>(
