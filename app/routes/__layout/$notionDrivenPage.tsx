@@ -42,9 +42,26 @@ export const PrismNotionCode: NotionRenderComponents["code"] = ({ block }) => {
 // Notion Render Settings
 export const notionRenderClasses: Partial<NotionRenderClasses> = {
   column_list: { root: "grid" },
-  color_blue: "color_blue",
-  color_green: "color_green",
+
+  color_default: "color_default",
+  color_gray: "color_gray",
+  color_brown: "color_brown",
   color_orange: "color_orange",
+  color_yellow: "color_yellow",
+  color_green: "color_green",
+  color_blue: "color_blue",
+  color_purple: "color_purple",
+  color_pink: "color_pink",
+  color_red: "color_red",
+  color_gray_background: "color_gray_background",
+  color_brown_background: "color_brown_background",
+  color_orange_background: "color_orange_background",
+  color_yellow_background: "color_yellow_background",
+  color_green_background: "color_green_background",
+  color_blue_background: "color_blue_background",
+  color_purple_background: "color_purple_background",
+  color_pink_background: "color_pink_background",
+  color_red_background: "color_red_background",
 };
 export const notionRenderComponents: Partial<NotionRenderComponents> = {
   // code: PrismNotionCode,

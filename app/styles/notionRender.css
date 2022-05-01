@@ -1,9 +1,56 @@
-.color_blue {
-  color: rgba(51, 160, 200, 0.498);
+.color_default {
+}
+.color_gray {
+  color: gray;
+}
+.color_brown {
+  color: brown;
+}
+.color_orange {
+  color: orange;
+}
+.color_yellow {
+  color: yellow;
 }
 .color_green {
   color: rgb(122, 207, 122);
 }
-.color_orange {
-  color: orange;
+.color_blue {
+  color: rgba(51, 160, 200, 0.498);
+}
+.color_purple {
+  color: purple;
+}
+.color_pink {
+  color: pink;
+}
+.color_red {
+  color: red;
+}
+.color_gray_background {
+  background-color: gray;
+}
+.color_brown_background {
+  background-color: brown;
+}
+.color_orange_background {
+  background-color: orange;
+}
+.color_yellow_background {
+  background-color: yellow;
+}
+.color_green_background {
+  background-color: green;
+}
+.color_blue_background {
+  background-color: blue;
+}
+.color_purple_background {
+  background-color: purple;
+}
+.color_pink_background {
+  background-color: pink;
+}
+.color_red_background {
+  background-color: red;
 }
