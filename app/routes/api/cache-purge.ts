@@ -25,9 +25,15 @@ export const action: ActionFunction = async ({ request }) => {
         }
         return true;
       })
-      .map((page) => {
-        console.log(`🔥 purging ${page.path}`);
-        return fetch(`${config.baseUrl}${page.path}`, {
+      .flatMap((page) => {
+        return [
+          page.path,
+          `${page.path}?_data=${encodeURIComponent(page.codePath)}`,
+        ];
+      })
+      .map((path) => {
+        console.log(`🔥 purging ${path}`);
+        return fetch(`${config.baseUrl}${path}`, {
           method: "HEAD",
           headers: { "Cache-Purge": "1" },
         });

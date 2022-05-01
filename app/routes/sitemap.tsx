@@ -15,6 +15,7 @@ import { meta as presentasjonerMeta } from "~/routes/__layout/presentasjoner/ind
 export interface Page {
   title: string;
   path: string;
+  codePath: string;
   children: Page[];
   lastmod?: string;
 }
@@ -23,16 +24,23 @@ export const getSitemapTree = async () => {
   const landing: Page = {
     title: indexMeta({} as any).title!,
     path: "/",
+    codePath: "routes/__layout/index",
     children: [
       {
         title: presentasjonerMeta({} as any).title!,
         path: "/presentasjoner",
+        codePath: "routes/__layout/presentasjoner/index",
         children: (await getPresentasjoner()).map(
-          databasePagesToPage("/presentasjoner/")
+          databasePagesToPage(
+            "/presentasjoner/",
+            "routes/presentasjoner.$presentasjon"
+          )
         ),
       },
 
-      ...(await getNotionDrivenPages()).map(databasePagesToPage("/")),
+      ...(await getNotionDrivenPages()).map(
+        databasePagesToPage("/", "routes/__layout/$notionDrivenPage")
+      ),
     ],
   };
 
@@ -40,12 +48,13 @@ export const getSitemapTree = async () => {
 };
 
 const databasePagesToPage =
-  (parentPath: string) =>
+  (parentPath: string, codePath: string) =>
   (page: DatabasePage): Page => {
     const title = getTitle(page);
     return {
       title,
       path: `${parentPath}${slugify(title)}`,
+      codePath,
       children: [], // Fow now we don't allow child pages
       lastmod: page.last_edited_time,
     };
