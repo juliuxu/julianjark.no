@@ -21,7 +21,7 @@ export interface Page {
 }
 
 export const getSitemapTree = async () => {
-  const landing: Page = {
+  const forside: Page = {
     title: indexMeta({} as any).title!,
     path: "/",
     codePath: "routes/__layout/index",
@@ -44,7 +44,7 @@ export const getSitemapTree = async () => {
     ],
   };
 
-  return landing;
+  return forside;
 };
 
 const databasePagesToPage =

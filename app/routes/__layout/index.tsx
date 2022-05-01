@@ -18,7 +18,7 @@ import {
 
 type Data = { blocks: Block[] };
 export const loader: LoaderFunction = async () => {
-  const blocks = await getBlocksWithChildren(config.landingPageId);
+  const blocks = await getBlocksWithChildren(config.forsidePageId);
   await prepareNotionBlocks(blocks, { theme: "dark-plus" });
   return json<Data>(
     {

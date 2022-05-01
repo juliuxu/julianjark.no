@@ -7,7 +7,7 @@ const MONTH_IN_SECONDS = 60 * 60 * 24 * 30;
 const YEAR_IN_SECONDS = 60 * 60 * 24 * 365;
 const config = {
   baseUrl,
-  landingPageId: "86ff219a78b94a7a8654d096d9f3096d",
+  forsidePageId: "9e33a0b80f334fffaf25b097f5e3b646",
   presentasjonerDatabaseId: "3017a0bad8744638b380b3a7aed7dd5e",
   notionDrivenPagesDatabaseId: "f61d11c80e4b40e2a4329cde350bb31a",
 
