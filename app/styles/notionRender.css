@@ -54,3 +54,7 @@
 .color_red_background {
   background-color: red;
 }
+
+.notion-image {
+  border-radius: var(--border-radius);
+}

@@ -42,6 +42,7 @@ export const PrismNotionCode: NotionRenderComponents["code"] = ({ block }) => {
 // Notion Render Settings
 export const notionRenderClasses: Partial<NotionRenderClasses> = {
   column_list: { root: "grid" },
+  image: { root: "notion-image" },
 
   color_default: "color_default",
   color_gray: "color_gray",
