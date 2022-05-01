@@ -1,3 +1,4 @@
+import crypto from "crypto";
 export function assertItemFound<T>(item: T | undefined): asserts item is T {
   if (item === undefined)
     throw new Response("Not Found", {
@@ -19,8 +20,19 @@ export const optimizedImageUrl = (
     Object.entries(options)
       .filter(([key, value]) => key && value)
       .map(([key, value]) => [key, String(value)])
-  ).toString();
-  return `${imageOptimizeUrl}?src=${encodeURIComponent(url)}&${optionsParams}`;
+  );
+
+  let cacheKey: string;
+  const m = url.match(/secure\.notion-static\.com\/(?<uuid>[\w\-]+)\//);
+  if (m?.groups?.uuid) {
+    cacheKey = encodeURIComponent(m.groups.uuid + optionsParams);
+  } else {
+    cacheKey = encodeURIComponent(url + optionsParams);
+  }
+
+  return `${imageOptimizeUrl}?src=${encodeURIComponent(
+    url
+  )}&${optionsParams}&juliancachekey=${cacheKey}`;
 };
 
 export function getKeyValueOptions<T extends Record<string, string>>(

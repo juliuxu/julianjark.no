@@ -83,3 +83,32 @@ location / {
   proxy_ignore_headers Vary;
 }
 `;
+
+const cacheEnabledButControlledByAppCustomCacheKey = `
+location / {
+  include conf.d/include/proxy.conf;
+  
+  proxy_cache super-cache;
+
+  proxy_cache_key $host$request_uri;
+
+  proxy_cache_background_update on;
+  proxy_cache_bypass $http_cache_purge;
+  add_header X-Cache-Status $upstream_cache_status;
+  proxy_ignore_headers Vary;
+}
+
+location /api/image {
+  include conf.d/include/proxy.conf;
+  
+  proxy_cache super-cache;
+
+  proxy_cache_key $arg_juliancachekey;
+  add_header X-Julian-Custom-Cache true;
+
+  proxy_cache_background_update on;
+  proxy_cache_bypass $http_cache_purge;
+  add_header X-Cache-Status $upstream_cache_status;
+  proxy_ignore_headers Vary;
+}
+`;
