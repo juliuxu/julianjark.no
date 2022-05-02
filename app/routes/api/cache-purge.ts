@@ -3,6 +3,7 @@ import config from "~/config.server";
 import { flattenDepthFirst, getSitemapTree } from "../sitemap";
 
 export const action: ActionFunction = async ({ request }) => {
+  const now = new Date();
   const sitemapTree = await getSitemapTree();
 
   const onlyEditedLastNSeconds = new URL(request.url).searchParams.get(
@@ -18,7 +19,7 @@ export const action: ActionFunction = async ({ request }) => {
         if (Number.isInteger(seconds) && page.lastmod !== undefined) {
           const diff = Math.abs(
             Math.floor(
-              (new Date().getTime() - new Date(page.lastmod).getTime()) / 1000
+              (now.getTime() - new Date(page.lastmod).getTime()) / 1000
             )
           );
           return diff < (seconds as number);
