@@ -7,7 +7,7 @@ import {
   getNotionDrivenPages,
 } from "~/service/notion";
 import Code from "~/components/prismCode";
-import { DatabasePage } from "~/service/notionApi.server";
+import { DatabasePage, getPage } from "~/service/notionApi.server";
 import config from "~/config.server";
 import { meta as indexMeta } from "~/routes/__layout";
 import { meta as presentasjonerMeta } from "~/routes/__layout/presentasjoner/index";
@@ -25,6 +25,7 @@ export const getSitemapTree = async () => {
     title: indexMeta({} as any).title!,
     path: "/",
     codePath: "routes/__layout/index",
+    lastmod: (await getPage(config.forsidePageId)).last_edited_time,
     children: [
       {
         title: presentasjonerMeta({} as any).title!,
