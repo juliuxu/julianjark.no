@@ -1,4 +1,4 @@
-import { json, ActionFunction } from "@remix-run/node";
+import { ActionFunction } from "@remix-run/node";
 import config from "~/config.server";
 import { flattenDepthFirst, getSitemapTree } from "../sitemap";
 import { PassThrough } from "stream";
@@ -11,23 +11,35 @@ export const action: ActionFunction = async ({ request }) => {
     outputStream.write("🌍 fetching sitemap\n");
     const sitemapTree = await getSitemapTree();
 
-    const onlyEditedLastNSeconds = new URL(request.url).searchParams.get(
+    const onlyEditedLastNSecondsParam = new URL(request.url).searchParams.get(
       "onlyEditedLastNSeconds"
     );
-    const seconds =
-      onlyEditedLastNSeconds && Number.parseInt(onlyEditedLastNSeconds);
+    const onlyEditedLastNSeconds =
+      onlyEditedLastNSecondsParam &&
+      Number.parseInt(onlyEditedLastNSecondsParam);
+
+    const isValidDate = (d: any) => d instanceof Date && !isNaN(d);
+    const onlyEditedSinceDateParam = new URL(request.url).searchParams.get(
+      "onlyEditedSinceDate"
+    );
+    const onlyEditedSinceDate = new Date(onlyEditedSinceDateParam as any);
 
     await Promise.all(
       flattenDepthFirst(sitemapTree)
-        // If onlyEditedLastNSeconds is given correctly, only purge sites edited during the given time period
         .filter((page) => {
-          if (Number.isInteger(seconds) && page.lastmod !== undefined) {
+          if (page.lastmod === undefined) return true;
+
+          if (isValidDate(onlyEditedSinceDate)) {
+            return now > onlyEditedSinceDate;
+          }
+
+          if (Number.isInteger(onlyEditedLastNSeconds)) {
             const diff = Math.abs(
               Math.floor(
                 (now.getTime() - new Date(page.lastmod).getTime()) / 1000
               )
             );
-            return diff < (seconds as number);
+            return diff < (onlyEditedLastNSeconds as number);
           }
           return true;
         })
