@@ -20,22 +20,22 @@ function badImageResponse() {
 }
 
 export const loader: LoaderFunction = async ({ request }) => {
+  // Parse request
+  const url = new URL(request.url);
+  let href = url.searchParams.get("src");
+  if (!href) {
+    return badImageResponse();
+  }
+  href = decodeURIComponent(href);
+
+  const options = {
+    width: getNumberOrUndefined(url.searchParams.get("width")),
+    height: getNumberOrUndefined(url.searchParams.get("height")),
+    quality: getNumberOrUndefined(url.searchParams.get("quality")) ?? 75,
+    blur: getNumberOrUndefined(url.searchParams.get("blur")),
+  };
+
   try {
-    // Parse request
-    const url = new URL(request.url);
-    let href = url.searchParams.get("src");
-    if (!href) {
-      return badImageResponse();
-    }
-    href = decodeURIComponent(href);
-
-    const options = {
-      width: getNumberOrUndefined(url.searchParams.get("width")),
-      height: getNumberOrUndefined(url.searchParams.get("height")),
-      quality: getNumberOrUndefined(url.searchParams.get("quality")) ?? 75,
-      blur: getNumberOrUndefined(url.searchParams.get("blur")),
-    };
-
     // Fetch image
     const upstreamRes = await fetch(href);
     if (!upstreamRes.ok) {
@@ -46,6 +46,8 @@ export const loader: LoaderFunction = async ({ request }) => {
       );
       return badImageResponse();
     }
+
+    // Parse image
     const upstreamType = upstreamRes.headers.get("Content-Type");
     const upstreamBuffer = Buffer.from(await upstreamRes.arrayBuffer());
     if (!upstreamType?.startsWith("image/")) {
