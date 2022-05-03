@@ -2,45 +2,43 @@ import { ActionFunction } from "@remix-run/node";
 import config from "~/config.server";
 import { flattenDepthFirst, getSitemapTree } from "../sitemap";
 import { PassThrough } from "stream";
+import { getDateOrUndefined, getNumberOrUndefined } from "~/common";
 
 export const action: ActionFunction = async ({ request }) => {
   const outputStream = new PassThrough();
+
+  const url = new URL(request.url);
+  const searchParams = {
+    onlyEditedLastNSeconds: getNumberOrUndefined(
+      url.searchParams.get("onlyEditedLastNSeconds")
+    ),
+    onlyEditedSinceDate: getDateOrUndefined(
+      url.searchParams.get("onlyEditedSinceDate")
+    ),
+  };
 
   async function inner() {
     const now = new Date();
     outputStream.write("🌍 fetching sitemap\n");
     const sitemapTree = await getSitemapTree();
 
-    const onlyEditedLastNSecondsParam = new URL(request.url).searchParams.get(
-      "onlyEditedLastNSeconds"
-    );
-    const onlyEditedLastNSeconds =
-      onlyEditedLastNSecondsParam &&
-      Number.parseInt(onlyEditedLastNSecondsParam);
-
-    const isValidDate = (d: any) => d instanceof Date && !isNaN(d as any);
-    const onlyEditedSinceDateParam = new URL(request.url).searchParams.get(
-      "onlyEditedSinceDate"
-    );
-    const onlyEditedSinceDate = new Date(onlyEditedSinceDateParam as any);
-
     const results = await Promise.all(
       flattenDepthFirst(sitemapTree)
         .filter((page) => {
           if (page.lastmod === undefined) return true;
 
-          if (isValidDate(onlyEditedSinceDate)) {
-            return new Date(page.lastmod) > onlyEditedSinceDate;
+          if (searchParams.onlyEditedSinceDate) {
+            return new Date(page.lastmod) > searchParams.onlyEditedSinceDate;
           }
 
-          if (Number.isInteger(onlyEditedLastNSeconds)) {
+          if (searchParams.onlyEditedLastNSeconds) {
             const timeSincePageWasLastEdited = Math.abs(
               Math.floor(
                 (now.getTime() - new Date(page.lastmod).getTime()) / 1000
               )
             );
             return (
-              timeSincePageWasLastEdited < (onlyEditedLastNSeconds as number)
+              timeSincePageWasLastEdited < searchParams.onlyEditedLastNSeconds
             );
           }
           return true;

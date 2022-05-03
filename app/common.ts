@@ -49,3 +49,16 @@ export function getKeyValueOptions<T extends Record<string, string>>(
 
   return options as T;
 }
+
+export const getNumberOrUndefined = (s?: string | null) => {
+  if (!s) return undefined;
+  const v = Number.parseInt(s ?? "");
+  if (!Number.isInteger(v)) return undefined;
+  return v;
+};
+export const getDateOrUndefined = (s?: string | null) => {
+  if (!s) return undefined;
+  const v = new Date(s);
+  if (v instanceof Date && !isNaN(v as any)) return v;
+  return undefined;
+};
