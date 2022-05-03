@@ -3,6 +3,7 @@
 import sharp from "sharp";
 import type { LoaderFunction, Request as NodeRequest } from "@remix-run/node";
 import { Response } from "@remix-run/node";
+import { getNumberOrUndefined } from "~/common";
 
 const badImageBase64 =
   "R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
@@ -18,14 +19,6 @@ function badImageResponse() {
   });
 }
 
-function getIntOrNull(value: string | null) {
-  if (value === null) {
-    return null;
-  }
-
-  return Number.parseInt(value);
-}
-
 export const loader: LoaderFunction = async ({ request }) => {
   try {
     // Parse request
@@ -36,10 +29,12 @@ export const loader: LoaderFunction = async ({ request }) => {
     }
     href = decodeURIComponent(href);
 
-    const width = getIntOrNull(url.searchParams.get("width"));
-    const height = getIntOrNull(url.searchParams.get("height"));
-    const quality = getIntOrNull(url.searchParams.get("quality")) ?? 75;
-    const blur = getIntOrNull(url.searchParams.get("blur"));
+    const options = {
+      width: getNumberOrUndefined(url.searchParams.get("width")),
+      height: getNumberOrUndefined(url.searchParams.get("height")),
+      quality: getNumberOrUndefined(url.searchParams.get("quality")) ?? 75,
+      blur: getNumberOrUndefined(url.searchParams.get("blur")),
+    };
 
     // Fetch image
     const upstreamRes = await fetch(href);
@@ -75,33 +70,37 @@ export const loader: LoaderFunction = async ({ request }) => {
     transformer.rotate();
 
     // Resize if requested
-    const { width: metaWidth, height: metaHeight } =
+    const { width: actualWidth, height: actualHeight } =
       await transformer.metadata();
     if (
-      width &&
-      height &&
-      metaWidth &&
-      metaHeight &&
-      metaWidth > width &&
-      metaHeight > height
+      options.width &&
+      options.height &&
+      actualWidth &&
+      actualHeight &&
+      actualWidth > options.width &&
+      actualHeight > options.height
     ) {
-    } else if (width && metaWidth && metaWidth > width) {
-      transformer.resize(width);
-    } else if (height && metaHeight && metaHeight > height) {
-      transformer.resize(undefined, height);
+    } else if (options.width && actualWidth && actualWidth > options.width) {
+      transformer.resize(options.width);
+    } else if (
+      options.height &&
+      actualHeight &&
+      actualHeight > options.height
+    ) {
+      transformer.resize(undefined, options.height);
     }
 
     if (upstreamType === WEBP) {
-      transformer.webp({ quality });
+      transformer.webp({ quality: options.quality });
     } else if (upstreamType === PNG) {
-      transformer.png({ quality });
+      transformer.png({ quality: options.quality });
     } else if (upstreamType === JPEG) {
-      transformer.jpeg({ quality, mozjpeg: true });
+      transformer.jpeg({ quality: options.quality, mozjpeg: true });
     }
 
     // Blur
-    if (blur) {
-      transformer.blur(blur);
+    if (options.blur) {
+      transformer.blur(options.blur);
     }
 
     const optimizedBuffer = await transformer.toBuffer();
