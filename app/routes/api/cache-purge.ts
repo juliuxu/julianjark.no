@@ -30,7 +30,7 @@ export const action: ActionFunction = async ({ request }) => {
           if (page.lastmod === undefined) return true;
 
           if (isValidDate(onlyEditedSinceDate)) {
-            return now > onlyEditedSinceDate;
+            return new Date(page.lastmod) > onlyEditedSinceDate;
           }
 
           if (Number.isInteger(onlyEditedLastNSeconds)) {
