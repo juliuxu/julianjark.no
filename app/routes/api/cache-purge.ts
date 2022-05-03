@@ -60,9 +60,9 @@ export const action: ActionFunction = async ({ request }) => {
         })
     );
     if (results.length === 0) {
-      outputStream.write("🆗 no pages to be purged with given filter");
+      outputStream.write("🆗 no pages to be purged with given filter\n");
     }
-    outputStream.write("✅ done");
+    outputStream.write("✅ done\n");
     outputStream.end();
   }
   inner();
