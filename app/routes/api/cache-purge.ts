@@ -18,7 +18,7 @@ export const action: ActionFunction = async ({ request }) => {
       onlyEditedLastNSecondsParam &&
       Number.parseInt(onlyEditedLastNSecondsParam);
 
-    const isValidDate = (d: any) => d instanceof Date && !isNaN(d);
+    const isValidDate = (d: any) => d instanceof Date && !isNaN(d as any);
     const onlyEditedSinceDateParam = new URL(request.url).searchParams.get(
       "onlyEditedSinceDate"
     );
