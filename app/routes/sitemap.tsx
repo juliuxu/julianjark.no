@@ -27,6 +27,8 @@ export const getSitemapTree = async () => {
   const presentasjonerPages = getPresentasjoner();
   const notionDrivenPages = getNotionDrivenPages();
 
+  const resolvedPresentasjonerPages = await presentasjonerPages;
+
   const forside: Page = {
     title: indexMeta({} as any).title!,
     path: "/",
@@ -37,7 +39,11 @@ export const getSitemapTree = async () => {
         title: presentasjonerMeta({} as any).title!,
         path: "/presentasjoner",
         codePath: "routes/__layout/presentasjoner/index",
-        children: (await presentasjonerPages).map(
+        lastmod: resolvedPresentasjonerPages
+          .map((page) => page.last_edited_time)
+          .sort()
+          .reverse()[0],
+        children: resolvedPresentasjonerPages.map(
           databasePagesToPage(
             "/presentasjoner/",
             "routes/presentasjoner.$presentasjon"
