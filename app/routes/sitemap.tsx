@@ -21,17 +21,23 @@ export interface Page {
 }
 
 export const getSitemapTree = async () => {
+  // Initiate async call at once, await them later
+  // This way they run in parallel, instead of sequentially
+  const forsidePage = getPage(config.forsidePageId);
+  const presentasjonerPages = getPresentasjoner();
+  const notionDrivenPages = getNotionDrivenPages();
+
   const forside: Page = {
     title: indexMeta({} as any).title!,
     path: "/",
     codePath: "routes/__layout/index",
-    lastmod: (await getPage(config.forsidePageId)).last_edited_time,
+    lastmod: (await forsidePage).last_edited_time,
     children: [
       {
         title: presentasjonerMeta({} as any).title!,
         path: "/presentasjoner",
         codePath: "routes/__layout/presentasjoner/index",
-        children: (await getPresentasjoner()).map(
+        children: (await presentasjonerPages).map(
           databasePagesToPage(
             "/presentasjoner/",
             "routes/presentasjoner.$presentasjon"
@@ -39,7 +45,7 @@ export const getSitemapTree = async () => {
         ),
       },
 
-      ...(await getNotionDrivenPages()).map(
+      ...(await notionDrivenPages).map(
         databasePagesToPage("/", "routes/__layout/$notionDrivenPage")
       ),
     ],
