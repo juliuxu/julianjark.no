@@ -24,7 +24,7 @@ export const action: ActionFunction = async ({ request }) => {
     );
     const onlyEditedSinceDate = new Date(onlyEditedSinceDateParam as any);
 
-    await Promise.all(
+    const results = await Promise.all(
       flattenDepthFirst(sitemapTree)
         .filter((page) => {
           if (page.lastmod === undefined) return true;
@@ -34,12 +34,14 @@ export const action: ActionFunction = async ({ request }) => {
           }
 
           if (Number.isInteger(onlyEditedLastNSeconds)) {
-            const diff = Math.abs(
+            const timeSincePageWasLastEdited = Math.abs(
               Math.floor(
                 (now.getTime() - new Date(page.lastmod).getTime()) / 1000
               )
             );
-            return diff < (onlyEditedLastNSeconds as number);
+            return (
+              timeSincePageWasLastEdited < (onlyEditedLastNSeconds as number)
+            );
           }
           return true;
         })
@@ -57,6 +59,9 @@ export const action: ActionFunction = async ({ request }) => {
           });
         })
     );
+    if (results.length === 0) {
+      outputStream.write("🆗 no pages to be purged with given filter");
+    }
     outputStream.write("✅ done");
     outputStream.end();
   }
