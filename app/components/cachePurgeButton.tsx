@@ -1,8 +1,7 @@
 import { useFetcher } from "@remix-run/react";
 import { useState } from "react";
-import { isDebugMode } from "./debug";
 
-export function CachePurgeCurrenPageButton() {
+export function CachePurgeCurrentPageButton() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const onClick = async () => {
     setIsSubmitting(true);
