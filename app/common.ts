@@ -62,3 +62,8 @@ export const getDateOrUndefined = (s?: string | null) => {
   if (v instanceof Date && !isNaN(v as any)) return v;
   return undefined;
 };
+export const getBooleanOrUndefined = (s?: string | null) => {
+  if (s === "true") return true;
+  if (s === "false") return false;
+  return undefined;
+};

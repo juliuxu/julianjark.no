@@ -17,7 +17,7 @@ export interface Page {
   path: string;
   codePath: string;
   children: Page[];
-  lastmod?: string;
+  lastmod: string;
 }
 
 export const getSitemapTree = async () => {
