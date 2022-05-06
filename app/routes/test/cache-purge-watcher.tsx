@@ -35,6 +35,7 @@ export default function CachePurgeWatcher() {
       });
       const body = await response.text();
       setBuffer(body);
+      before = now;
     };
 
     intervalRef.current = setInterval(watcher, interval);
