@@ -9,7 +9,6 @@ export const links: LinksFunction = () => [
   },
 ];
 
-const sleep = async (ms: number) => new Promise((r) => setTimeout(r, ms));
 const interval = 10000;
 
 export default function CachePurgeWatcher() {
@@ -24,6 +23,7 @@ export default function CachePurgeWatcher() {
   };
   useEffect(() => {
     stopWatching();
+    if (!isWatching) return;
 
     let before = new Date();
     const watcher = async () => {
@@ -54,7 +54,7 @@ export default function CachePurgeWatcher() {
           }}
         />
       </label>
-      {buffer && <pre>{buffer}</pre>}
+      {isWatching && <pre>{buffer}</pre>}
     </>
   );
 }
