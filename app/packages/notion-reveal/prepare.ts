@@ -93,7 +93,7 @@ interface SubSlideWithoutNotes {
 
 // Config
 const NOTES_BLOCK_TYPE = "callout";
-const HIDE_HEADING_TOKEN = "—";
+const HIDE_HEADING_TOKENS = ["—", "~"];
 
 export const prepareSlides = (blocks: Block[]): Slide[] => {
   // STEP: Remove unsupported blocks
@@ -173,8 +173,11 @@ export const prepareSlides = (blocks: Block[]): Slide[] => {
     ];
     if (
       headingBlockTypes.includes(block.type) &&
-      getTextFromRichText((block as any)[block.type].rich_text) ===
-        HIDE_HEADING_TOKEN
+      HIDE_HEADING_TOKENS.some((token) =>
+        getTextFromRichText((block as any)[block.type].rich_text).startsWith(
+          token
+        )
+      )
     ) {
       return false;
     }
