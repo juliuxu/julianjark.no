@@ -16,7 +16,7 @@ import {
   DatabasePage,
   getBlocksWithChildren,
 } from "~/service/notionApi.server";
-import { assertItemFound, takeWhileM } from "~/common";
+import { assertItemFound, optimizedImageUrl, takeWhileM } from "~/common";
 
 import { Block } from "~/service/notion.types";
 import config from "~/config.server";
@@ -132,20 +132,39 @@ export const meta: MetaFunction = ({ data }: { data: Data }) => {
 
 export default function DrinkView() {
   const data = useLoaderData<Data>();
+
+  // Illustration
+  let illustrationUrl: string | undefined;
+  if (data.page.cover?.type === "external") {
+    illustrationUrl = data.page.cover.external.url;
+  } else if (data.page.cover?.type === "file") {
+    illustrationUrl = data.page.cover.file.url;
+  }
+
   return (
     <>
       <h1>{getTitle(data.page)}</h1>
       <div className="grid">
         <div>
-          <h2>Ingredienser</h2>
-          <NotionRender blocks={data.drink.Ingredienser} />
+          <div className="grid">
+            <div>
+              <h2>Ingredienser</h2>
+              <NotionRender blocks={data.drink.Ingredienser} />
+            </div>
+            <div>
+              <h2>Fremgangsmåte</h2>
+              <NotionRender blocks={data.drink.Fremgangsmåte} />
+            </div>
+          </div>
         </div>
-        <div>
-          <h2>Fremgangsmåte</h2>
-          <NotionRender blocks={data.drink.Fremgangsmåte} />
-        </div>
+        {illustrationUrl && (
+          <div>
+            <img src={optimizedImageUrl(illustrationUrl)} />
+          </div>
+        )}
       </div>
-      <Debug pageData={data.drink} />
+
+      <Debug pageData={data.page} />
     </>
   );
 }
