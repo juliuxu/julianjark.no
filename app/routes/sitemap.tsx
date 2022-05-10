@@ -48,10 +48,7 @@ export const getSitemapTree = async () => {
           .sort()
           .reverse()[0],
         children: resolvedDrinkerPages.map(
-          databasePagesToPage(
-            "/drinker/",
-            "routes/presentasjoner.$presentasjon"
-          )
+          databasePagesToPage("/drinker/", "routes/__layout/drinker/$drink")
         ),
       },
       {
