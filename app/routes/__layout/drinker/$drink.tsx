@@ -21,6 +21,7 @@ import { assertItemFound, takeWhileM } from "~/common";
 import { Block } from "~/service/notion.types";
 import config from "~/config.server";
 import Debug from "~/components/debug";
+import NotionRender from "~/packages/notion-render";
 
 type Drink = {
   Ingredienser: Block[];
@@ -133,6 +134,17 @@ export default function DrinkView() {
   const data = useLoaderData<Data>();
   return (
     <>
+      <h1>{getTitle(data.page)}</h1>
+      <div className="grid">
+        <div>
+          <h2>Ingredienser</h2>
+          <NotionRender blocks={data.drink.Ingredienser} />
+        </div>
+        <div>
+          <h2>Fremgangsmåte</h2>
+          <NotionRender blocks={data.drink.Fremgangsmåte} />
+        </div>
+      </div>
       <Debug pageData={data.drink} />
     </>
   );
