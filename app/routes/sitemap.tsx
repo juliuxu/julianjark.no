@@ -5,12 +5,14 @@ import {
   getTitle,
   getPresentasjoner,
   getNotionDrivenPages,
+  getDrinker,
 } from "~/service/notion";
 import Code from "~/components/prismCode";
 import { DatabasePage, getPage } from "~/service/notionApi.server";
 import config from "~/config.server";
 import { meta as indexMeta } from "~/routes/__layout";
 import { meta as presentasjonerMeta } from "~/routes/__layout/presentasjoner/index";
+import { meta as drinkerMeta } from "~/routes/__layout/drinker/index";
 
 export interface Page {
   title: string;
@@ -24,9 +26,11 @@ export const getSitemapTree = async () => {
   // Initiate async call at once, await them later
   // This way they run in parallel, instead of sequentially
   const forsidePage = getPage(config.forsidePageId);
+  const drinkerPages = getDrinker();
   const presentasjonerPages = getPresentasjoner();
   const notionDrivenPages = getNotionDrivenPages();
 
+  const resolvedDrinkerPages = await drinkerPages;
   const resolvedPresentasjonerPages = await presentasjonerPages;
 
   const forside: Page = {
@@ -35,6 +39,21 @@ export const getSitemapTree = async () => {
     codePath: "routes/__layout/index",
     lastmod: (await forsidePage).last_edited_time,
     children: [
+      {
+        title: drinkerMeta({} as any).title!,
+        path: "/drinker",
+        codePath: "routes/__layout/drinker/index",
+        lastmod: resolvedDrinkerPages
+          .map((page) => page.last_edited_time)
+          .sort()
+          .reverse()[0],
+        children: resolvedDrinkerPages.map(
+          databasePagesToPage(
+            "/drinker/",
+            "routes/presentasjoner.$presentasjon"
+          )
+        ),
+      },
       {
         title: presentasjonerMeta({} as any).title!,
         path: "/presentasjoner",

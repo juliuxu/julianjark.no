@@ -8,6 +8,7 @@ const YEAR_IN_SECONDS = 60 * 60 * 24 * 365;
 const config = {
   baseUrl,
   forsidePageId: "9e33a0b80f334fffaf25b097f5e3b646",
+  drinkerDatabaseId: "2ae3c50cf7284db19648aefbd688e45d",
   presentasjonerDatabaseId: "3017a0bad8744638b380b3a7aed7dd5e",
   notionDrivenPagesDatabaseId: "f61d11c80e4b40e2a4329cde350bb31a",
 

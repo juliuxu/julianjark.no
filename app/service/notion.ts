@@ -55,6 +55,18 @@ export const findPageBySlugPredicate =
   (slug: string) => (page: PageResponse | DatabasePage) =>
     slugify(getTitle(page)) === slug;
 
+export const getDrinker = async () =>
+  await getDatabasePages(
+    config.drinkerDatabaseId,
+    [{ timestamp: "created_time", direction: "ascending" }],
+    {
+      property: "Gruppering",
+      multi_select: {
+        contains: "🌐",
+      },
+    }
+  );
+
 export const getPresentasjoner = async () =>
   (
     await getDatabasePages(config.presentasjonerDatabaseId, [

@@ -1,4 +1,3 @@
-import crypto from "crypto";
 export function assertItemFound<T>(item: T | undefined): asserts item is T {
   if (item === undefined)
     throw new Response("Not Found", {
@@ -67,3 +66,11 @@ export const getBooleanOrUndefined = (s?: string | null) => {
   if (s === "false") return false;
   return undefined;
 };
+
+export function takeWhileM<T>(arr: T[], predicate: (el: T) => boolean) {
+  const result: T[] = [];
+  while (arr.length > 0 && predicate(arr[0])) {
+    result.push(arr.shift()!);
+  }
+  return result;
+}

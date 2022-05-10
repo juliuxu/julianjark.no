@@ -5,22 +5,18 @@ const notion = new Client({
   auth: process.env.NOTION_TOKEN,
 });
 
-type DatabaseSort =
-  | {
-      property: string;
-      direction: "ascending" | "descending";
-    }
-  | {
-      timestamp: "created_time" | "last_edited_time";
-      direction: "ascending" | "descending";
-    };
+type Sorts = Parameters<typeof notion.databases.query>[0]["sorts"];
+type Filter = Parameters<typeof notion.databases.query>[0]["filter"];
+
 export const getDatabasePages = async (
   databaseId: string,
-  sorts?: DatabaseSort[]
+  sorts?: Sorts,
+  filter?: Filter
 ) => {
   const response = await notion.databases.query({
     database_id: databaseId,
     sorts,
+    filter,
   });
 
   return onlyDatabasePages(response.results);
