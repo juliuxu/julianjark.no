@@ -19,6 +19,79 @@ function badImageResponse() {
   });
 }
 
+interface ProccessingOptions {
+  width?: number;
+  height?: number;
+  quality: number;
+  blur?: number;
+}
+export const fetchAndProccessImage = async (
+  href: string,
+  options: ProccessingOptions
+) => {
+  // Fetch image
+  const upstreamRes = await fetch(href);
+  if (!upstreamRes.ok) {
+    throw new Error(
+      `upstream image response failed for ${href} ${upstreamRes.status}`
+    );
+  }
+
+  // Parse image
+  const upstreamContentType = upstreamRes.headers.get("Content-Type");
+  const upstreamBuffer = Buffer.from(await upstreamRes.arrayBuffer());
+  if (!upstreamContentType?.startsWith("image/")) {
+    throw new Error(
+      `The requested resource isn't a valid image for ${href} received ${upstreamContentType}`
+    );
+  }
+
+  const AVIF = "image/avif";
+  const WEBP = "image/webp";
+  const PNG = "image/png";
+  const JPEG = "image/jpeg";
+  const GIF = "image/gif";
+  const SVG = "image/svg+xml";
+
+  // Begin sharp transformation logic
+  const transformer = sharp(upstreamBuffer);
+  transformer.rotate();
+
+  // Resize if requested
+  const { width: actualWidth, height: actualHeight } =
+    await transformer.metadata();
+  if (
+    options.width &&
+    options.height &&
+    actualWidth &&
+    actualHeight &&
+    actualWidth > options.width &&
+    actualHeight > options.height
+  ) {
+  } else if (options.width && actualWidth && actualWidth > options.width) {
+    transformer.resize(options.width);
+  } else if (options.height && actualHeight && actualHeight > options.height) {
+    transformer.resize(undefined, options.height);
+  }
+
+  // Blur if requested
+  if (options.blur) {
+    transformer.blur(options.blur);
+  }
+
+  // Always optimize
+  if (upstreamContentType === WEBP) {
+    transformer.webp({ quality: options.quality });
+  } else if (upstreamContentType === PNG) {
+    transformer.png({ quality: options.quality });
+  } else if (upstreamContentType === JPEG) {
+    transformer.jpeg({ quality: options.quality, mozjpeg: true });
+  }
+
+  const buffer = await transformer.toBuffer();
+  return { buffer, contentType: upstreamContentType };
+};
+
 export const loader: LoaderFunction = async ({ request }) => {
   // Parse request
   const url = new URL(request.url);
@@ -36,85 +109,15 @@ export const loader: LoaderFunction = async ({ request }) => {
   };
 
   try {
-    // Fetch image
-    const upstreamRes = await fetch(href);
-    if (!upstreamRes.ok) {
-      console.error(
-        "upstream image response failed for",
-        href,
-        upstreamRes.status
-      );
-      return badImageResponse();
-    }
-
-    // Parse image
-    const upstreamType = upstreamRes.headers.get("Content-Type");
-    const upstreamBuffer = Buffer.from(await upstreamRes.arrayBuffer());
-    if (!upstreamType?.startsWith("image/")) {
-      console.error(
-        "The requested resource isn't a valid image for",
-        href,
-        "received",
-        upstreamType
-      );
-      return badImageResponse();
-    }
-
-    const AVIF = "image/avif";
-    const WEBP = "image/webp";
-    const PNG = "image/png";
-    const JPEG = "image/jpeg";
-    const GIF = "image/gif";
-    const SVG = "image/svg+xml";
-
-    // Begin sharp transformation logic
-    const transformer = sharp(upstreamBuffer);
-    transformer.rotate();
-
-    // Resize if requested
-    const { width: actualWidth, height: actualHeight } =
-      await transformer.metadata();
-    if (
-      options.width &&
-      options.height &&
-      actualWidth &&
-      actualHeight &&
-      actualWidth > options.width &&
-      actualHeight > options.height
-    ) {
-    } else if (options.width && actualWidth && actualWidth > options.width) {
-      transformer.resize(options.width);
-    } else if (
-      options.height &&
-      actualHeight &&
-      actualHeight > options.height
-    ) {
-      transformer.resize(undefined, options.height);
-    }
-
-    // Blur if requested
-    if (options.blur) {
-      transformer.blur(options.blur);
-    }
-
-    // Always optimize
-    if (upstreamType === WEBP) {
-      transformer.webp({ quality: options.quality });
-    } else if (upstreamType === PNG) {
-      transformer.png({ quality: options.quality });
-    } else if (upstreamType === JPEG) {
-      transformer.jpeg({ quality: options.quality, mozjpeg: true });
-    }
-
-    const optimizedBuffer = await transformer.toBuffer();
+    const { buffer, contentType } = await fetchAndProccessImage(href, options);
 
     // Return the new image
-    return new Response(optimizedBuffer, {
+    return new Response(buffer, {
       headers: {
-        "Content-Type": upstreamType,
+        "Content-Type": contentType,
         "Cache-Control": "public, max-age=31536000, immutable",
       },
-    }) as unknown as Response;
+    });
   } catch (error) {
     console.error(error);
     return badImageResponse();
