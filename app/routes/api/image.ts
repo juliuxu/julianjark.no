@@ -92,17 +92,18 @@ export const loader: LoaderFunction = async ({ request }) => {
       transformer.resize(undefined, options.height);
     }
 
+    // Blur if requested
+    if (options.blur) {
+      transformer.blur(options.blur);
+    }
+
+    // Always optimize
     if (upstreamType === WEBP) {
       transformer.webp({ quality: options.quality });
     } else if (upstreamType === PNG) {
       transformer.png({ quality: options.quality });
     } else if (upstreamType === JPEG) {
       transformer.jpeg({ quality: options.quality, mozjpeg: true });
-    }
-
-    // Blur
-    if (options.blur) {
-      transformer.blur(options.blur);
     }
 
     const optimizedBuffer = await transformer.toBuffer();
