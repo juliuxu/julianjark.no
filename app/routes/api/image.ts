@@ -1,7 +1,7 @@
 // https://gist.github.com/jacob-ebey/3a37a86307de9ef22f47aae2e593b56f
 // https://github.com/vercel/next.js/blob/canary/packages/next/server/image-optimizer.ts
 import sharp from "sharp";
-import type { LoaderFunction, Request as NodeRequest } from "@remix-run/node";
+import type { LoaderFunction } from "@remix-run/node";
 import { Response } from "@remix-run/node";
 import { getNumberOrUndefined } from "~/common";
 
