@@ -43,7 +43,11 @@ const prepare = (page: DatabasePage, blocks: Block[]): Partial<Drink> => {
       }
 
       // References
-      const referenceBlockTypes: Block["type"][] = ["bookmark", "video"];
+      const referenceBlockTypes: Block["type"][] = [
+        "bookmark",
+        "video",
+        "image",
+      ];
       if (referenceBlockTypes.includes(block.type)) {
         result.References = [...(result.References ?? []), block];
         continue;
