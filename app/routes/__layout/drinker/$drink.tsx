@@ -22,6 +22,12 @@ import { Block } from "~/service/notion.types";
 import config from "~/config.server";
 import Debug from "~/components/debug";
 import NotionRender from "~/packages/notion-render";
+import type { Components as NotionRenderComponents } from "~/packages/notion-render/components";
+import { OptimizedNotionImage } from "~/components/notionComponents";
+
+export const notionRenderComponents: Partial<NotionRenderComponents> = {
+  image: OptimizedNotionImage,
+};
 
 type Drink = {
   Ingredienser: Block[];
@@ -167,6 +173,18 @@ export default function DrinkView() {
           </div>
         )}
       </div>
+
+      {data.drink.References.length > 0 && (
+        <>
+          <details style={{ marginTop: 16 }}>
+            <summary>Referanser</summary>
+            <NotionRender
+              blocks={data.drink.References}
+              components={notionRenderComponents}
+            />
+          </details>
+        </>
+      )}
 
       <Debug pageData={data.page} />
     </>
