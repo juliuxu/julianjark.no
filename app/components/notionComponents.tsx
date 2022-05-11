@@ -26,6 +26,10 @@ export const OptimizedNotionImage: NotionRenderComponents["image"] = ({
   if (unoptimized !== "true") url = optimizedImageUrl(url, { width, height });
 
   return (
-    <img className={useNotionRenderContext().classes.image.root} src={url} />
+    <img
+      className={useNotionRenderContext().classes.image.root}
+      src={url}
+      loading="lazy"
+    />
   );
 };
