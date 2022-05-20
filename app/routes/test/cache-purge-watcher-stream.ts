@@ -4,7 +4,7 @@ import { flattenDepthFirst, getSitemapTree } from "../sitemap";
 
 // Notion date stamps are by the minute
 // Only other way to purge then is by checking changes in other properties
-const WATCH_INTERVAL = 61 * 1000;
+const WATCH_INTERVAL = 70 * 1000;
 
 export const loader: LoaderFunction = ({ request }) => {
   const stream = new ReadableStream({
