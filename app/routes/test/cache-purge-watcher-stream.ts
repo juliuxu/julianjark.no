@@ -1,5 +1,5 @@
 import { LoaderFunction } from "@remix-run/node";
-import { getBooleanOrUndefined, getOneOfOrUndefined } from "~/common";
+import { getOneOfOrUndefined } from "~/common";
 import config from "~/config.server";
 import { flattenDepthFirst, getSitemapTree, Page } from "../sitemap";
 
