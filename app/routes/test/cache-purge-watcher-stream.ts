@@ -12,7 +12,7 @@ const isChangedPage = (before: Date) => (page: Page) => {
   // This means that if a before timestamp is recorded at 14:25:30
   // and a changed happens 10 seconds later, at 14:25:40
   // the change will be recorded as 14:25:00
-  // which is less than 14:25:30. Making a simple comparsion miss the change
+  // which is less than 14:25:30. Making comparsions using seconds miss the change
 
   // One way to mitigate this is to treat any change in the same minute as changed
   // This will cause more unnecessary updates, but all updates will be caught.
