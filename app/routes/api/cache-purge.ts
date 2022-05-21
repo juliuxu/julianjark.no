@@ -1,7 +1,6 @@
 import { ActionFunction } from "@remix-run/node";
 import config from "~/config.server";
 import { flattenDepthFirst, getSitemapTree, Page } from "../sitemap";
-import { PassThrough } from "stream";
 import { getDateOrUndefined, getNumberOrUndefined } from "~/common";
 
 export const isChangedPage = (before: Date) => (page: Page) => {
@@ -92,8 +91,6 @@ export const createReadableStreamLogger = (
 };
 
 export const action: ActionFunction = async ({ request }) => {
-  const outputStream = new PassThrough();
-
   const url = new URL(request.url);
   const onlyEditedLastNSeconds = getNumberOrUndefined(
     url.searchParams.get("onlyEditedLastNSeconds")
