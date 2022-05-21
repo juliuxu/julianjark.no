@@ -66,6 +66,13 @@ export const getBooleanOrUndefined = (s?: string | null) => {
   if (s === "false") return false;
   return undefined;
 };
+export function getOneOfOrUndefined<T extends string>(
+  list: T[],
+  s?: string | null
+) {
+  if (list.includes(s as any)) return s as T;
+  return undefined;
+}
 
 export function takeWhileM<T>(arr: T[], predicate: (el: T) => boolean) {
   const result: T[] = [];
