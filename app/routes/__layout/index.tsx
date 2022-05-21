@@ -10,11 +10,11 @@ import config from "~/config.server";
 import NotionRender from "~/packages/notion-render";
 import { Block } from "~/service/notion.types";
 import { getBlocksWithChildren } from "~/service/notionApi.server";
-import { prepareNotionBlocks } from "~/shiki-code-render/shiki-notion";
 import {
   notionRenderClasses,
   notionRenderComponents,
 } from "./$notionDrivenPage";
+import { prepareNotionBlocks } from "~/shiki-code-render/prepare.server";
 
 type Data = { blocks: Block[] };
 export const loader: LoaderFunction = async () => {

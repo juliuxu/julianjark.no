@@ -30,6 +30,7 @@ import {
   parsePresentationProperties,
 } from "~/packages/notion-reveal/prepare";
 import notionRevealStyles from "~/packages/notion-reveal/styles.css";
+import { prepareNotionBlocks } from "~/shiki-code-render/prepare.server";
 
 import revealCss from "reveal.js/dist/reveal.css";
 import blackRevealTheme from "reveal.js/dist/theme/black.css";
@@ -44,7 +45,6 @@ import solarizedRevealTheme from "reveal.js/dist/theme/solarized.css";
 import bloodRevealTheme from "reveal.js/dist/theme/blood.css";
 import moonRevealTheme from "reveal.js/dist/theme/moon.css";
 import capraRevealTheme from "~/styles/capraRevealTheme.css";
-import { prepareNotionBlocks } from "~/shiki-code-render/shiki-notion";
 import config from "~/config.server";
 
 const themes = {

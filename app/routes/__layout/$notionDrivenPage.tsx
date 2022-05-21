@@ -20,10 +20,8 @@ import NotionRender from "~/packages/notion-render";
 import { Block } from "~/service/notion.types";
 import type { Classes as NotionRenderClasses } from "~/packages/notion-render/classes";
 import type { Components as NotionRenderComponents } from "~/packages/notion-render/components";
-import {
-  ShikiNotionCode,
-  prepareNotionBlocks,
-} from "~/shiki-code-render/shiki-notion";
+import { ShikiNotionCode } from "~/shiki-code-render/shiki-notion";
+import { prepareNotionBlocks } from "~/shiki-code-render/prepare.server";
 import PrismCode from "~/components/prismCode";
 import { getPlainTextFromRichTextList } from "~/packages/notion-render/components";
 import config from "~/config.server";
@@ -65,7 +63,6 @@ export const notionRenderClasses: Partial<NotionRenderClasses> = {
   color_red_background: "color_red_background",
 };
 export const notionRenderComponents: Partial<NotionRenderComponents> = {
-  // code: PrismNotionCode,
   code: ShikiNotionCode,
   image: OptimizedNotionImage,
 };
