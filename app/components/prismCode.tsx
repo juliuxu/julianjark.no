@@ -1,6 +1,8 @@
 import Highlight, { Prism } from "prism-react-renderer";
 import vsDark from "prism-react-renderer/themes/vsDark";
 import prismTomorrow from "prismjs/themes/prism-tomorrow.css";
+import { getPlainTextFromRichTextList } from "~/packages/notion-render/components";
+import type { Components as NotionRenderComponents } from "~/packages/notion-render/components";
 
 export const prismStyles = prismTomorrow;
 
@@ -52,3 +54,13 @@ export const CollapsedPrismCode = (props: CollapsedCodeProps) => (
     <Code {...props} />
   </details>
 );
+
+export const PrismNotionCode: NotionRenderComponents["code"] = ({ block }) => {
+  if (block.type !== "code") return null;
+  return (
+    <PrismCode
+      language={block.code.language}
+      code={getPlainTextFromRichTextList(block.code.rich_text)}
+    />
+  );
+};

@@ -22,20 +22,8 @@ import type { Classes as NotionRenderClasses } from "~/packages/notion-render/cl
 import type { Components as NotionRenderComponents } from "~/packages/notion-render/components";
 import { ShikiNotionCode } from "~/shiki-code-render/shiki-notion";
 import { prepareNotionBlocks } from "~/shiki-code-render/prepare.server";
-import PrismCode from "~/components/prismCode";
-import { getPlainTextFromRichTextList } from "~/packages/notion-render/components";
 import config from "~/config.server";
 import { OptimizedNotionImage } from "~/components/notionComponents";
-
-export const PrismNotionCode: NotionRenderComponents["code"] = ({ block }) => {
-  if (block.type !== "code") return null;
-  return (
-    <PrismCode
-      language={block.code.language}
-      code={getPlainTextFromRichTextList(block.code.rich_text)}
-    />
-  );
-};
 
 // Notion Render Settings
 export const notionRenderClasses: Partial<NotionRenderClasses> = {
