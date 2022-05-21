@@ -9,53 +9,101 @@ export const links: LinksFunction = () => [
   },
 ];
 
-const interval = 10000;
-
 export default function CachePurgeWatcher() {
   const [buffer, setBuffer] = useState("");
-  const intervalRef = useRef<ReturnType<typeof setInterval>>();
+  const abortController = useRef<AbortController | null>(null);
   const [isWatching, setIsWatching] = useState(false);
+  const [watchInterval, setWatchInterval] = useState(15000);
+  const [loglevel, setLoglevel] = useState<"silent" | "info" | "verbose">(
+    "silent"
+  );
 
-  const stopWatching = () => {
-    if (intervalRef.current) {
-      clearInterval(intervalRef.current);
-    }
-  };
   useEffect(() => {
-    stopWatching();
-    if (!isWatching) return;
+    abortController?.current?.abort();
+    setBuffer("");
 
-    let before = new Date();
-    const watcher = async () => {
-      const now = new Date();
-      const searchParams = new URLSearchParams();
-      searchParams.set("onlyEditedSinceDate", before.toISOString());
-      const response = await fetch(`/api/cache-purge?${searchParams}`, {
-        method: "POST",
-      });
-      const body = await response.text();
-      setBuffer(body);
-      before = now;
-    };
+    if (isWatching) {
+      (async () => {
+        abortController.current = new AbortController();
+        try {
+          const response = await fetch(
+            `/api/cache-purge-watcher-stream?loglevel=${loglevel}&watchInterval=${watchInterval}`,
+            {
+              signal: abortController.current.signal,
+            }
+          );
+          const reader = response.body
+            ?.pipeThrough(new TextDecoderStream())
+            .getReader();
+          if (!reader) throw new Error("no reader available");
 
-    intervalRef.current = setInterval(watcher, interval);
-    return stopWatching;
-  }, [isWatching]);
-
+          while (true) {
+            const { done, value } = await reader.read();
+            if (done || abortController.current.signal.aborted) return;
+            if (value) {
+              setBuffer((currentBuffer) => {
+                const newBuffer = currentBuffer + value;
+                // const split = newBuffer.split("\n\n");
+                // if (split.length > 1) return split[1];
+                return newBuffer;
+              });
+            }
+          }
+        } catch (e) {}
+      })();
+    }
+  }, [isWatching, loglevel, watchInterval]);
+  const selectStyle = {
+    width: "unset",
+    padding: "0 1.5rem 0 1rem",
+    marginBottom: 0,
+  };
   return (
     <>
-      <label>
-        Watch{" "}
-        <input
-          type="checkbox"
-          role="switch"
-          checked={isWatching}
-          onChange={() => {
-            setIsWatching(!isWatching);
+      <div style={{ display: "flex", justifyContent: "flex-start", gap: 8 }}>
+        <label>
+          Watch{" "}
+          <input
+            type="checkbox"
+            role="switch"
+            checked={isWatching}
+            onChange={() => {
+              setIsWatching(!isWatching);
+            }}
+          />
+        </label>
+        <select
+          style={selectStyle}
+          value={loglevel}
+          onChange={(e) => setLoglevel(e.target.value as any)}
+        >
+          <option value="silent">silent</option>
+          <option value="info">info</option>
+          <option value="verbose">verbose</option>
+        </select>
+        <select
+          style={selectStyle}
+          value={watchInterval}
+          onChange={(e) => setWatchInterval(Number(e.target.value) as any)}
+        >
+          <option value="5000">5s</option>
+          <option value="15000">15s</option>
+          <option value="30000">30s</option>
+          <option value="60000">60s</option>
+        </select>
+      </div>
+      {isWatching && (
+        <pre
+          // https://stackoverflow.com/a/44051405
+          style={{
+            height: 150,
+            display: "flex",
+            flexDirection: "column-reverse",
           }}
-        />
-      </label>
-      {isWatching && <pre>{buffer}</pre>}
+        >
+          {buffer}
+        </pre>
+      )}
     </>
   );
 }
