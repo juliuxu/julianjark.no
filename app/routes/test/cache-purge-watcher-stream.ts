@@ -5,10 +5,23 @@ import { flattenDepthFirst, getSitemapTree, Page } from "../sitemap";
 
 // Notion date stamps are by the minute
 // Only other way to purge then is by checking changes in other properties
-const WATCH_INTERVAL = 70 * 1000;
+const WATCH_INTERVAL = 20 * 1000;
 
 const isChangedPage = (before: Date) => (page: Page) => {
-  return new Date(page.lastmod) > before;
+  // Notion timestamps are stored only to minute precision
+  // This means that if a before timestamp is recorded at 14:25:30
+  // and a changed happens 10 seconds later, at 14:25:40
+  // the change will be recorded as 14:25:00
+  // which is less than 14:25:30. Making a simple comparsion miss the change
+
+  // One way to mitigate this is to treat any change in the same minute as changed
+  // This will cause more unnecessary updates, but all updates will be caught.
+  // With a watch interval of 20 seconds, we will get at most 2 unnecessary purges
+  const minuteDate = new Date(before);
+  minuteDate.setMilliseconds(0);
+  minuteDate.setSeconds(0);
+
+  return new Date(page.lastmod) >= minuteDate;
 };
 
 const purgePage = (page: Page) => {
