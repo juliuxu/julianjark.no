@@ -96,7 +96,7 @@ export default function CachePurgeWatcher() {
         <pre
           // https://stackoverflow.com/a/44051405
           style={{
-            height: 150,
+            height: 100,
             display: "flex",
             flexDirection: "column-reverse",
           }}
