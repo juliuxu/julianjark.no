@@ -9,10 +9,12 @@ export const loader: LoaderFunction = ({ request }) => {
     getOneOfOrUndefined(
       ["silent", "info", "verbose"],
       url.searchParams.get("loglevel")
-    ) ?? "verbose";
-  const watchInterval =
+    ) ?? "info";
+  const watchInterval = Math.max(
     getNumberOrUndefined(url.searchParams.get("watchInterval")) ??
-    DEFAULT_WATCH_INTERVAL;
+      DEFAULT_WATCH_INTERVAL,
+    4000
+  );
 
   const stream = new ReadableStream({
     async start(controller) {
