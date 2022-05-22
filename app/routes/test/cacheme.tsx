@@ -90,7 +90,7 @@ location / {
   
   proxy_cache super-cache;
 
-  proxy_cache_key $host$request_uri;
+  proxy_cache_key $host$request_uri$cookie_debugMode;
 
   proxy_cache_background_update on;
   proxy_cache_bypass $http_cache_purge;
