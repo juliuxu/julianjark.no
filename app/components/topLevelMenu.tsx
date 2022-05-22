@@ -1,5 +1,5 @@
 import { NavLink } from "@remix-run/react";
-import { getSitemapTree } from "~/routes/sitemap";
+import { getSitemapTree } from "~/sitemap.server";
 import {
   CachePurgeAllPagesButton,
   CachePurgeCurrentPageButton,

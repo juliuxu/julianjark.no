@@ -1,7 +1,7 @@
 import { ActionFunction } from "@remix-run/node";
 import config from "~/config.server";
-import { flattenDepthFirst, getSitemapTree, Page } from "../sitemap";
 import { getDateOrUndefined, getNumberOrUndefined } from "~/common";
+import { Page, flattenDepthFirst, getSitemapTree } from "~/sitemap.server";
 
 export const isChangedPage = (before: Date) => (page: Page) => {
   // Notion timestamps are stored only to minute precision

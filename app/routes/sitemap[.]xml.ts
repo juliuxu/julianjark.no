@@ -1,7 +1,6 @@
 import { LoaderFunction } from "@remix-run/node";
-import { flattenDepthFirst, getSitemapTree } from "./sitemap";
-import type { Page } from "./sitemap";
 import config from "~/config.server";
+import { Page, getSitemapTree, flattenDepthFirst } from "~/sitemap.server";
 
 function pageToEntry(page: Page): string {
   return `
