@@ -15,14 +15,16 @@ import {
   notionRenderComponents,
 } from "./$notionDrivenPage";
 import { prepareNotionBlocks } from "~/shiki-code-render/prepare.server";
+import { maybePrepareDebugData } from "~/components/debug.server";
 
-type Data = { blocks: Block[] };
-export const loader: LoaderFunction = async () => {
+type Data = { blocks: Block[]; debugData?: string };
+export const loader: LoaderFunction = async ({ request }) => {
   const blocks = await getBlocksWithChildren(config.forsidePageId);
   await prepareNotionBlocks(blocks, { theme: "dark-plus" });
   return json<Data>(
     {
       blocks,
+      debugData: await maybePrepareDebugData(request, blocks),
     },
     { headers: config.cacheControlHeaders }
   );
@@ -44,7 +46,7 @@ export default function Index() {
         classes={notionRenderClasses}
         blocks={data.blocks}
       />
-      <Debug pageData={data.blocks} />
+      <Debug debugData={data.debugData} />
     </>
   );
 }

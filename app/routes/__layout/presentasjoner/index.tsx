@@ -9,14 +9,16 @@ import { getPresentasjoner, getTitle, slugify } from "~/service/notion";
 import { DatabasePage } from "~/service/notionApi.server";
 import Debug from "~/components/debug";
 import config from "~/config.server";
+import { maybePrepareDebugData } from "~/components/debug.server";
 
-type Data = { presentasjoner: DatabasePage[] };
-export const loader: LoaderFunction = async () => {
+type Data = { presentasjoner: DatabasePage[]; debugData?: string };
+export const loader: LoaderFunction = async ({ request }) => {
   const presentasjoner = await getPresentasjoner();
 
   return json(
     {
       presentasjoner,
+      debugData: await maybePrepareDebugData(request, { presentasjoner }),
     },
     { headers: config.cacheControlHeaders }
   );
@@ -43,7 +45,7 @@ export default function Index() {
           </li>
         ))}
       </ul>
-      <Debug pageData={data.presentasjoner} />
+      <Debug debugData={data.debugData} />
     </>
   );
 }

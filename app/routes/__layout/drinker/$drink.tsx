@@ -24,6 +24,7 @@ import Debug from "~/components/debug";
 import NotionRender from "~/packages/notion-render";
 import type { Components as NotionRenderComponents } from "~/packages/notion-render/components";
 import { OptimizedNotionImage } from "~/components/notionComponents";
+import { maybePrepareDebugData } from "~/components/debug.server";
 
 export const notionRenderComponents: Partial<NotionRenderComponents> = {
   image: OptimizedNotionImage,
@@ -113,8 +114,9 @@ interface Data {
   page: DatabasePage;
   blocks: Block[];
   drink: Drink;
+  debugData?: string;
 }
-export const loader: LoaderFunction = async ({ params }) => {
+export const loader: LoaderFunction = async ({ request, params }) => {
   const page = (await getDrinker()).find(
     findPageBySlugPredicate(params.drink ?? "")
   );
@@ -125,7 +127,12 @@ export const loader: LoaderFunction = async ({ params }) => {
   const drink = prepare(page, blocks) as Required<Drink>;
 
   return json<Data>(
-    { page, blocks, drink },
+    {
+      page,
+      blocks,
+      drink,
+      debugData: await maybePrepareDebugData(request, { drink, page, blocks }),
+    },
     { headers: config.cacheControlHeadersDynamic(page.last_edited_time) }
   );
 };
@@ -186,7 +193,7 @@ export default function DrinkView() {
         </>
       )}
 
-      <Debug pageData={data.page} />
+      <Debug debugData={data.debugData} />
     </>
   );
 }

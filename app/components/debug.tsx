@@ -1,25 +1,27 @@
 import { useEffect, useState } from "react";
-import { CollapsedPrismCode } from "~/components/prismCode";
+import { CollapsedPrismCode } from "~/shiki-code-render";
 
-// This is really hacky.
-// The data is still being transfered to the browser, even when it's hidden
-export const isDebugMode = () => {
-  if (typeof document !== "undefined") {
-    // const debugMode = document.cookie
-    //   .split("; ")
-    //   .find((row) => row.startsWith("debugMode="))
-    //   ?.split("=")[1];
-    const debugMode = sessionStorage.getItem("debugMode");
-    return debugMode === "true";
-  }
-  return false;
+export const isDebugModeFromCookie = (cookieString: string) => {
+  const debugMode = cookieString
+    .split("; ")
+    .find((row) => row.startsWith("debugMode="))
+    ?.split("=")[1];
+  // const debugMode = sessionStorage.getItem("debugMode");
+  return debugMode === "true";
 };
 
 const setDebugMode = (value: boolean) => {
   // https://developer.mozilla.org/en-US/docs/Web/API/Document/cookie
-  // document.cookie = `debugMode=${value}`;
+  if (value) document.cookie = `debugMode=true`;
+  else document.cookie = "debugMode= ; expires = Thu, 01 Jan 1970 00:00:00 GMT";
+  // sessionStorage.setItem("debugMode", String(value));
+};
 
-  sessionStorage.setItem("debugMode", String(value));
+const isDebugMode = () => {
+  if (typeof document !== "undefined") {
+    return isDebugModeFromCookie(document.cookie);
+  }
+  return false;
 };
 
 export const DebugToggle = () => {
@@ -74,15 +76,12 @@ export const OnlyDebugMode: React.FC<any> = ({ children }) => {
   return <>{children}</>;
 };
 interface Props {
-  pageData: any;
+  debugData?: string;
 }
-export default function Debug(props: Props) {
+export default function Debug({ debugData }: Props) {
   return (
     <OnlyDebugMode>
-      <CollapsedPrismCode
-        language="json"
-        code={JSON.stringify(props.pageData, null, 2)}
-      />
+      <CollapsedPrismCode codeHtml={debugData ?? ""} />
     </OnlyDebugMode>
   );
 }

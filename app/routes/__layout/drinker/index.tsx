@@ -9,12 +9,15 @@ import { getDrinker, getTitle, slugify } from "~/service/notion";
 import { DatabasePage } from "~/service/notionApi.server";
 import Debug from "~/components/debug";
 import config from "~/config.server";
+import { maybePrepareDebugData } from "~/components/debug.server";
 
-type Data = { drinker: DatabasePage[] };
-export const loader: LoaderFunction = async () => {
+type Data = { drinker: DatabasePage[]; debugData?: string };
+export const loader: LoaderFunction = async ({ request }) => {
+  const drinker = await getDrinker();
   return json(
     {
-      drinker: await getDrinker(),
+      drinker,
+      debugData: await maybePrepareDebugData(request, { drinker }),
     },
     { headers: config.cacheControlHeaders }
   );
@@ -41,7 +44,7 @@ export default function Index() {
           </li>
         ))}
       </ul>
-      <Debug pageData={data.drinker} />
+      <Debug debugData={data.debugData} />
     </>
   );
 }

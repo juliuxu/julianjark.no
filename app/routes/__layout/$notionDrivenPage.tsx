@@ -24,6 +24,7 @@ import { ShikiNotionCode } from "~/shiki-code-render/shiki-notion";
 import { prepareNotionBlocks } from "~/shiki-code-render/prepare.server";
 import config from "~/config.server";
 import { OptimizedNotionImage } from "~/components/notionComponents";
+import { maybePrepareDebugData } from "~/components/debug.server";
 
 // Notion Render Settings
 export const notionRenderClasses: Partial<NotionRenderClasses> = {
@@ -55,8 +56,9 @@ export const notionRenderComponents: Partial<NotionRenderComponents> = {
   image: OptimizedNotionImage,
 };
 
-type Data = { page: PageResponse; blocks: Block[] };
+type Data = { page: PageResponse; blocks: Block[]; debugData?: string };
 export const loader: LoaderFunction = async ({
+  request,
   params: { notionDrivenPage: requestedNotionDrivenPageSlug = "" },
 }) => {
   const page = (await getNotionDrivenPages()).find(
@@ -72,6 +74,7 @@ export const loader: LoaderFunction = async ({
     {
       page,
       blocks,
+      debugData: await maybePrepareDebugData(request, { page, blocks }),
     },
     { headers: config.cacheControlHeadersDynamic(page.last_edited_time) }
   );
@@ -95,7 +98,7 @@ export default function NotionDrivenPage() {
         classes={notionRenderClasses}
         blocks={data.blocks}
       />
-      <Debug pageData={data} />
+      <Debug debugData={data.debugData} />
     </>
   );
 }
