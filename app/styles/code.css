@@ -1,0 +1,84 @@
+/* Shiki code block styles */
+.shiki > code {
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem;
+  padding-left: 0;
+  padding-right: 0;
+}
+.shiki > code > .line {
+  padding-right: 1rem;
+  padding-left: 1rem;
+}
+
+/* Line numbers */
+.shiki[data-line-numbers="true"] {
+  counter-reset: shiki-line-number;
+}
+.shiki[data-line-numbers="true"] > code > .line {
+  padding-left: 0;
+}
+.shiki[data-line-numbers="true"] > code > .line::before {
+  counter-increment: shiki-line-number;
+  content: counter(shiki-line-number);
+
+  padding-left: 0rem;
+  text-align: right;
+  display: inline-block;
+  width: 3rem;
+  padding-right: 1rem;
+  position: sticky;
+  left: 0;
+}
+.shiki > code,
+.shiki > code > .line,
+.shiki > code > .line::before {
+  background-color: inherit;
+}
+
+/* Highlightning */
+:root {
+  --shiki-highlight-color: #4ec9b0;
+}
+.shiki > code {
+  display: inline-block;
+}
+.shiki > code > .line {
+  position: relative;
+  display: block;
+}
+.shiki > code > .line:not(:last-child) {
+  /*
+    Dirty hack to remove space between items when they are display:block
+    should figure out what is actually causing this
+  */
+  margin-bottom: -1.4rem;
+  line-height: 1.4rem;
+  min-height: 1.4rem;
+}
+.shiki > code > .line.highlight::after {
+  background-color: var(--shiki-highlight-color);
+
+  content: " ";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  opacity: 0.15;
+  pointer-events: none;
+}
+.shiki[data-line-numbers="true"] > code > .line.highlight::before {
+  border-left: 6px solid var(--shiki-highlight-color);
+}
+
+/* Filename */
+.shiki {
+  position: relative;
+}
+.shiki[data-filename]::before {
+  content: attr(data-filename);
+  position: absolute;
+  left: 8px;
+  top: 4px;
+  font-size: 0.7rem;
+  opacity: 0.7;
+}

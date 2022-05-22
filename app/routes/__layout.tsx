@@ -13,6 +13,7 @@ import TopLevelMenu, {
 import picoCss from "@picocss/pico/css/pico.min.css";
 
 import commonStyles from "~/styles/common.css";
+import codeStyles from "~/styles/code.css";
 import notionRenderStyles from "~/styles/notionRender.css";
 import config from "~/config.server";
 
@@ -24,6 +25,10 @@ export const links: LinksFunction = () => [
   {
     rel: "stylesheet",
     href: commonStyles,
+  },
+  {
+    rel: "stylesheet",
+    href: codeStyles,
   },
   {
     rel: "stylesheet",
