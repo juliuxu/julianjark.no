@@ -40,6 +40,7 @@
   --shiki-highlight-color: #4ec9b0;
 }
 .shiki > code {
+  width: 100%;
   display: inline-block;
 }
 .shiki > code > .line {
