@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { CollapsedPrismCode } from "~/shiki-code-render";
+import { CollapsedShikiCode } from "~/shiki-code-render";
 
 export const isDebugModeFromCookie = (cookieString: string) => {
   const debugMode = cookieString
@@ -81,7 +81,7 @@ interface Props {
 export default function Debug({ debugData }: Props) {
   return (
     <OnlyDebugMode>
-      <CollapsedPrismCode codeHtml={debugData ?? ""} />
+      <CollapsedShikiCode codeHtml={debugData ?? ""} />
     </OnlyDebugMode>
   );
 }

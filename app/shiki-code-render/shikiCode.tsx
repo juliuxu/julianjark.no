@@ -9,7 +9,7 @@ type CollapsedShikiCode = Props & {
   open?: boolean;
   title?: React.ReactNode;
 };
-export const CollapsedPrismCode = ({
+export const CollapsedShikiCode = ({
   open,
   title = "Show code",
   ...rest
