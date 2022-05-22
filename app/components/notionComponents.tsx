@@ -1,4 +1,4 @@
-import { getKeyValueOptions, optimizedImageUrl } from "~/common";
+import { optimizedImageUrl } from "~/common";
 import type { Components as NotionRenderComponents } from "~/packages/notion-render/components";
 import { useNotionRenderContext } from "~/packages/notion-render/context";
 import { getTextFromRichText } from "~/service/notion";
@@ -17,11 +17,12 @@ export const OptimizedNotionImage: NotionRenderComponents["image"] = ({
     return null;
   }
 
-  const { unoptimized, width, height } = getKeyValueOptions<{
-    unoptimized?: string;
-    width?: string;
-    height?: string;
-  }>(getTextFromRichText(block.image.caption));
+  const params = Object.fromEntries(
+    new URLSearchParams(getTextFromRichText(block.image.caption))
+  );
+  const { unoptimized, width, height, alt, lazy } = params as Partial<
+    typeof params
+  >;
 
   if (unoptimized !== "true") url = optimizedImageUrl(url, { width, height });
 
@@ -29,7 +30,8 @@ export const OptimizedNotionImage: NotionRenderComponents["image"] = ({
     <img
       className={useNotionRenderContext().classes.image.root}
       src={url}
-      loading="lazy"
+      loading={lazy !== "false" ? "lazy" : "eager"}
+      alt={alt}
     />
   );
 };
