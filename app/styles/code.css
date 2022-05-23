@@ -68,7 +68,7 @@
   pointer-events: none;
 }
 .shiki[data-line-numbers="true"] > code > .line.highlight::before {
-  border-left: 6px solid var(--shiki-highlight-color);
+  box-shadow: -6px 0px 0px 0px var(--shiki-highlight-color);
 }
 
 /* Filename */
