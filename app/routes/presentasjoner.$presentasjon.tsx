@@ -30,6 +30,7 @@ import {
   parsePresentationProperties,
 } from "~/packages/notion-reveal/prepare";
 import notionRevealStyles from "~/packages/notion-reveal/styles.css";
+import codeStyles from "~/styles/code.css";
 import { prepareNotionBlocks } from "~/shiki-code-render/prepare.server";
 
 import revealCss from "reveal.js/dist/reveal.css";
@@ -71,6 +72,7 @@ export const getThemeOrDefault = (maybeTheme: string) =>
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: revealCss },
+  { rel: "stylesheet", href: codeStyles },
   { rel: "stylesheet", href: notionRevealStyles },
 
   // Source sans is used a lot in the the themes
