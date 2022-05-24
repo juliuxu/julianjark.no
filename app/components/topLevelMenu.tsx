@@ -4,19 +4,23 @@ import {
   CachePurgeAllPagesButton,
   CachePurgeCurrentPageButton,
 } from "./cachePurgeButton";
-import { DebugToggle, OnlyDebugMode } from "./debug";
+import { DebugToggle, useIsDebugMode } from "./debug";
 
 export const loader = async () => ({ sitemapTree: await getSitemapTree() });
 
 type Props = Awaited<ReturnType<typeof loader>>;
 export default function TopLevelMenu({ sitemapTree }: Props) {
+  const debugMode = useIsDebugMode();
   return (
     <nav>
       <ul>
         <li>
           <NavLink to={sitemapTree.path}>{sitemapTree.title}</NavLink>
         </li>
-        <li className="hidden-block dev-features">
+        <li
+          className="hidden-block dev-features"
+          style={debugMode ? { opacity: 1 } : {}}
+        >
           <DebugToggle />
           <CachePurgeCurrentPageButton />
           <CachePurgeAllPagesButton onlyEditedLastNSeconds={4 * 60 * 60}>

@@ -52,7 +52,7 @@ export const DebugToggle = () => {
 };
 
 // A bit hacky
-const useIsDebugMode = () => {
+export const useIsDebugMode = () => {
   const [debugMode, setDebugModeState] = useState(false);
   useEffect(() => {
     setDebugModeState(isDebugMode());
