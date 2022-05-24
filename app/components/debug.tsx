@@ -34,18 +34,7 @@ export const DebugToggle = () => {
   const debugMode = useIsDebugMode();
   return (
     <fieldset>
-      <label
-        htmlFor="debugModeSwitch"
-        className="debugButton"
-        style={
-          debugMode
-            ? {
-                opacity: 1,
-                visibility: "visible",
-              }
-            : undefined
-        }
-      >
+      <label htmlFor="debugModeSwitch">
         🧑‍💻
         <input
           type="checkbox"

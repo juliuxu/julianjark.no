@@ -6,7 +6,6 @@ export function CachePurgeCurrentPageButton() {
   const onClick = async () => {
     setIsSubmitting(true);
     await fetch(window.location.href, {
-      method: "HEAD",
       headers: { "Cache-Purge": "1" },
     });
     setIsSubmitting(false);

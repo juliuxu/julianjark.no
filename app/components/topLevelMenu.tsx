@@ -16,14 +16,13 @@ export default function TopLevelMenu({ sitemapTree }: Props) {
         <li>
           <NavLink to={sitemapTree.path}>{sitemapTree.title}</NavLink>
         </li>
-        <li>
+        <li className="hidden-block dev-features">
           <DebugToggle />
-        </li>
-        <li>
-          <OnlyDebugMode>
-            <CachePurgeCurrentPageButton />
-            <CachePurgeAllPagesButton />
-          </OnlyDebugMode>
+          <CachePurgeCurrentPageButton />
+          <CachePurgeAllPagesButton onlyEditedLastNSeconds={4 * 60 * 60}>
+            ⏱
+          </CachePurgeAllPagesButton>
+          <CachePurgeAllPagesButton />
         </li>
       </ul>
       <ul>
