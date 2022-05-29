@@ -13,7 +13,6 @@ import {
 } from "~/notion/notion-api.server";
 import { assertItemFound, optimizedImageUrl } from "~/utils";
 
-import { Block } from "~/notion/notion.types";
 import config from "~/config.server";
 import Debug from "~/components/debug";
 import NotionRender from "~/packages/notion-render";
