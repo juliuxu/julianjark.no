@@ -1,9 +1,10 @@
 import { Block } from "~/notion/notion.types";
 
 export type Drink = {
-  Illustration: string;
+  Forbredelser: Block[];
+  Illustrasjon: string;
   Ingredienser: Block[];
   Fremgangsmåte: Block[];
-  Notes: Block[];
-  References: Block[];
+  Notater: Block[];
+  Referanser: Block[];
 };

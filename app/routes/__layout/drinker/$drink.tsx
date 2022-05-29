@@ -80,19 +80,19 @@ export default function DrinkView() {
             </div>
           </div>
         </div>
-        {data.drink.Illustration && (
+        {data.drink.Illustrasjon && (
           <div>
-            <img src={optimizedImageUrl(data.drink.Illustration)} />
+            <img src={optimizedImageUrl(data.drink.Illustrasjon)} />
           </div>
         )}
       </div>
 
-      {data.drink.References.length > 0 && (
+      {data.drink.Referanser.length > 0 && (
         <>
           <details style={{ marginTop: 16 }}>
             <summary>Referanser</summary>
             <NotionRender
-              blocks={data.drink.References}
+              blocks={data.drink.Referanser}
               components={notionRenderComponents}
             />
           </details>

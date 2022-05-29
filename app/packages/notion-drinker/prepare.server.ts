@@ -16,7 +16,7 @@ export const prepare = (
     while ((block = blocksInner.shift()) !== undefined) {
       // Notes
       if (block.type === "callout") {
-        result.Notes = [...(result.Notes ?? []), block];
+        result.Notater = [...(result.Notater ?? []), block];
         continue;
       }
 
@@ -27,7 +27,7 @@ export const prepare = (
         "image",
       ];
       if (referenceBlockTypes.includes(block.type)) {
-        result.References = [...(result.References ?? []), block];
+        result.Referanser = [...(result.Referanser ?? []), block];
         continue;
       }
 
@@ -39,9 +39,11 @@ export const prepare = (
         const recursiveResult = inner((block as any)[block.type].children);
 
         // Manual merge
-        result.Notes = (result.Notes ?? []).concat(recursiveResult.Notes ?? []);
-        result.References = (result.References ?? []).concat(
-          recursiveResult.References ?? []
+        result.Notater = (result.Notater ?? []).concat(
+          recursiveResult.Notater ?? []
+        );
+        result.Referanser = (result.Referanser ?? []).concat(
+          recursiveResult.Referanser ?? []
         );
 
         if (recursiveResult.Ingredienser)
@@ -87,5 +89,5 @@ export const prepare = (
     illustrationUrl = page.cover.file.url;
   }
 
-  return { Illustration: illustrationUrl, ...inner(blocks) };
+  return { Illustrasjon: illustrationUrl, ...inner(blocks) };
 };
