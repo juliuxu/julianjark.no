@@ -73,8 +73,10 @@ export const prepare = (
         }
         return undefined;
       };
+      const Forbredelser = getItemsIfHeader("Forbredelser", block);
       const Ingredienser = getItemsIfHeader("Ingredienser", block);
       const Fremgangsmåte = getItemsIfHeader("Fremgangsmåte", block);
+      if (Forbredelser) result.Forbredelser = Forbredelser;
       if (Ingredienser) result.Ingredienser = Ingredienser;
       if (Fremgangsmåte) result.Fremgangsmåte = Fremgangsmåte;
     }
