@@ -1,7 +1,8 @@
 import { Block } from "~/notion/notion.types";
 
 export type Drink = {
-  Forbredelser?: Block[];
+  Tittel: string;
+  Forberedelser?: Block[];
   Illustrasjon: string;
   Ingredienser: Block[];
   Fremgangsmåte: Block[];
@@ -10,6 +11,7 @@ export type Drink = {
 };
 export function assertDrink(drink: Partial<Drink>): asserts drink is Drink {
   const keys: Array<keyof Drink> = [
+    "Tittel",
     "Illustrasjon",
     "Ingredienser",
     "Fremgangsmåte",

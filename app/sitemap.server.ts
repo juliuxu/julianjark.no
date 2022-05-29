@@ -9,7 +9,7 @@ import { DatabasePage, getPage } from "~/notion/notion-api.server";
 import config from "~/config.server";
 import { meta as indexMeta } from "~/routes/__layout";
 import { meta as presentasjonerMeta } from "~/routes/__layout/presentasjoner/index";
-import { meta as drinkerMeta } from "~/routes/__layout/drinker/index";
+import { meta as drinkerMeta } from "~/routes/__layout/drinker-old/index";
 
 export interface Page {
   title: string;

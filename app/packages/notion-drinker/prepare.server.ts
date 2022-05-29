@@ -1,4 +1,4 @@
-import { getTextFromRichText } from "~/notion/notion";
+import { getTextFromRichText, getTitle } from "~/notion/notion";
 import { DatabasePage } from "~/notion/notion-api.server";
 import type { Block } from "~/notion/notion.types";
 import { takeWhileM } from "~/utils";
@@ -47,8 +47,8 @@ export const prepare = (
           ? [...(result.Referanser ?? []), ...recursiveResult.Referanser]
           : result.Referanser;
 
-        if (recursiveResult.Forbredelser)
-          result.Forbredelser = recursiveResult.Forbredelser;
+        if (recursiveResult.Forberedelser)
+          result.Forberedelser = recursiveResult.Forberedelser;
         if (recursiveResult.Ingredienser)
           result.Ingredienser = recursiveResult.Ingredienser;
         if (recursiveResult.Fremgangsmåte)
@@ -79,7 +79,7 @@ export const prepare = (
       const Forbredelser = getItemsIfHeader("Forbredelser", block);
       const Ingredienser = getItemsIfHeader("Ingredienser", block);
       const Fremgangsmåte = getItemsIfHeader("Fremgangsmåte", block);
-      if (Forbredelser) result.Forbredelser = Forbredelser;
+      if (Forbredelser) result.Forberedelser = Forbredelser;
       if (Ingredienser) result.Ingredienser = Ingredienser;
       if (Fremgangsmåte) result.Fremgangsmåte = Fremgangsmåte;
     }
@@ -94,5 +94,8 @@ export const prepare = (
     illustrationUrl = page.cover.file.url;
   }
 
-  return { Illustrasjon: illustrationUrl, ...inner(blocks) };
+  // Tittel
+  const Tittel = getTitle(page);
+
+  return { Tittel, Illustrasjon: illustrationUrl, ...inner(blocks) };
 };
