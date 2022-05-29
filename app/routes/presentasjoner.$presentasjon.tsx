@@ -16,7 +16,7 @@ import {
 import {
   DatabasePage,
   getBlocksWithChildren,
-} from "~/service/notionApi.server";
+} from "~/service/notion-api.server";
 import { assertItemFound } from "~/common";
 
 import { Block } from "~/service/notion.types";

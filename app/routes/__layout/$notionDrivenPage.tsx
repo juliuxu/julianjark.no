@@ -13,7 +13,7 @@ import {
 import {
   getBlocksWithChildren,
   PageResponse,
-} from "~/service/notionApi.server";
+} from "~/service/notion-api.server";
 import { assertItemFound } from "~/common";
 import Debug from "~/components/debug";
 import NotionRender from "~/packages/notion-render";

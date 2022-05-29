@@ -9,7 +9,7 @@ import Debug from "~/components/debug";
 import config from "~/config.server";
 import NotionRender from "~/packages/notion-render";
 import { Block } from "~/service/notion.types";
-import { getBlocksWithChildren } from "~/service/notionApi.server";
+import { getBlocksWithChildren } from "~/service/notion-api.server";
 import {
   notionRenderClasses,
   notionRenderComponents,

@@ -4,7 +4,7 @@ import {
   DatabasePage,
   getDatabasePages,
   PageResponse,
-} from "./notionApi.server";
+} from "./notion-api.server";
 
 export function slugify(text: string) {
   return text

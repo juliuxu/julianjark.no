@@ -6,7 +6,7 @@ import {
   getDrinker,
 } from "~/service/notion";
 import Code from "~/components/prismCode";
-import { DatabasePage, getPage } from "~/service/notionApi.server";
+import { DatabasePage, getPage } from "~/service/notion-api.server";
 import config from "~/config.server";
 import { meta as indexMeta } from "~/routes/__layout";
 import { meta as presentasjonerMeta } from "~/routes/__layout/presentasjoner/index";

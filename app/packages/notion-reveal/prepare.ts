@@ -1,6 +1,6 @@
 import { getText } from "~/service/notion";
 import { getCheckbox, getSelect, getTextFromRichText } from "~/service/notion";
-import type { DatabasePage } from "~/service/notionApi.server";
+import type { DatabasePage } from "~/service/notion-api.server";
 
 import { Block } from "~/service/notion.types";
 import {
