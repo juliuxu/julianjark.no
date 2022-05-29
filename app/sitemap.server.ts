@@ -5,7 +5,6 @@ import {
   getNotionDrivenPages,
   getDrinker,
 } from "~/notion/notion";
-import Code from "~/components/prism-code";
 import { DatabasePage, getPage } from "~/notion/notion-api.server";
 import config from "~/config.server";
 import { meta as indexMeta } from "~/routes/__layout";

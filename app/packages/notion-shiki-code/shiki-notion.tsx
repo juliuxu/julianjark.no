@@ -6,7 +6,7 @@ export const ShikiNotionCode: NotionRenderComponents["code"] = ({ block }) => {
   const codeHtml = (block.code as any).shikiCodeHtml as string;
   if (typeof codeHtml !== "string") {
     throw new Error(
-      "Notion blocks needs to be prepared with `prepareNotionBlocks` functino"
+      "Notion blocks needs to be prepared with `prepareNotionBlocks` function"
     );
   }
   return <ShikiCode codeHtml={codeHtml} />;
