@@ -5,8 +5,8 @@ import {
   MetaFunction,
 } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
-import { getDrinker, getTitle, slugify } from "~/service/notion";
-import { DatabasePage } from "~/service/notion-api.server";
+import { getDrinker, getTitle, slugify } from "~/notion/notion";
+import { DatabasePage } from "~/notion/notion-api.server";
 import Debug from "~/components/debug";
 import config from "~/config.server";
 import { maybePrepareDebugData } from "~/components/debug.server";

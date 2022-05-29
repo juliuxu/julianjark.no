@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { Block } from "~/service/notion.types";
+import { Block } from "~/notion/notion.types";
 import { Classes, EmptyClasses } from "./classes";
 import { Components, DefaultComponents, ExtendedBlock } from "./components";
 import NotionRenderContext from "./context";

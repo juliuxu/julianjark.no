@@ -11,19 +11,19 @@ import {
   getDrinker,
   getTextFromRichText,
   getTitle,
-} from "~/service/notion";
+} from "~/notion/notion";
 import {
   DatabasePage,
   getBlocksWithChildren,
-} from "~/service/notion-api.server";
+} from "~/notion/notion-api.server";
 import { assertItemFound, optimizedImageUrl, takeWhileM } from "~/common";
 
-import { Block } from "~/service/notion.types";
+import { Block } from "~/notion/notion.types";
 import config from "~/config.server";
 import Debug from "~/components/debug";
 import NotionRender from "~/packages/notion-render";
 import type { Components as NotionRenderComponents } from "~/packages/notion-render/components";
-import { OptimizedNotionImage } from "~/components/notionComponents";
+import { OptimizedNotionImage } from "~/components/notion-components";
 import { maybePrepareDebugData } from "~/components/debug.server";
 
 export const notionRenderComponents: Partial<NotionRenderComponents> = {

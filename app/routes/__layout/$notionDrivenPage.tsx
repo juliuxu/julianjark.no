@@ -9,21 +9,21 @@ import {
   getTitle,
   findPageBySlugPredicate,
   getNotionDrivenPages,
-} from "~/service/notion";
+} from "~/notion/notion";
 import {
   getBlocksWithChildren,
   PageResponse,
-} from "~/service/notion-api.server";
+} from "~/notion/notion-api.server";
 import { assertItemFound } from "~/common";
 import Debug from "~/components/debug";
 import NotionRender from "~/packages/notion-render";
-import { Block } from "~/service/notion.types";
+import { Block } from "~/notion/notion.types";
 import type { Classes as NotionRenderClasses } from "~/packages/notion-render/classes";
 import type { Components as NotionRenderComponents } from "~/packages/notion-render/components";
 import { ShikiNotionCode } from "~/packages/notion-shiki-code/shiki-notion";
 import { prepareNotionBlocks } from "~/packages/notion-shiki-code/prepare.server";
 import config from "~/config.server";
-import { OptimizedNotionImage } from "~/components/notionComponents";
+import { OptimizedNotionImage } from "~/components/notion-components";
 import { maybePrepareDebugData } from "~/components/debug.server";
 
 // Notion Render Settings

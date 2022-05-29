@@ -1,6 +1,6 @@
 import { json, LoaderFunction } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
-import Code from "~/components/prismCode";
+import Code from "~/components/prism-code";
 import { getSitemapTree, asUrlList } from "~/sitemap.server";
 
 export const loader: LoaderFunction = async () => {

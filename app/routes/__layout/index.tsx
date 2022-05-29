@@ -8,8 +8,8 @@ import { useLoaderData } from "@remix-run/react";
 import Debug from "~/components/debug";
 import config from "~/config.server";
 import NotionRender from "~/packages/notion-render";
-import { Block } from "~/service/notion.types";
-import { getBlocksWithChildren } from "~/service/notion-api.server";
+import { Block } from "~/notion/notion.types";
+import { getBlocksWithChildren } from "~/notion/notion-api.server";
 import {
   notionRenderClasses,
   notionRenderComponents,

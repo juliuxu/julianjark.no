@@ -1,4 +1,4 @@
-import type { Block } from "~/service/notion.types";
+import type { Block } from "~/notion/notion.types";
 import { BlockComponentProps, DefaultComponents } from "./components";
 
 // Pseudo blocks

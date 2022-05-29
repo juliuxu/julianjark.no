@@ -1,7 +1,7 @@
 import * as shiki from "shiki";
 import type { Lang, Theme } from "shiki";
 import { getPlainTextFromRichTextList } from "~/packages/notion-render/components";
-import { Block } from "~/service/notion.types";
+import { Block } from "~/notion/notion.types";
 
 interface LineOption {
   line: number;

@@ -12,14 +12,14 @@ import {
   findPageBySlugPredicate,
   getPresentasjoner,
   getTitle,
-} from "~/service/notion";
+} from "~/notion/notion";
 import {
   DatabasePage,
   getBlocksWithChildren,
-} from "~/service/notion-api.server";
+} from "~/notion/notion-api.server";
 import { assertItemFound } from "~/common";
 
-import { Block } from "~/service/notion.types";
+import { Block } from "~/notion/notion.types";
 
 import type {
   PresentationProperties,

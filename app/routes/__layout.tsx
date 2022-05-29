@@ -8,7 +8,7 @@ import {
 import { Outlet, useLoaderData } from "@remix-run/react";
 import TopLevelMenu, {
   loader as topLevelMenuLoader,
-} from "~/components/topLevelMenu";
+} from "~/components/top-level-menu";
 
 import picoCss from "@picocss/pico/css/pico.min.css";
 

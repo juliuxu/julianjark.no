@@ -3,7 +3,7 @@ import picoCss from "@picocss/pico/css/pico.min.css";
 import { useLoaderData } from "@remix-run/react";
 import prepareCodeHtml from "~/packages/notion-shiki-code/prepare.server";
 import ShikiCode from "~/packages/notion-shiki-code/shiki-code";
-import PrismCode from "~/components/prismCode";
+import PrismCode from "~/components/prism-code";
 
 export const links: LinksFunction = () => [
   {

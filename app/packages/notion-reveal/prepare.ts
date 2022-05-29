@@ -1,8 +1,8 @@
-import { getText } from "~/service/notion";
-import { getCheckbox, getSelect, getTextFromRichText } from "~/service/notion";
-import type { DatabasePage } from "~/service/notion-api.server";
+import { getText } from "~/notion/notion";
+import { getCheckbox, getSelect, getTextFromRichText } from "~/notion/notion";
+import type { DatabasePage } from "~/notion/notion-api.server";
 
-import { Block } from "~/service/notion.types";
+import { Block } from "~/notion/notion.types";
 import {
   getThemeOrDefault,
   Theme,

@@ -3,7 +3,7 @@ import { getSitemapTree } from "~/sitemap.server";
 import {
   CachePurgeAllPagesButton,
   CachePurgeCurrentPageButton,
-} from "./cachePurgeButton";
+} from "./cache-purge-button";
 import { DebugToggle, useIsDebugMode } from "./debug";
 
 export const loader = async () => ({ sitemapTree: await getSitemapTree() });

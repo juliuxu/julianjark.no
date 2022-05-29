@@ -1,7 +1,7 @@
 import { optimizedImageUrl } from "~/common";
 import type { Components as NotionRenderComponents } from "~/packages/notion-render/components";
 import { useNotionRenderContext } from "~/packages/notion-render/context";
-import { getTextFromRichText } from "~/service/notion";
+import { getTextFromRichText } from "~/notion/notion";
 
 export const OptimizedNotionImage: NotionRenderComponents["image"] = ({
   block,

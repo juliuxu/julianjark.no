@@ -4,9 +4,9 @@ import {
   getPresentasjoner,
   getNotionDrivenPages,
   getDrinker,
-} from "~/service/notion";
-import Code from "~/components/prismCode";
-import { DatabasePage, getPage } from "~/service/notion-api.server";
+} from "~/notion/notion";
+import Code from "~/components/prism-code";
+import { DatabasePage, getPage } from "~/notion/notion-api.server";
 import config from "~/config.server";
 import { meta as indexMeta } from "~/routes/__layout";
 import { meta as presentasjonerMeta } from "~/routes/__layout/presentasjoner/index";
