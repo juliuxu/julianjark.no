@@ -1,4 +1,4 @@
-import { optimizedImageUrl } from "~/common";
+import { optimizedImageUrl } from "~/utils";
 import type { Components as NotionRenderComponents } from "~/packages/notion-render/components";
 import { useNotionRenderContext } from "~/packages/notion-render/context";
 import { getTextFromRichText } from "~/notion/notion";

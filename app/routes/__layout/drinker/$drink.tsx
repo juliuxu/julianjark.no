@@ -16,7 +16,7 @@ import {
   DatabasePage,
   getBlocksWithChildren,
 } from "~/notion/notion-api.server";
-import { assertItemFound, optimizedImageUrl, takeWhileM } from "~/common";
+import { assertItemFound, optimizedImageUrl, takeWhileM } from "~/utils";
 
 import { Block } from "~/notion/notion.types";
 import config from "~/config.server";

@@ -1,6 +1,6 @@
 import { ActionFunction } from "@remix-run/node";
 import config from "~/config.server";
-import { getDateOrUndefined, getNumberOrUndefined } from "~/common";
+import { getDateOrUndefined, getNumberOrUndefined } from "~/utils";
 import { Page, flattenDepthFirst, getSitemapTree } from "~/sitemap.server";
 
 export const isChangedPage = (before: Date) => (page: Page) => {

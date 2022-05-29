@@ -3,7 +3,7 @@
 import sharp from "sharp";
 import type { LoaderFunction } from "@remix-run/node";
 import { Response } from "@remix-run/node";
-import { getNumberOrUndefined } from "~/common";
+import { getNumberOrUndefined } from "~/utils";
 
 const badImageBase64 =
   "R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";

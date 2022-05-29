@@ -1,6 +1,6 @@
 import { LinksFunction } from "@remix-run/node";
 import picoCss from "@picocss/pico/css/pico.min.css";
-import { optimizedImageUrl } from "~/common";
+import { optimizedImageUrl } from "~/utils";
 
 export const links: LinksFunction = () => [
   {

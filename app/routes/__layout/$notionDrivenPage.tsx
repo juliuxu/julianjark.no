@@ -14,7 +14,7 @@ import {
   getBlocksWithChildren,
   PageResponse,
 } from "~/notion/notion-api.server";
-import { assertItemFound } from "~/common";
+import { assertItemFound } from "~/utils";
 import Debug from "~/components/debug";
 import NotionRender from "~/packages/notion-render";
 import { Block } from "~/notion/notion.types";

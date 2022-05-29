@@ -1,5 +1,5 @@
 import { LoaderFunction } from "@remix-run/node";
-import { getNumberOrUndefined, getOneOfOrUndefined } from "~/common";
+import { getNumberOrUndefined, getOneOfOrUndefined } from "~/utils";
 import { createReadableStreamLogger, purgeUpdatedPages } from "./cache-purge";
 
 const DEFAULT_WATCH_INTERVAL = 20 * 1000;
