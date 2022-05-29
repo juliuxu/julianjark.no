@@ -6,7 +6,7 @@ import {
   ListBlockType,
   BulletedList,
   NumberedList,
-} from "./pseudoComponents";
+} from "./pseudo-components";
 
 /**
  * Rich Text

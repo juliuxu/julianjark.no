@@ -31,7 +31,7 @@ import {
 } from "~/packages/notion-reveal/prepare";
 import notionRevealStyles from "~/packages/notion-reveal/styles.css";
 import codeStyles from "~/styles/code.css";
-import { prepareNotionBlocks } from "~/shiki-code-render/prepare.server";
+import { prepareNotionBlocks } from "~/packages/notion-shiki-code/prepare.server";
 
 import revealCss from "reveal.js/dist/reveal.css";
 import blackRevealTheme from "reveal.js/dist/theme/black.css";

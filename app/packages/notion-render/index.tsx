@@ -3,7 +3,7 @@ import { Block } from "~/service/notion.types";
 import { Classes, EmptyClasses } from "./classes";
 import { Components, DefaultComponents, ExtendedBlock } from "./components";
 import NotionRenderContext from "./context";
-import { ListBlock } from "./pseudoComponents";
+import { ListBlock } from "./pseudo-components";
 
 const filterUnsupportedBlocks = (components: Components, blocks: Block[]) =>
   blocks.filter((block) => components[block.type] !== undefined);

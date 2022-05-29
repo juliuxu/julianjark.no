@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { CollapsedShikiCode } from "~/shiki-code-render";
+import { CollapsedShikiCode } from "~/packages/notion-shiki-code";
 
 export const isDebugModeFromCookie = (cookieString: string) => {
   const debugMode = cookieString

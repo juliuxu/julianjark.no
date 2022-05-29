@@ -1,8 +1,8 @@
 import { json, LinksFunction, LoaderFunction } from "@remix-run/node";
 import picoCss from "@picocss/pico/css/pico.min.css";
 import { useLoaderData } from "@remix-run/react";
-import prepareCodeHtml from "~/shiki-code-render/prepare.server";
-import ShikiCode from "~/shiki-code-render/shikiCode";
+import prepareCodeHtml from "~/packages/notion-shiki-code/prepare.server";
+import ShikiCode from "~/packages/notion-shiki-code/shiki-code";
 import PrismCode from "~/components/prismCode";
 
 export const links: LinksFunction = () => [

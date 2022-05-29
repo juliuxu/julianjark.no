@@ -1,4 +1,4 @@
-import { prepare } from "~/shiki-code-render";
+import { prepare } from "~/packages/notion-shiki-code";
 import { isDebugModeFromCookie } from "./debug";
 
 export const maybePrepareDebugData = async (request: Request, data: any) => {

@@ -14,7 +14,7 @@ import {
   notionRenderClasses,
   notionRenderComponents,
 } from "./$notionDrivenPage";
-import { prepareNotionBlocks } from "~/shiki-code-render/prepare.server";
+import { prepareNotionBlocks } from "~/packages/notion-shiki-code/prepare.server";
 import { maybePrepareDebugData } from "~/components/debug.server";
 
 type Data = { blocks: Block[]; debugData?: string };

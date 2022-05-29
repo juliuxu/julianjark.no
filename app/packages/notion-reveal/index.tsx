@@ -6,7 +6,7 @@ import PrismCode from "~/components/prismCode";
 import NotionRender from "~/packages/notion-render";
 import type { Classes as NotionRenderClasses } from "~/packages/notion-render/classes";
 import { Components as NotionRenderComponents } from "~/packages/notion-render/components";
-import { ShikiNotionCode } from "~/shiki-code-render/shiki-notion";
+import { ShikiNotionCode } from "~/packages/notion-shiki-code/shiki-notion";
 import type { PreparedData, Slide, SubSlide } from "./prepare";
 
 // Classes
