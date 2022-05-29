@@ -39,13 +39,16 @@ export const prepare = (
         const recursiveResult = inner((block as any)[block.type].children);
 
         // Manual merge
-        result.Notater = (result.Notater ?? []).concat(
-          recursiveResult.Notater ?? []
-        );
-        result.Referanser = (result.Referanser ?? []).concat(
-          recursiveResult.Referanser ?? []
-        );
+        result.Notater = recursiveResult.Notater
+          ? [...(result.Notater ?? []), ...recursiveResult.Notater]
+          : result.Notater;
 
+        result.Referanser = recursiveResult.Referanser
+          ? [...(result.Referanser ?? []), ...recursiveResult.Referanser]
+          : result.Referanser;
+
+        if (recursiveResult.Forbredelser)
+          result.Forbredelser = recursiveResult.Forbredelser;
         if (recursiveResult.Ingredienser)
           result.Ingredienser = recursiveResult.Ingredienser;
         if (recursiveResult.Fremgangsmåte)

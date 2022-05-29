@@ -20,7 +20,7 @@ import NotionRender from "~/packages/notion-render";
 import type { Components as NotionRenderComponents } from "~/packages/notion-render/components";
 import { OptimizedNotionImage } from "~/components/notion-components";
 import { maybePrepareDebugData } from "~/components/debug.server";
-import { Drink } from "~/packages/notion-drinker/types";
+import { assertDrink, Drink } from "~/packages/notion-drinker/types";
 import { prepare } from "~/packages/notion-drinker/prepare.server";
 
 export const notionRenderComponents: Partial<NotionRenderComponents> = {
@@ -39,7 +39,8 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   assertItemFound(page);
 
   const blocks = await getBlocksWithChildren(page.id);
-  const drink = prepare(page, blocks) as Required<Drink>;
+  const drink = prepare(page, blocks);
+  assertDrink(drink);
 
   return json<Data>(
     {
@@ -80,14 +81,12 @@ export default function DrinkView() {
             </div>
           </div>
         </div>
-        {data.drink.Illustrasjon && (
-          <div>
-            <img src={optimizedImageUrl(data.drink.Illustrasjon)} />
-          </div>
-        )}
+        <div>
+          <img src={optimizedImageUrl(data.drink.Illustrasjon)} />
+        </div>
       </div>
 
-      {data.drink.Referanser.length > 0 && (
+      {data.drink.Referanser && (
         <>
           <details style={{ marginTop: 16 }}>
             <summary>Referanser</summary>
