@@ -24,7 +24,7 @@ export default function Drinker() {
   return (
     <div>
       <div className="h-72 w-full bg-teal-100">
-        <nav className="max-w-lg flex flex-wrap gap-10 lg:max-w-4xl mx-auto">
+        <nav className="max-w-lg lg:max-w-4xl mx-auto flex flex-wrap gap-x-10 gap-y-7">
           {data.drinker.map((drink) => (
             <NavLink
               key={drink.id}

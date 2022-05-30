@@ -6,7 +6,7 @@ import {
 } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import config from "~/config.server";
-import { getDrinker, getTitle, slugify } from "~/notion/notion";
+import { getDrinker } from "~/notion/notion";
 import { DatabasePage } from "~/notion/notion-api.server";
 import tailwind from "~/tailwind.css";
 

@@ -62,8 +62,9 @@ export const meta: MetaFunction = ({ data }: { data: Data }) => {
 export default function DrinkView() {
   const data = useLoaderData<Data>();
   return (
-    <>
-      <div>
+    <div className="max-w-lg md:max-w-4xl mx-auto">
+      {/* <h1 className="text-xl italic">{data.drink.Tittel}</h1> */}
+      <div className="flex flex-col gap-20 mt-14">
         {data.drink.Forberedelser && (
           <div>
             <h2 className="text-4xl font-semibold">Forberedelser</h2>
@@ -71,13 +72,18 @@ export default function DrinkView() {
           </div>
         )}
 
-        <div>
-          <div>
+        <div className="flex">
+          <div className="w-1/2 lg:w-1/3">
             <h2 className="text-4xl font-semibold">Ingredienser</h2>
             <NotionRender blocks={data.drink.Ingredienser} />
           </div>
           {data.drink.Illustrasjon && (
-            <img src={optimizedImageUrl(data.drink.Illustrasjon)} />
+            <div className="w-1/2 lg:w-2/3 h-72 lg:h-96 relative">
+              <img
+                className="absolute inset-0 h-full w-full object-cover object-top"
+                src={optimizedImageUrl(data.drink.Illustrasjon)}
+              />
+            </div>
           )}
         </div>
 
@@ -95,14 +101,16 @@ export default function DrinkView() {
       {data.drink.Referanser && (
         <div>
           <h2 className="text-4xl font-semibold">Referanser</h2>
-          <NotionRender
-            blocks={data.drink.Referanser}
-            components={notionRenderComponents}
-          />
+          <div className="flex flex-wrap gap-10">
+            <NotionRender
+              blocks={data.drink.Referanser}
+              components={notionRenderComponents}
+            />
+          </div>
         </div>
       )}
 
       <Debug debugData={data.debugData} />
-    </>
+    </div>
   );
 }
