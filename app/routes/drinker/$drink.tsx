@@ -76,7 +76,9 @@ export default function DrinkView() {
             <h2 className="text-4xl font-semibold">Ingredienser</h2>
             <NotionRender blocks={data.drink.Ingredienser} />
           </div>
-          <img src={optimizedImageUrl(data.drink.Illustrasjon)} />
+          {data.drink.Illustrasjon && (
+            <img src={optimizedImageUrl(data.drink.Illustrasjon)} />
+          )}
         </div>
 
         <div>
