@@ -39,13 +39,13 @@ export const getSitemapTree = async () => {
       {
         title: drinkerMeta({} as any).title!,
         path: "/drinker",
-        codePath: "routes/__layout/drinker/index",
+        codePath: "routes/drinker/index",
         lastmod: resolvedDrinkerPages
           .map((page) => page.last_edited_time)
           .sort()
           .reverse()[0],
         children: resolvedDrinkerPages.map(
-          databasePagesToPage("/drinker/", "routes/__layout/drinker/$drink")
+          databasePagesToPage("/drinker/", "routes/drinker/$drink")
         ),
       },
       {
