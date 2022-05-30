@@ -80,9 +80,11 @@ export default function DrinkView() {
             </div>
           </div>
         </div>
-        <div>
-          <img src={optimizedImageUrl(data.drink.Illustrasjon)} />
-        </div>
+        {data.drink.Illustrasjon && (
+          <div>
+            <img src={optimizedImageUrl(data.drink.Illustrasjon)} />
+          </div>
+        )}
       </div>
 
       {data.drink.Referanser && (
