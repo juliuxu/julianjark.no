@@ -122,6 +122,7 @@ const assertPageResponse = (page: MaybePageResponse) => {
 // this lets us speed up development significantly when doing rapid design changes
 if (process.env.NODE_ENV === "development") {
   const cachePath = pathJoin(process.env.TMPDIR || "/tmp", "notion-api-cache");
+  console.log("caching notion to", cachePath);
   const memoizer = memoizeFs({
     cachePath,
     maxAge: 1000 * 60 * 60 * 4,
