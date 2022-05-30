@@ -1,5 +1,7 @@
 import { Client } from "@notionhq/client";
 import type { ListBlockChildrenResponse } from "@notionhq/client/build/src/api-endpoints";
+import { join as pathJoin } from "path";
+import memoizeFs from "memoize-fs";
 
 const notion = new Client({
   auth: process.env.NOTION_TOKEN,
@@ -8,7 +10,7 @@ const notion = new Client({
 type Sorts = Parameters<typeof notion.databases.query>[0]["sorts"];
 type Filter = Parameters<typeof notion.databases.query>[0]["filter"];
 
-export const getDatabasePages = async (
+export let getDatabasePages = async (
   databaseId: string,
   sorts?: Sorts,
   filter?: Filter
@@ -22,12 +24,12 @@ export const getDatabasePages = async (
   return onlyDatabasePages(response.results);
 };
 
-export const getPage = async (pageId: string) => {
+export let getPage = async (pageId: string) => {
   const response = await notion.pages.retrieve({ page_id: pageId });
   return assertPageResponse(response);
 };
 
-export const getBlocks = async (blockId: string) => {
+export let getBlocks = async (blockId: string) => {
   const blocks = [];
   let cursor;
   while (true) {
@@ -44,7 +46,7 @@ export const getBlocks = async (blockId: string) => {
   return blocks.filter(isBlockObjectResponse);
 };
 
-export const getBlocksWithChildren = async (
+export let getBlocksWithChildren = async (
   blockId: string
 ): Promise<BlockWithChildren[]> => {
   const blocks = await getBlocks(blockId);
@@ -114,3 +116,31 @@ const assertPageResponse = (page: MaybePageResponse) => {
   if ("properties" in page) return page;
   throw new Error("passed page is not a PageResponse");
 };
+
+// Cache during development
+// Since the notion api is pretty slow,
+// this lets us speed up development significantly when doing rapid design changes
+if (process.env.NODE_ENV === "development") {
+  const cachePath = pathJoin(process.env.TMPDIR || "/tmp", "notion-api-cache");
+  const memoizer = memoizeFs({
+    cachePath,
+    maxAge: 1000 * 60 * 60 * 4,
+  });
+  const memoAsync = (
+    fn: memoizeFs.FnToMemoize,
+    opts: memoizeFs.Options = {}
+  ) => {
+    const p = memoizer.fn(fn, opts);
+    let mfn: memoizeFs.FnToMemoize | undefined = undefined;
+    return async (...args: any) => {
+      if (!mfn) {
+        mfn = await p;
+      }
+      return await mfn(...args);
+    };
+  };
+
+  getPage = memoAsync(getPage);
+  getBlocks = memoAsync(getBlocks);
+  getDatabasePages = memoAsync(getDatabasePages);
+}
