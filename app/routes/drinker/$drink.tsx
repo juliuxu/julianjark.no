@@ -6,19 +6,14 @@ import {
 } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 
-import { findPageBySlugPredicate, getDrinker, getTitle } from "~/notion/notion";
-import {
-  DatabasePage,
-  getBlocksWithChildren,
-} from "~/notion/notion-api.server";
+import { findPageBySlugPredicate, getDrinker } from "~/notion/notion";
+import { getBlocksWithChildren } from "~/notion/notion-api.server";
 import { assertItemFound, optimizedImageUrl } from "~/utils";
 
 import config from "~/config.server";
-import Debug from "~/components/debug";
 import NotionRender from "~/packages/notion-render";
 import type { Components as NotionRenderComponents } from "~/packages/notion-render/components";
 import { OptimizedNotionImage } from "~/components/notion-components";
-import { maybePrepareDebugData } from "~/components/debug.server";
 import { assertDrink, Drink } from "~/packages/notion-drinker/types";
 import { prepare } from "~/packages/notion-drinker/prepare.server";
 
@@ -28,7 +23,6 @@ export const notionRenderComponents: Partial<NotionRenderComponents> = {
 
 interface Data {
   drink: Drink;
-  debugData?: string;
 }
 export const loader: LoaderFunction = async ({ request, params }) => {
   const page = (await getDrinker()).find(
@@ -43,7 +37,6 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   return json<Data>(
     {
       drink,
-      debugData: await maybePrepareDebugData(request, { drink, blocks }),
     },
     { headers: config.cacheControlHeadersDynamic(page.last_edited_time) }
   );
@@ -61,20 +54,50 @@ export const meta: MetaFunction = ({ data }: { data: Data }) => {
 
 export default function DrinkView() {
   const data = useLoaderData<Data>();
+
+  const menuItems = [
+    "Forberedelser",
+    "Ingredienser",
+    "Fremgangsmåte",
+    "Notater",
+    "Referanser",
+  ];
+
   return (
-    <div className="max-w-lg md:max-w-4xl mx-auto">
+    <div className="max-w-lg lg:max-w-6xl mx-auto pt-10 lg:flex lg:gap-x-16">
       {/* <h1 className="text-xl italic">{data.drink.Tittel}</h1> */}
-      <div className="flex flex-col gap-20 mt-14">
+
+      <aside className="hidden self-start lg:block lg:w-1/4 py-7 px-12 border">
+        <div className="text-lg font-semibold">Innhold</div>
+        <ul className="mt-8 space-y-4">
+          {menuItems.map((item) => (
+            <li key={item}>
+              <a
+                className="block p-4 hover:bg-gray-50 before:content-['▪'] before:left-0 before:absolute relative"
+                href={`#${item}`}
+              >
+                {item}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </aside>
+
+      <div className="flex flex-col gap-20 lg:w-3/4">
         {data.drink.Forberedelser && (
           <div>
-            <h2 className="text-4xl font-semibold">Forberedelser</h2>
+            <h2 className="text-4xl font-semibold" id="Forberedelser">
+              Forberedelser
+            </h2>
             <NotionRender blocks={data.drink.Forberedelser} />
           </div>
         )}
 
         <div className="flex">
           <div className="w-1/2 lg:w-1/3">
-            <h2 className="text-4xl font-semibold">Ingredienser</h2>
+            <h2 className="text-4xl font-semibold" id="Ingredienser">
+              Ingredienser
+            </h2>
             <NotionRender blocks={data.drink.Ingredienser} />
           </div>
           {data.drink.Illustrasjon && (
@@ -88,29 +111,40 @@ export default function DrinkView() {
         </div>
 
         <div>
-          <h2 className="text-4xl font-semibold">Fremgangsmåte</h2>
+          <h2 className="text-4xl font-semibold" id="Fremgangsmåte">
+            Fremgangsmåte
+          </h2>
           <NotionRender blocks={data.drink.Fremgangsmåte} />
         </div>
 
-        <div>
-          <div></div>
-        </div>
-        <div></div>
-      </div>
-
-      {data.drink.Referanser && (
-        <div>
-          <h2 className="text-4xl font-semibold">Referanser</h2>
-          <div className="flex flex-wrap gap-10">
-            <NotionRender
-              blocks={data.drink.Referanser}
-              components={notionRenderComponents}
-            />
+        {data.drink.Notater && (
+          <div>
+            <h2 className="text-4xl font-semibold" id="Notater">
+              Notater
+            </h2>
+            <div className="flex flex-wrap gap-10">
+              <NotionRender
+                blocks={data.drink.Notater}
+                components={notionRenderComponents}
+              />
+            </div>
           </div>
-        </div>
-      )}
+        )}
 
-      <Debug debugData={data.debugData} />
+        {data.drink.Referanser && (
+          <div>
+            <h2 className="text-4xl font-semibold" id="Referanser">
+              Referanser
+            </h2>
+            <div className="flex flex-wrap gap-10">
+              <NotionRender
+                blocks={data.drink.Referanser}
+                components={notionRenderComponents}
+              />
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

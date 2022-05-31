@@ -23,7 +23,7 @@ export default function Drinker() {
   const data = useLoaderData<Data>();
   return (
     <div>
-      <div className="h-72 w-full bg-teal-100">
+      <div className="h-72 w-full bg-green-100">
         <nav className="max-w-lg lg:max-w-4xl mx-auto flex flex-wrap gap-x-10 gap-y-7">
           {data.drinker.map((drink) => (
             <NavLink
