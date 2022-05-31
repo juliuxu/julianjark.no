@@ -86,7 +86,7 @@ export default function DrinkView() {
       <div className="flex flex-col gap-20 lg:w-3/4">
         {data.drink.Forberedelser && (
           <div>
-            <h2 className="text-4xl font-semibold" id="Forberedelser">
+            <h2 className="text-4xl mb-8 font-semibold" id="Forberedelser">
               Forberedelser
             </h2>
             <NotionRender blocks={data.drink.Forberedelser} />
@@ -95,7 +95,7 @@ export default function DrinkView() {
 
         <div className="flex">
           <div className="w-1/2 lg:w-1/3">
-            <h2 className="text-4xl font-semibold" id="Ingredienser">
+            <h2 className="text-4xl mb-8 font-semibold" id="Ingredienser">
               Ingredienser
             </h2>
             <NotionRender blocks={data.drink.Ingredienser} />
@@ -111,7 +111,7 @@ export default function DrinkView() {
         </div>
 
         <div>
-          <h2 className="text-4xl font-semibold" id="Fremgangsmåte">
+          <h2 className="text-4xl mb-8 font-semibold" id="Fremgangsmåte">
             Fremgangsmåte
           </h2>
           <NotionRender blocks={data.drink.Fremgangsmåte} />
@@ -119,7 +119,7 @@ export default function DrinkView() {
 
         {data.drink.Notater && (
           <div>
-            <h2 className="text-4xl font-semibold" id="Notater">
+            <h2 className="text-4xl mb-8 font-semibold" id="Notater">
               Notater
             </h2>
             <div className="flex flex-wrap gap-10">
@@ -133,7 +133,7 @@ export default function DrinkView() {
 
         {data.drink.Referanser && (
           <div>
-            <h2 className="text-4xl font-semibold" id="Referanser">
+            <h2 className="text-4xl mb-8 font-semibold" id="Referanser">
               Referanser
             </h2>
             <div className="flex flex-wrap gap-10">
