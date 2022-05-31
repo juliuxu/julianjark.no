@@ -13,7 +13,7 @@ const config = {
   notionDrivenPagesDatabaseId: "f61d11c80e4b40e2a4329cde350bb31a",
 
   cacheControlHeaders: {
-    "Cache-Control": `public, s-maxage=${60}, stale-while-revalidate=${YEAR_IN_SECONDS}, stale-if-error=${MONTH_IN_SECONDS}`,
+    "Cache-Control": `public, s-maxage=${60}, stale-while-revalidate=${YEAR_IN_SECONDS}`,
   },
 
   // Dynamic cache control headers based on the last updated time
@@ -39,7 +39,7 @@ const config = {
       ([threshold]) => diffInSeconds < threshold
     )![1];
     return {
-      "Cache-Control": `public, s-maxage=${serverCacheMaxAge}, stale-while-revalidate=${YEAR_IN_SECONDS}, stale-if-error=${MONTH_IN_SECONDS}`,
+      "Cache-Control": `public, s-maxage=${serverCacheMaxAge}, stale-while-revalidate=${YEAR_IN_SECONDS}`,
     };
   },
 } as const;
