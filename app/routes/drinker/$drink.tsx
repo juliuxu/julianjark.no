@@ -67,7 +67,7 @@ export default function DrinkView() {
     <div className="max-w-lg lg:max-w-6xl mx-auto pt-10 lg:flex lg:gap-x-16">
       {/* <h1 className="text-xl italic">{data.drink.Tittel}</h1> */}
 
-      <aside className="hidden self-start lg:block lg:w-1/4 py-7 px-12 border">
+      <aside className="hidden self-start sticky top-10 lg:block lg:w-1/4 py-7 px-12 border">
         <div className="text-lg font-semibold">Innhold</div>
         <ul className="mt-8 space-y-4">
           {menuItems.map((item) => (
