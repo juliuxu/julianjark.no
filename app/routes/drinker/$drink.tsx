@@ -56,12 +56,12 @@ export default function DrinkView() {
   const data = useLoaderData<Data>();
 
   const menuItems = [
-    "Forberedelser",
-    "Ingredienser",
-    "Fremgangsmåte",
-    "Notater",
-    "Referanser",
-  ];
+    data.drink.Forberedelser ? "Forberedelser" : "",
+    data.drink.Ingredienser ? "Ingredienser" : "",
+    data.drink.Fremgangsmåte ? "Fremgangsmåte" : "",
+    data.drink.Notater ? "Notater" : "",
+    data.drink.Referanser ? "Referanser" : "",
+  ].filter(Boolean);
 
   return (
     <div className="max-w-lg lg:max-w-6xl mx-auto pt-10 lg:flex lg:gap-x-16">
@@ -85,19 +85,17 @@ export default function DrinkView() {
 
       <div className="flex flex-col gap-20 lg:w-3/4">
         {data.drink.Forberedelser && (
-          <div>
-            <h2 className="text-4xl mb-8 font-semibold" id="Forberedelser">
-              Forberedelser
-            </h2>
+          <div className="relative">
+            <div id="Forberedelser" className="absolute -top-10" />
+            <h2 className="text-4xl mb-8 font-semibold">Forberedelser</h2>
             <NotionRender blocks={data.drink.Forberedelser} />
           </div>
         )}
 
-        <div className="flex">
+        <div className="flex relative">
           <div className="w-1/2 lg:w-1/3">
-            <h2 className="text-4xl mb-8 font-semibold" id="Ingredienser">
-              Ingredienser
-            </h2>
+            <div id="Ingredienser" className="absolute -top-10" />
+            <h2 className="text-4xl mb-8 font-semibold">Ingredienser</h2>
             <NotionRender blocks={data.drink.Ingredienser} />
           </div>
           {data.drink.Illustrasjon && (
@@ -110,18 +108,16 @@ export default function DrinkView() {
           )}
         </div>
 
-        <div>
-          <h2 className="text-4xl mb-8 font-semibold" id="Fremgangsmåte">
-            Fremgangsmåte
-          </h2>
+        <div className="relative">
+          <div id="Fremgangsmåte" className="absolute -top-10" />
+          <h2 className="text-4xl mb-8 font-semibold">Fremgangsmåte</h2>
           <NotionRender blocks={data.drink.Fremgangsmåte} />
         </div>
 
         {data.drink.Notater && (
-          <div>
-            <h2 className="text-4xl mb-8 font-semibold" id="Notater">
-              Notater
-            </h2>
+          <div className="relative">
+            <div id="Notater" className="absolute -top-10" />
+            <h2 className="text-4xl mb-8 font-semibold">Notater</h2>
             <div className="flex flex-wrap gap-10">
               <NotionRender
                 blocks={data.drink.Notater}
@@ -132,10 +128,9 @@ export default function DrinkView() {
         )}
 
         {data.drink.Referanser && (
-          <div>
-            <h2 className="text-4xl mb-8 font-semibold" id="Referanser">
-              Referanser
-            </h2>
+          <div className="relative">
+            <div id="Referanser" className="absolute -top-10" />
+            <h2 className="text-4xl mb-8 font-semibold">Referanser</h2>
             <div className="flex flex-wrap gap-10">
               <NotionRender
                 blocks={data.drink.Referanser}
