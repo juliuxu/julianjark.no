@@ -81,3 +81,13 @@ export function takeWhileM<T>(arr: T[], predicate: (el: T) => boolean) {
   }
   return result;
 }
+
+export function chunked<T>(l: T[], chunkSize: number) {
+  const result: T[][] = [];
+  const copy = l.slice();
+  while (copy.length > 0) {
+    result.push(copy.splice(0, chunkSize));
+  }
+
+  return result;
+}
