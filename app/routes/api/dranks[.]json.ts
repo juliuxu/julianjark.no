@@ -22,9 +22,13 @@ interface Ingredient {
   recommendation?: string;
   amount?: string;
 }
+interface Step {
+  text: string;
+}
 interface Drank {
   title: string;
   ingredients: Ingredient[];
+  steps: Step[];
   lastUpdated: string;
   body?: any;
 }
@@ -84,9 +88,27 @@ const prepare = (page: DatabasePage, blocks: BlockWithChildren[]): Drank => {
       return { title: s };
     });
 
+  const steps = drink.Fremgangsmåte.filter(
+    (block) =>
+      block.type === "bulleted_list_item" || block.type === "numbered_list_item"
+  )
+    .map((block) => {
+      if (block.type === "bulleted_list_item") {
+        return getTextFromRichText(block.bulleted_list_item.rich_text);
+      }
+      if (block.type === "numbered_list_item") {
+        return getTextFromRichText(block.numbered_list_item.rich_text);
+      }
+      return "";
+    })
+    .map((s) => {
+      return { text: s };
+    });
+
   return {
     title: drink.Tittel,
     ingredients,
+    steps,
     lastUpdated: page.last_edited_time,
   };
 };
