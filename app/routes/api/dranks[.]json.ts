@@ -36,7 +36,7 @@ interface Drank {
   lastUpdated: string;
 }
 interface Data {
-  lastUpdated?: string;
+  lastUpdated: string;
   dranks: Drank[];
 }
 export const loader: LoaderFunction = async () => {
