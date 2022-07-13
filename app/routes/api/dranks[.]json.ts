@@ -25,7 +25,7 @@ interface Ingredient {
   mlAmount?: string;
 }
 interface Step {
-  text: string;
+  title: string;
 }
 interface Drank {
   title: string;
@@ -114,7 +114,7 @@ const prepare = (page: DatabasePage, blocks: BlockWithChildren[]): Drank => {
     })
     .map((s) => s.trim())
     .map((s) => {
-      return { text: s };
+      return { title: s };
     });
 
   return {
