@@ -18,9 +18,11 @@ import { chunked } from "~/utils";
  * A drank is in the app domain
  */
 interface Ingredient {
+  raw: string;
   title: string;
   recommendation?: string;
   amount?: string;
+  mlAmount?: string;
 }
 interface Step {
   text: string;
@@ -28,9 +30,9 @@ interface Step {
 interface Drank {
   title: string;
   ingredients: Ingredient[];
+  illustrationUrl: string;
   steps: Step[];
   lastUpdated: string;
-  body?: any;
 }
 interface Data {
   lastUpdated?: string;
@@ -83,9 +85,18 @@ const prepare = (page: DatabasePage, blocks: BlockWithChildren[]): Drank => {
       }
       return "";
     })
+    .map((s) => s.trim())
     .map((s) => {
-      // TODO: Split out amount and recommendation
-      return { title: s };
+      const regex =
+        /^((?<amount>[\d\.\-]+[\s\w]*?)\s)?(?<mlAmount>\([\d-]+ml\))?\s?(?<title>[A-ZÆØÅ].+?)(\s—\s(?<recommendation>.+))?$/;
+      const matches = s.match(regex);
+      if (
+        matches?.groups === undefined ||
+        typeof matches.groups.title !== "string"
+      )
+        throw new Error(`could not parse ${s}`);
+
+      return { raw: s, ...matches.groups } as Ingredient;
     });
 
   const steps = drink.Fremgangsmåte.filter(
@@ -101,12 +112,14 @@ const prepare = (page: DatabasePage, blocks: BlockWithChildren[]): Drank => {
       }
       return "";
     })
+    .map((s) => s.trim())
     .map((s) => {
       return { text: s };
     });
 
   return {
     title: drink.Tittel,
+    illustrationUrl: drink.Illustrasjon,
     ingredients,
     steps,
     lastUpdated: page.last_edited_time,
