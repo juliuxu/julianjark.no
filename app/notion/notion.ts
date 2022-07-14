@@ -48,6 +48,14 @@ export const getSelect = (name: string, fromPage: DatabasePage) => {
   return undefined;
 };
 
+export const getMultiSelect = (name: string, fromPage: DatabasePage) => {
+  const property = fromPage.properties[name];
+  if (property?.type === "multi_select") {
+    return property.multi_select.map((x) => x.name);
+  }
+  return undefined;
+};
+
 export const getTextFromRichText = (richText: RichTextItem[]) =>
   richText.map((richTextBlock) => richTextBlock.plain_text).join("");
 

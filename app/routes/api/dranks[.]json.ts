@@ -30,6 +30,8 @@ interface Step {
 interface Drank {
   id: string;
   title: string;
+  alcohol: string;
+  tags: string[];
   ingredients: Ingredient[];
   illustrationUrl: string;
   steps: Step[];
@@ -121,6 +123,8 @@ const prepare = (page: DatabasePage, blocks: BlockWithChildren[]): Drank => {
   return {
     id: page.id,
     title: drink.Tittel,
+    alcohol: drink.Alkohol,
+    tags: drink.Tags,
     illustrationUrl: drink.Illustrasjon,
     ingredients,
     steps,

@@ -1,4 +1,9 @@
-import { getTextFromRichText, getTitle } from "~/notion/notion";
+import {
+  getMultiSelect,
+  getSelect,
+  getTextFromRichText,
+  getTitle,
+} from "~/notion/notion";
 import { DatabasePage } from "~/notion/notion-api.server";
 import type { Block } from "~/notion/notion.types";
 import { takeWhileM } from "~/utils";
@@ -97,5 +102,17 @@ export const prepare = (
   // Tittel
   const Tittel = getTitle(page);
 
-  return { Tittel, Illustrasjon: illustrationUrl, ...inner(blocks) };
+  // Alkohol
+  const Alkohol = getSelect("Alkohol", page);
+
+  // Tags
+  const Tags = getMultiSelect("Tags", page);
+
+  return {
+    Tittel,
+    Alkohol,
+    Tags,
+    Illustrasjon: illustrationUrl,
+    ...inner(blocks),
+  };
 };
