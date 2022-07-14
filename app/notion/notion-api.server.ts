@@ -29,6 +29,11 @@ export let getPage = async (pageId: string) => {
   return assertPageResponse(response);
 };
 
+export let getDatabase = async (databaseId: string) => {
+  const response = await notion.databases.retrieve({ database_id: databaseId });
+  return assertDatabaseResponse(response);
+};
+
 export let getBlocks = async (blockId: string) => {
   const blocks = [];
   let cursor;
@@ -117,6 +122,16 @@ const assertPageResponse = (page: MaybePageResponse) => {
   throw new Error("passed page is not a PageResponse");
 };
 
+// Database
+export type MaybeDatabaseResponse = Awaited<
+  ReturnType<typeof notion.databases.retrieve>
+>;
+export type DatabaseResponse = ReturnType<typeof assertDatabaseResponse>;
+const assertDatabaseResponse = (page: MaybeDatabaseResponse) => {
+  if ("properties" in page) return page;
+  throw new Error("passed page is not a DatabaseResponse");
+};
+
 // Cache during development
 // Since the notion api is pretty slow,
 // this lets us speed up development significantly when doing rapid design changes
@@ -142,6 +157,7 @@ if (process.env.NODE_ENV === "development") {
   };
 
   getPage = memoAsync(getPage);
+  getDatabase = memoAsync(getDatabase);
   getBlocks = memoAsync(getBlocks);
   getDatabasePages = memoAsync(getDatabasePages);
 }

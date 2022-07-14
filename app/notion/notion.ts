@@ -2,6 +2,7 @@ import config from "~/config.server";
 import { RichTextItem } from "./notion.types";
 import {
   DatabasePage,
+  getDatabase,
   getDatabasePages,
   PageResponse,
 } from "./notion-api.server";
@@ -62,6 +63,9 @@ export const getTextFromRichText = (richText: RichTextItem[]) =>
 export const findPageBySlugPredicate =
   (slug: string) => (page: PageResponse | DatabasePage) =>
     slugify(getTitle(page)) === slug;
+
+export const getDrinkerDatabasePage = async () =>
+  await getDatabase(config.drinkerDatabaseId);
 
 export const getDrinker = async () =>
   await getDatabasePages(

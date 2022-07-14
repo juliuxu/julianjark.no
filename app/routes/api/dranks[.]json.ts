@@ -1,6 +1,9 @@
 import { LoaderFunction, json } from "@remix-run/node";
 import config from "~/config.server";
-import { getDrinker } from "~/notion/notion";
+import {
+  getDrinker,
+  getDrinkerDatabasePage as getDrinkerDatabase,
+} from "~/notion/notion";
 import {
   DatabasePage,
   getBlocksWithChildren,
@@ -40,11 +43,15 @@ interface Drank {
 interface Data {
   lastUpdated: string;
   dranks: Drank[];
+  alcoholOrder: string[];
 }
 export const loader: LoaderFunction = async () => {
-  console.time("fetching drinker");
-  const drinker = await getDrinker();
-  console.timeEnd("fetching drinker");
+  console.time("fetching database and pages");
+  const [drinkerDatabase, drinker] = await Promise.all([
+    getDrinkerDatabase(),
+    getDrinker(),
+  ] as const);
+  console.timeEnd("fetching database and pages");
 
   console.time("fetching drinker blocks");
   let dranks: Drank[] = [];
@@ -64,8 +71,15 @@ export const loader: LoaderFunction = async () => {
     .map((x) => x.lastUpdated)
     .sort()
     .reverse()[0];
+
+  if (drinkerDatabase.properties["Alkohol"].type !== "select")
+    throw new Error("Database mangler Alkohol");
+  const alcoholOrder = drinkerDatabase.properties["Alkohol"].select.options.map(
+    (x) => x.name
+  );
+
   return json<Data>(
-    { dranks, lastUpdated },
+    { dranks, alcoholOrder, lastUpdated },
     { headers: config.cacheControlHeadersDynamic(lastUpdated) }
   );
 };
