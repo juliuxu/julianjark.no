@@ -2,11 +2,12 @@ import { LoaderFunction, json } from "@remix-run/node";
 import config from "~/config.server";
 import {
   getDrinker,
-  getDrinkerDatabasePage as getDrinkerDatabase,
+  getDrinkerDatabase as getDrinkerDatabase,
 } from "~/notion/notion";
 import {
   DatabasePage,
   getBlocksWithChildren,
+  getPage,
 } from "~/notion/notion-api.server";
 import { getTextFromRichText } from "~/notion/notion";
 import { BlockWithChildren } from "~/notion/notion.types";
@@ -45,7 +46,18 @@ interface Data {
   dranks: Drank[];
   alcoholOrder: string[];
 }
-export const loader: LoaderFunction = async () => {
+export const loader: LoaderFunction = async ({ request }) => {
+  // Single Drank
+  const drankId = new URL(request.url).searchParams.get("id");
+  if (drankId !== null && drankId.length > 0) {
+    const drinkPage = await getPage(drankId);
+    const drinkBlocks = await getBlocksWithChildren(drinkPage.id);
+    const drank = prepare(drinkPage, drinkBlocks);
+    return json(drank, {
+      headers: config.cacheControlHeadersDynamic(drank.lastUpdated),
+    });
+  }
+
   console.time("fetching database and pages");
   const [drinkerDatabase, drinker] = await Promise.all([
     getDrinkerDatabase(),

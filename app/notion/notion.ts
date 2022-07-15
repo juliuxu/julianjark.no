@@ -64,7 +64,7 @@ export const findPageBySlugPredicate =
   (slug: string) => (page: PageResponse | DatabasePage) =>
     slugify(getTitle(page)) === slug;
 
-export const getDrinkerDatabasePage = async () =>
+export const getDrinkerDatabase = async () =>
   await getDatabase(config.drinkerDatabaseId);
 
 export const getDrinker = async () =>
