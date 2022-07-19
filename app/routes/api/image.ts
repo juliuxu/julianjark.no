@@ -1,9 +1,10 @@
 // https://gist.github.com/jacob-ebey/3a37a86307de9ef22f47aae2e593b56f
 // https://github.com/vercel/next.js/blob/canary/packages/next/server/image-optimizer.ts
 import sharp from "sharp";
+import type { FitEnum } from "sharp";
 import type { LoaderFunction } from "@remix-run/node";
 import { Response } from "@remix-run/node";
-import { getNumberOrUndefined } from "~/utils";
+import { getNumberOrUndefined, getOneOfOrUndefined } from "~/utils";
 
 const badImageBase64 =
   "R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
@@ -20,6 +21,7 @@ function badImageResponse() {
 }
 
 interface ProccessingOptions {
+  fit?: keyof FitEnum;
   width?: number;
   height?: number;
   quality: number;
@@ -68,6 +70,11 @@ export const fetchAndProccessImage = async (
     actualWidth > options.width &&
     actualHeight > options.height
   ) {
+    transformer.resize({
+      width: options.width,
+      height: options.height,
+      fit: options.fit,
+    });
   } else if (options.width && actualWidth && actualWidth > options.width) {
     transformer.resize(options.width);
   } else if (options.height && actualHeight && actualHeight > options.height) {
@@ -101,7 +108,11 @@ export const loader: LoaderFunction = async ({ request }) => {
   }
   href = decodeURIComponent(href);
 
-  const options = {
+  const options: ProccessingOptions = {
+    fit: getOneOfOrUndefined(
+      ["fill", "contain", "cover", "inside", "outside"],
+      url.searchParams.get("fit")
+    ),
     width: getNumberOrUndefined(url.searchParams.get("width")),
     height: getNumberOrUndefined(url.searchParams.get("height")),
     quality: getNumberOrUndefined(url.searchParams.get("quality")) ?? 75,
