@@ -6,7 +6,11 @@ import {
 } from "~/notion/notion";
 import { DatabasePage } from "~/notion/notion-api.server";
 import type { Block } from "~/notion/notion.types";
-import { rewriteNotionImageUrl, takeWhileM } from "~/utils";
+import {
+  getOneOfOrUndefined,
+  rewriteNotionImageUrl,
+  takeWhileM,
+} from "~/utils";
 import { Drink } from "./types";
 
 export const prepare = (
@@ -102,6 +106,13 @@ export const prepare = (
     illustrationUrl = rewriteNotionImageUrl(illustrationUrl, page.id);
   }
 
+  // Illustrasjon Posisjon
+  const IllustrasjonPosisjon =
+    getOneOfOrUndefined(
+      ["top", "center"],
+      getSelect("IllustrasjonPosisjon", page)
+    ) ?? "center";
+
   // Tittel
   const Tittel = getTitle(page);
 
@@ -116,6 +127,7 @@ export const prepare = (
     Alkohol,
     Tags,
     Illustrasjon: illustrationUrl,
+    IllustrasjonPosisjon,
     ...inner(blocks),
   };
 };

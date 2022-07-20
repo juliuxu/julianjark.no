@@ -38,6 +38,7 @@ interface Drank {
   tags: string[];
   ingredients: Ingredient[];
   illustrationUrl: string;
+  illustrationPosition: "top" | "center";
   steps: Step[];
   lastUpdated: string;
 }
@@ -152,6 +153,7 @@ const prepare = (page: DatabasePage, blocks: BlockWithChildren[]): Drank => {
     alcohol: drink.Alkohol,
     tags: drink.Tags,
     illustrationUrl: drink.Illustrasjon,
+    illustrationPosition: drink.IllustrasjonPosisjon,
     ingredients,
     steps,
     lastUpdated: page.last_edited_time,

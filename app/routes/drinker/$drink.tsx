@@ -101,7 +101,11 @@ export default function DrinkView() {
           {data.drink.Illustrasjon && (
             <div className="w-1/2 lg:w-2/3 h-72 lg:h-96 relative">
               <img
-                className="absolute inset-0 h-full w-full object-cover object-center"
+                className={`absolute inset-0 h-full w-full object-cover ${
+                  data.drink.IllustrasjonPosisjon === "top"
+                    ? "object-top"
+                    : "object-center"
+                }`}
                 src={optimizedImageUrl(data.drink.Illustrasjon)}
               />
             </div>

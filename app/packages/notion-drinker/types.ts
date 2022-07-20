@@ -6,6 +6,7 @@ export type Drink = {
   Tags: string[];
   Forberedelser?: Block[];
   Illustrasjon: string;
+  IllustrasjonPosisjon: "top" | "center";
   Ingredienser: Block[];
   Fremgangsmåte: Block[];
   Notater?: Block[];
@@ -17,6 +18,7 @@ export function assertDrink(drink: Partial<Drink>): asserts drink is Drink {
     "Alkohol",
     "Tags",
     "Illustrasjon",
+    "IllustrasjonPosisjon",
     "Ingredienser",
     "Fremgangsmåte",
   ];
