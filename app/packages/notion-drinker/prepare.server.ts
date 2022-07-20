@@ -6,7 +6,7 @@ import {
 } from "~/notion/notion";
 import { DatabasePage } from "~/notion/notion-api.server";
 import type { Block } from "~/notion/notion.types";
-import { takeWhileM } from "~/utils";
+import { rewriteNotionImageUrl, takeWhileM } from "~/utils";
 import { Drink } from "./types";
 
 export const prepare = (
@@ -97,6 +97,9 @@ export const prepare = (
     illustrationUrl = page.cover.external.url;
   } else if (page.cover?.type === "file") {
     illustrationUrl = page.cover.file.url;
+  }
+  if (illustrationUrl !== undefined) {
+    illustrationUrl = rewriteNotionImageUrl(illustrationUrl, page.id);
   }
 
   // Tittel

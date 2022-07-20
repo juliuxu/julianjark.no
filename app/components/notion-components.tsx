@@ -1,4 +1,4 @@
-import { optimizedImageUrl } from "~/utils";
+import { optimizedImageUrl, rewriteNotionImageUrl } from "~/utils";
 import type { Components as NotionRenderComponents } from "~/packages/notion-render/components";
 import { useNotionRenderContext } from "~/packages/notion-render/context";
 import { getTextFromRichText } from "~/notion/notion";
@@ -24,7 +24,11 @@ export const OptimizedNotionImage: NotionRenderComponents["image"] = ({
     typeof params
   >;
 
-  if (unoptimized !== "true") url = optimizedImageUrl(url, { width, height });
+  if (unoptimized !== "true")
+    url = optimizedImageUrl(rewriteNotionImageUrl(url, block.id), {
+      width,
+      height,
+    });
 
   return (
     <img

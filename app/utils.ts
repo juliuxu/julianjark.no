@@ -5,6 +5,30 @@ export function assertItemFound<T>(item: T | undefined): asserts item is T {
     });
 }
 
+// Rewrite secure notion image urls
+// The downside of this is that the page/block needs to be public
+// Ok for my use-case
+export const rewriteNotionImageUrl = (url: string, pageOrBlockId: string) => {
+  // Determine if it's a notion aws url
+  const m = url.match(
+    /^(?<awsUrl>https:\/\/.+?secure\.notion-static\.com\/[\w-]+\/.+?)\?/
+  );
+  const awsUrl = m?.groups?.awsUrl;
+  if (awsUrl === undefined) return url;
+
+  // This is the url notion uses
+  const optionsParams = new URLSearchParams({
+    table: "block",
+    id: pageOrBlockId,
+    cache: "v2",
+  });
+  const newUrl = `https://www.notion.so/image/${encodeURIComponent(
+    awsUrl
+  )}?${optionsParams}`;
+
+  return newUrl;
+};
+
 // See api/image.ts
 export const optimizedImageUrl = (
   url: string,
@@ -12,6 +36,7 @@ export const optimizedImageUrl = (
     quality?: number | string;
     width?: number | string;
     height?: number | string;
+    fit?: string;
   } = {}
 ) => {
   const imageOptimizeUrl = `/api/image`;
@@ -21,17 +46,21 @@ export const optimizedImageUrl = (
       .map(([key, value]) => [key, String(value)])
   );
 
-  let cacheKey: string;
-  const m = url.match(/secure\.notion-static\.com\/(?<uuid>[\w\-]+)\//);
-  if (m?.groups?.uuid) {
-    cacheKey = encodeURIComponent(m.groups.uuid + optionsParams);
-  } else {
-    cacheKey = encodeURIComponent(url + optionsParams);
-  }
+  return `${imageOptimizeUrl}?src=${encodeURIComponent(url)}&${optionsParams}`;
+  // Old way of working around dynamic image url's from notion
+  // Since I now generate non-dynamic url's, this is no longer needed
+  //
+  // let cacheKey: string;
+  // const m = url.match(/secure\.notion-static\.com\/(?<uuid>[\w\-]+)\//);
+  // if (m?.groups?.uuid) {
+  //   cacheKey = encodeURIComponent(m.groups.uuid + optionsParams);
+  // } else {
+  //   cacheKey = encodeURIComponent(url + optionsParams);
+  // }
 
-  return `${imageOptimizeUrl}?src=${encodeURIComponent(
-    url
-  )}&${optionsParams}&juliancachekey=${cacheKey}`;
+  // return `${imageOptimizeUrl}?src=${encodeURIComponent(
+  //   url
+  // )}&${optionsParams}&juliancachekey=${cacheKey}`;
 };
 
 export function getKeyValueOptions<T extends Record<string, string>>(

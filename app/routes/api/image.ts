@@ -102,11 +102,10 @@ export const fetchAndProccessImage = async (
 export const loader: LoaderFunction = async ({ request }) => {
   // Parse request
   const url = new URL(request.url);
-  let href = url.searchParams.get("src");
+  const href = url.searchParams.get("src");
   if (!href) {
     return badImageResponse();
   }
-  href = decodeURIComponent(href);
 
   const options: ProccessingOptions = {
     fit: getOneOfOrUndefined(
