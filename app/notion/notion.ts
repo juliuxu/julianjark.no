@@ -48,6 +48,20 @@ export const getSelect = (name: string, fromPage: DatabasePage) => {
   }
   return undefined;
 };
+export const getSelectAndColor = (name: string, fromPage: DatabasePage) => {
+  const property = fromPage.properties[name];
+  if (
+    property?.type === "select" &&
+    property.select?.name &&
+    property.select.color
+  ) {
+    return {
+      title: property.select.name,
+      color: property.select.color,
+    } as const;
+  }
+  return undefined;
+};
 
 export const getMultiSelect = (name: string, fromPage: DatabasePage) => {
   const property = fromPage.properties[name];

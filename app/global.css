@@ -1,0 +1,76 @@
+/* Fonts */
+
+@font-face {
+  font-family: "Avenue X";
+  src: url("/fonts/Avenue X.otf") format("opentype");
+  /* src: url("/fonts/AvenueX-Regular.otf") format("opentype"); */
+  font-weight: 400;
+  font-display: swap;
+  font-style: normal;
+}
+
+/**
+ * @license
+ *
+ * Font Family: Chillax
+ * Designed by: Manushi Parikh
+ * URL: https://www.fontshare.com/fonts/chillax
+ * © 2022 Indian Type Foundry
+ *
+ * Font Styles:
+ * Chillax Extralight
+ * Chillax Light
+ * Chillax Regular
+ * Chillax Medium
+ * Chillax Semibold
+ * Chillax Bold
+ *
+*/
+
+@font-face {
+  font-family: "Chillax-Extralight";
+  src: url("/fonts/Chillax-Extralight.otf") format("opentype");
+  font-weight: 200;
+  font-display: swap;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Chillax-Light";
+  src: url("/fonts/Chillax-Light.otf") format("opentype");
+  font-weight: 300;
+  font-display: swap;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Chillax-Regular";
+  src: url("/fonts/Chillax-Regular.otf") format("opentype");
+  font-weight: 400;
+  font-display: swap;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Chillax-Medium";
+  src: url("/fonts/Chillax-Medium.otf") format("opentype");
+  font-weight: 500;
+  font-display: swap;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Chillax-Semibold";
+  src: url("/fonts/Chillax-Semibold.otf") format("opentype");
+  font-weight: 600;
+  font-display: swap;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Chillax-Bold";
+  src: url("/fonts/Chillax-Bold.otf") format("opentype");
+  font-weight: 700;
+  font-display: swap;
+  font-style: normal;
+}

@@ -19,3 +19,18 @@ export type RichTextItem = Extract<
   Block,
   { type: "paragraph" }
 >["paragraph"]["rich_text"][number];
+
+export type RichTextColor = RichTextItem["annotations"]["color"];
+
+// TODO: Infer from @notionhq/client
+export type SelectColor =
+  | "default"
+  | "gray"
+  | "brown"
+  | "orange"
+  | "yellow"
+  | "green"
+  | "blue"
+  | "purple"
+  | "pink"
+  | "red";

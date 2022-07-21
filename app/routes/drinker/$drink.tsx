@@ -14,7 +14,7 @@ import config from "~/config.server";
 import NotionRender from "~/packages/notion-render";
 import type { Components as NotionRenderComponents } from "~/packages/notion-render/components";
 import { OptimizedNotionImage } from "~/components/notion-components";
-import { assertDrink, Drink } from "~/packages/notion-drinker/types";
+import { assertDrink } from "~/packages/notion-drinker/types";
 import { prepare } from "~/packages/notion-drinker/prepare.server";
 
 export const notionRenderComponents: Partial<NotionRenderComponents> = {
