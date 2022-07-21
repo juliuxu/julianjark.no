@@ -1,7 +1,7 @@
 import {
   HeadersFunction,
   json,
-  LoaderFunction,
+  LoaderArgs,
   MetaFunction,
 } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
@@ -56,11 +56,10 @@ export const notionRenderComponents: Partial<NotionRenderComponents> = {
   image: OptimizedNotionImage,
 };
 
-type Data = { page: PageResponse; blocks: Block[]; debugData?: string };
-export const loader: LoaderFunction = async ({
+export const loader = async ({
   request,
   params: { notionDrivenPage: requestedNotionDrivenPageSlug = "" },
-}) => {
+}: LoaderArgs) => {
   const page = (await getNotionDrivenPages()).find(
     findPageBySlugPredicate(requestedNotionDrivenPageSlug)
   );
@@ -70,7 +69,7 @@ export const loader: LoaderFunction = async ({
   const blocks = await getBlocksWithChildren(page.id);
   await prepareNotionBlocks(blocks, { theme: "dark-plus" });
 
-  return json<Data>(
+  return json(
     {
       page,
       blocks,
@@ -83,14 +82,14 @@ export const headers: HeadersFunction = ({ loaderHeaders }) => {
   return loaderHeaders;
 };
 
-export const meta: MetaFunction = ({ data }: { data: Data }) => {
+export const meta: MetaFunction = ({ data }) => {
   return {
     title: getTitle(data.page),
   };
 };
 
 export default function NotionDrivenPage() {
-  const data = useLoaderData<Data>();
+  const data = useLoaderData<typeof loader>();
   return (
     <>
       <NotionRender

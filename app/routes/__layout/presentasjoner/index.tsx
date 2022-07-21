@@ -1,18 +1,16 @@
 import {
   HeadersFunction,
   json,
-  LoaderFunction,
+  LoaderArgs,
   MetaFunction,
 } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
 import { getPresentasjoner, getTitle, slugify } from "~/notion/notion";
-import { DatabasePage } from "~/notion/notion-api.server";
 import Debug from "~/components/debug";
 import config from "~/config.server";
 import { maybePrepareDebugData } from "~/components/debug.server";
 
-type Data = { presentasjoner: DatabasePage[]; debugData?: string };
-export const loader: LoaderFunction = async ({ request }) => {
+export const loader = async ({ request }: LoaderArgs) => {
   const presentasjoner = await getPresentasjoner();
 
   return json(
@@ -32,7 +30,7 @@ export const meta: MetaFunction = () => ({
 });
 
 export default function Index() {
-  const data = useLoaderData<Data>();
+  const data = useLoaderData<typeof loader>();
   return (
     <>
       <h1>Presentasjoner</h1>

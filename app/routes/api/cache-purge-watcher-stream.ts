@@ -1,9 +1,9 @@
-import { LoaderFunction } from "@remix-run/node";
+import { LoaderArgs } from "@remix-run/node";
 import { getNumberOrUndefined, getOneOfOrUndefined } from "~/utils";
 import { createReadableStreamLogger, purgeUpdatedPages } from "./cache-purge";
 
 const DEFAULT_WATCH_INTERVAL = 20 * 1000;
-export const loader: LoaderFunction = ({ request }) => {
+export const loader = ({ request }: LoaderArgs) => {
   const url = new URL(request.url);
   const currentLoglevel =
     getOneOfOrUndefined(

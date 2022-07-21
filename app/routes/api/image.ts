@@ -2,7 +2,7 @@
 // https://github.com/vercel/next.js/blob/canary/packages/next/server/image-optimizer.ts
 import sharp from "sharp";
 import type { FitEnum } from "sharp";
-import type { LoaderFunction } from "@remix-run/node";
+import type { LoaderArgs } from "@remix-run/node";
 import { Response } from "@remix-run/node";
 import { getNumberOrUndefined, getOneOfOrUndefined } from "~/utils";
 
@@ -99,7 +99,7 @@ export const fetchAndProccessImage = async (
   return { buffer, contentType: upstreamContentType };
 };
 
-export const loader: LoaderFunction = async ({ request }) => {
+export const loader = async ({ request }: LoaderArgs) => {
   // Parse request
   const url = new URL(request.url);
   const href = url.searchParams.get("src");

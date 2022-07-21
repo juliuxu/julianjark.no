@@ -1,8 +1,8 @@
 import {
-  LoaderFunction,
   json,
   MetaFunction,
   HeadersFunction,
+  LoaderArgs,
 } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 
@@ -21,10 +21,7 @@ export const notionRenderComponents: Partial<NotionRenderComponents> = {
   image: OptimizedNotionImage,
 };
 
-interface Data {
-  drink: Drink;
-}
-export const loader: LoaderFunction = async ({ request, params }) => {
+export const loader = async ({ params }: LoaderArgs) => {
   const page = (await getDrinker()).find(
     findPageBySlugPredicate(params.drink ?? "")
   );
@@ -34,7 +31,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   const drink = prepare(page, blocks);
   assertDrink(drink);
 
-  return json<Data>(
+  return json(
     {
       drink,
     },
@@ -46,14 +43,14 @@ export const headers: HeadersFunction = ({ loaderHeaders }) => {
   return loaderHeaders;
 };
 
-export const meta: MetaFunction = ({ data }: { data: Data }) => {
+export const meta: MetaFunction = ({ data }) => {
   return {
     title: data.drink.Tittel,
   };
 };
 
 export default function DrinkView() {
-  const data = useLoaderData<Data>();
+  const data = useLoaderData<typeof loader>();
 
   const menuItems = [
     data.drink.Forberedelser ? "Forberedelser" : "",

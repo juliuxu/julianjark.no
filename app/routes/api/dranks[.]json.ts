@@ -1,4 +1,4 @@
-import { LoaderFunction, json } from "@remix-run/node";
+import { json, LoaderArgs } from "@remix-run/node";
 import config from "~/config.server";
 import {
   getDrinker,
@@ -42,12 +42,8 @@ interface Drank {
   steps: Step[];
   lastUpdated: string;
 }
-interface Data {
-  lastUpdated: string;
-  dranks: Drank[];
-  alcoholOrder: string[];
-}
-export const loader: LoaderFunction = async ({ request }) => {
+
+export const loader = async ({ request }: LoaderArgs) => {
   // Single Drank
   const drankId = new URL(request.url).searchParams.get("id");
   if (drankId !== null && drankId.length > 0) {
@@ -91,7 +87,7 @@ export const loader: LoaderFunction = async ({ request }) => {
     (x) => x.name
   );
 
-  return json<Data>(
+  return json(
     { dranks, alcoholOrder, lastUpdated },
     { headers: config.cacheControlHeadersDynamic(lastUpdated) }
   );

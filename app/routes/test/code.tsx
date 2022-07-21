@@ -1,4 +1,4 @@
-import { json, LinksFunction, LoaderFunction } from "@remix-run/node";
+import { json, LinksFunction, LoaderArgs } from "@remix-run/node";
 import picoCss from "@picocss/pico/css/pico.min.css";
 import { useLoaderData } from "@remix-run/react";
 import prepareCodeHtml from "~/packages/notion-shiki-code/prepare.server";
@@ -32,7 +32,7 @@ export default function CodeTest() {
 }
 `.trim();
 
-export const loader: LoaderFunction = async () => {
+export const loader = async ({}: LoaderArgs) => {
   const codeHtml = await prepareCodeHtml(codeText, {
     lang: "tsx",
     theme: "dark-plus",
@@ -41,7 +41,7 @@ export const loader: LoaderFunction = async () => {
 };
 
 export default function CodeTest() {
-  const data = useLoaderData();
+  const data = useLoaderData<typeof loader>();
   // const [x, setX] = useState("");
   // useEffect(() => {
   //   isoPrepare(data.codeText, { lang: "tsx" }).then((codeHtml) => {

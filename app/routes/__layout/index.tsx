@@ -1,14 +1,13 @@
 import {
   HeadersFunction,
   json,
-  LoaderFunction,
+  LoaderArgs,
   MetaFunction,
 } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import Debug from "~/components/debug";
 import config from "~/config.server";
 import NotionRender from "~/packages/notion-render";
-import { Block } from "~/notion/notion.types";
 import { getBlocksWithChildren } from "~/notion/notion-api.server";
 import {
   notionRenderClasses,
@@ -17,11 +16,10 @@ import {
 import { prepareNotionBlocks } from "~/packages/notion-shiki-code/prepare.server";
 import { maybePrepareDebugData } from "~/components/debug.server";
 
-type Data = { blocks: Block[]; debugData?: string };
-export const loader: LoaderFunction = async ({ request }) => {
+export const loader = async ({ request }: LoaderArgs) => {
   const blocks = await getBlocksWithChildren(config.forsidePageId);
   await prepareNotionBlocks(blocks, { theme: "dark-plus" });
-  return json<Data>(
+  return json(
     {
       blocks,
       debugData: await maybePrepareDebugData(request, blocks),
@@ -38,7 +36,7 @@ export const meta: MetaFunction = () => ({
 });
 
 export default function Index() {
-  const data = useLoaderData<Data>();
+  const data = useLoaderData<typeof loader>();
   return (
     <>
       <NotionRender

@@ -1,7 +1,7 @@
-import { LoaderFunction } from "@remix-run/node";
+import { LoaderArgs } from "@remix-run/node";
 import { asUrlList, getSitemapTree } from "~/sitemap.server";
 
-export const loader: LoaderFunction = async () => {
+export const loader = async ({}: LoaderArgs) => {
   const sitemapTree = await getSitemapTree();
   const urlList = asUrlList(sitemapTree);
 

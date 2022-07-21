@@ -2,7 +2,7 @@ import {
   HeadersFunction,
   json,
   LinksFunction,
-  LoaderFunction,
+  LoaderArgs,
   MetaFunction,
 } from "@remix-run/node";
 import { Outlet, useLoaderData } from "@remix-run/react";
@@ -36,7 +36,7 @@ export const links: LinksFunction = () => [
   },
 ];
 
-export const loader: LoaderFunction = async () => {
+export const loader = async ({}: LoaderArgs) => {
   return json(
     {
       ...(await topLevelMenuLoader()),
@@ -56,7 +56,7 @@ export const headers: HeadersFunction = () => {
 };
 
 export default function Layout() {
-  const data = useLoaderData();
+  const data = useLoaderData<typeof loader>();
   return (
     <>
       <header className="container">

@@ -1,16 +1,13 @@
 import {
-  LoaderFunction,
   json,
   MetaFunction,
   HeadersFunction,
+  LoaderArgs,
 } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 
 import { findPageBySlugPredicate, getDrinker, getTitle } from "~/notion/notion";
-import {
-  DatabasePage,
-  getBlocksWithChildren,
-} from "~/notion/notion-api.server";
+import { getBlocksWithChildren } from "~/notion/notion-api.server";
 import { assertItemFound, optimizedImageUrl } from "~/utils";
 
 import config from "~/config.server";
@@ -19,19 +16,14 @@ import NotionRender from "~/packages/notion-render";
 import type { Components as NotionRenderComponents } from "~/packages/notion-render/components";
 import { OptimizedNotionImage } from "~/components/notion-components";
 import { maybePrepareDebugData } from "~/components/debug.server";
-import { assertDrink, Drink } from "~/packages/notion-drinker/types";
+import { assertDrink } from "~/packages/notion-drinker/types";
 import { prepare } from "~/packages/notion-drinker/prepare.server";
 
 export const notionRenderComponents: Partial<NotionRenderComponents> = {
   image: OptimizedNotionImage,
 };
 
-interface Data {
-  page: DatabasePage;
-  drink: Drink;
-  debugData?: string;
-}
-export const loader: LoaderFunction = async ({ request, params }) => {
+export const loader = async ({ request, params }: LoaderArgs) => {
   const page = (await getDrinker()).find(
     findPageBySlugPredicate(params.drink ?? "")
   );
@@ -41,7 +33,7 @@ export const loader: LoaderFunction = async ({ request, params }) => {
   const drink = prepare(page, blocks);
   assertDrink(drink);
 
-  return json<Data>(
+  return json(
     {
       page,
       drink,
@@ -55,14 +47,14 @@ export const headers: HeadersFunction = ({ loaderHeaders }) => {
   return loaderHeaders;
 };
 
-export const meta: MetaFunction = ({ data }: { data: Data }) => {
+export const meta: MetaFunction = ({ data }) => {
   return {
     title: getTitle(data.page),
   };
 };
 
 export default function DrinkView() {
-  const data = useLoaderData<Data>();
+  const data = useLoaderData<typeof loader>();
 
   return (
     <>

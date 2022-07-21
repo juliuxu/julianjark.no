@@ -1,9 +1,9 @@
 import {
-  LoaderFunction,
   json,
   MetaFunction,
   LinksFunction,
   HeadersFunction,
+  LoaderArgs,
 } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 
@@ -83,15 +83,7 @@ export const links: LinksFunction = () => [
   { rel: "stylesheet", href: "/fontsource/source-sans-pro/700.css" },
 ];
 
-interface Data {
-  page: DatabasePage;
-  properties: PresentationProperties;
-  slides: Slide[];
-  blocks: Block[];
-}
-export const loader: LoaderFunction = async ({
-  params: { presentasjon = "" },
-}) => {
+export const loader = async ({ params: { presentasjon = "" } }: LoaderArgs) => {
   const page = (await getPresentasjoner()).find(
     findPageBySlugPredicate(presentasjon)
   );
@@ -102,7 +94,7 @@ export const loader: LoaderFunction = async ({
   await prepareNotionBlocks(blocks, { theme: "dark-plus" });
   const slides = prepareSlides(blocks);
 
-  return json<Data>(
+  return json(
     { page, blocks, properties, slides },
     { headers: config.cacheControlHeadersDynamic(page.last_edited_time) }
   );
@@ -112,7 +104,7 @@ export const headers: HeadersFunction = ({ loaderHeaders }) => {
   return loaderHeaders;
 };
 
-export const meta: MetaFunction = ({ data }: { data: Data }) => {
+export const meta: MetaFunction = ({ data }) => {
   return {
     title: getTitle(data.page),
     description: data.properties.Ingress,
@@ -120,7 +112,7 @@ export const meta: MetaFunction = ({ data }: { data: Data }) => {
 };
 
 export default function Presentasjon() {
-  const data = useLoaderData<Data>();
+  const data = useLoaderData<typeof loader>();
   return (
     <>
       <link rel="stylesheet" href={themes[data.properties.Theme]} />
