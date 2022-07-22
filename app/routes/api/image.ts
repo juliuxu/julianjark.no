@@ -5,6 +5,8 @@ import type { FitEnum } from "sharp";
 import type { LoaderArgs } from "@remix-run/node";
 import { Response } from "@remix-run/node";
 import { getNumberOrUndefined, getOneOfOrUndefined } from "~/utils";
+import { join as pathJoin } from "path";
+import memoizeFs from "memoize-fs";
 
 const badImageBase64 =
   "R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
@@ -27,7 +29,7 @@ interface ProccessingOptions {
   quality: number;
   blur?: number;
 }
-export const fetchAndProccessImage = async (
+export let fetchAndProccessImage = async (
   href: string,
   options: ProccessingOptions
 ) => {
@@ -98,6 +100,29 @@ export const fetchAndProccessImage = async (
   const buffer = await transformer.toBuffer();
   return { buffer, contentType: upstreamContentType };
 };
+
+if (process.env.NODE_ENV === "development") {
+  const cachePath = pathJoin(".cache", "notion-image-cache");
+  console.log("caching images to", cachePath);
+  const memoizer = memoizeFs({
+    cachePath,
+  });
+  const memoAsync = (
+    fn: memoizeFs.FnToMemoize,
+    opts: memoizeFs.Options = {}
+  ) => {
+    const p = memoizer.fn(fn, opts);
+    let mfn: memoizeFs.FnToMemoize | undefined = undefined;
+    return async (...args: any) => {
+      if (!mfn) {
+        mfn = await p;
+      }
+      return await mfn(...args);
+    };
+  };
+
+  // fetchAndProccessImage = memoAsync(fetchAndProccessImage);
+}
 
 export const loader = async ({ request }: LoaderArgs) => {
   // Parse request

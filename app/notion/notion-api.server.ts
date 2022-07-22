@@ -3,6 +3,10 @@ import type { ListBlockChildrenResponse } from "@notionhq/client/build/src/api-e
 import { join as pathJoin } from "path";
 import memoizeFs from "memoize-fs";
 
+import serializeJavascript from "serialize-javascript";
+const deserializeJavascript = (serializedJsString?: string) =>
+  eval(`(() => (${serializedJsString}))()`).data;
+
 const notion = new Client({
   auth: process.env.NOTION_TOKEN,
 });
@@ -136,11 +140,12 @@ const assertDatabaseResponse = (page: MaybeDatabaseResponse) => {
 // Since the notion api is pretty slow,
 // this lets us speed up development significantly when doing rapid design changes
 if (process.env.NODE_ENV === "development") {
-  const cachePath = pathJoin(process.env.TMPDIR || "/tmp", "notion-api-cache");
+  const cachePath = pathJoin(".cache", "notion-api-cache");
   console.log("caching notion to", cachePath);
   const memoizer = memoizeFs({
     cachePath,
-    maxAge: 1000 * 60 * 60 * 4,
+    serialize: serializeJavascript,
+    deserialize: deserializeJavascript,
   });
   const memoAsync = (
     fn: memoizeFs.FnToMemoize,

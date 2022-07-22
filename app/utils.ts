@@ -78,6 +78,11 @@ export function getKeyValueOptions<T extends Record<string, string>>(
   return options as T;
 }
 
+export const getNonEmptyStringOrUndefined = (s?: string | null) => {
+  if (!s) return undefined;
+  if (s.length < 1) return undefined;
+  return s;
+};
 export const getNumberOrUndefined = (s?: string | null) => {
   if (!s) return undefined;
   const v = Number.parseInt(s ?? "");
@@ -119,4 +124,13 @@ export function chunked<T>(l: T[], chunkSize: number) {
   }
 
   return result;
+}
+
+// TODO: Type this
+export function debounce(fn: (...args: any) => unknown, ms: number) {
+  let timeout: NodeJS.Timeout;
+  return (...args: any) => {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => fn(...args), ms);
+  };
 }
