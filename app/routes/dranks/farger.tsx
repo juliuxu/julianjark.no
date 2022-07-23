@@ -111,12 +111,12 @@ export default function Drinker() {
 
   return (
     <>
-      <div className="flex flex-col gap-10 p-6">
+      <div className="flex flex-col gap-10 p-6 bg-gray-50">
         <h1 className="text-4xl uppercase">Dranks</h1>
         <div>
-          <Form method="get" className="flex flex-col gap-4" reloadDocument>
+          <Form method="get" className="flex flex-col gap-4">
             <input
-              className="w-full bg-gray-100 rounded px-3 py-2"
+              className="w-full bg-gray-200 rounded px-3 py-2"
               type="search"
               placeholder="Søk etter dranks"
               name="search"
@@ -140,7 +140,7 @@ export default function Drinker() {
                       )}
                       onChange={(e) => submit(e.currentTarget.form)}
                     />
-                    <span className="rounded px-3 py-2 bg-gray-100 peer-checked:bg-teal-100 peer-focus:outline-teal-200 peer-focus:outline peer-focus:outline-4">
+                    <span className="rounded px-3 py-2 bg-gray-200 peer-checked:bg-teal-100 peer-focus:outline-teal-200 peer-focus:outline peer-focus:outline-4">
                       {alcohol.title}
                     </span>
                   </label>
@@ -149,7 +149,7 @@ export default function Drinker() {
             </div>
           </Form>
         </div>
-        <div className="grid grid-cols-3 gap-5">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-6 gap-5">
           {data.drinkerByAlcoholOrder
             .flatMap(({ drinker }) => drinker)
             .map((drink) => (
@@ -167,19 +167,20 @@ interface DrankCardProps {
 }
 const DrankCard = ({ drank }: DrankCardProps) => {
   return (
-    <a
-      href="#"
-      className="relative overflow-clip rounded-md  h-56 p-4 flex flex-col-reverse"
-    >
-      {/* TODO: There should be a better way of doing this. Check out tailwind course */}
-      <span className="absolute z-10 text-2xl text-white font-semibold shadow-inner">
-        {drank.Tittel}
-      </span>
-      <img
-        className="absolute top-0 left-0 w-full h-full object-cover hover:h-[120%] hover:w-[120%] transition-all ease-in-out duration-500"
-        src={optimizedImageUrl(drank.Illustrasjon)}
-        alt=""
-      />
+    <a href="#" className="overflow-hidden rounded-md shadow">
+      <div className="relative pb-[120%] group">
+        <img
+          className="absolute w-full h-full object-cover group-hover:scale-[1.2] transition-all ease-in-out duration-500"
+          src={optimizedImageUrl(drank.Illustrasjon)}
+          alt=""
+        />
+        <span
+          className="absolute bottom-0 p-4 text-2xl text-white font-semibold drop-shadow-lg"
+          style={{ textShadow: "0 0 10px rgb(0 0 0 / 33%);" }}
+        >
+          {drank.Tittel}
+        </span>
+      </div>
     </a>
   );
 };
