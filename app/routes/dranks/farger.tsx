@@ -2,6 +2,7 @@ import { LinksFunction, json, MetaFunction, LoaderArgs } from "@remix-run/node";
 import {
   Form,
   useLoaderData,
+  useSearchParams,
   useSubmit,
   useTransition,
 } from "@remix-run/react";
@@ -11,13 +12,14 @@ import config from "~/config.server";
 import { getDrinker, getDrinkerDatabase } from "~/notion/notion";
 import { prepareFromPage } from "~/packages/notion-drinker/prepare.server";
 import {
+  Alcohol,
   assertDrinkHeader,
   DrinkHeader,
 } from "~/packages/notion-drinker/types";
 import tailwind from "~/tailwind.css";
 import global from "~/global.css";
 import { debounce, optimizedImageUrl } from "~/utils";
-import { useCallback } from "react";
+import React, { Fragment, useCallback } from "react";
 
 export const links: LinksFunction = () => [
   {
@@ -106,15 +108,37 @@ export const meta: MetaFunction = () => ({
 export default function Drinker() {
   const data = useLoaderData<typeof loader>();
   const submit = useSubmit();
+  const transition = useTransition();
 
   const submitDebounced = useCallback(debounce(submit, 200), []);
 
+  const isSubmitting = transition.state === "submitting";
+  const isAlcoholChecked = (alcohol: Alcohol) => {
+    if (transition.submission?.formData)
+      return transition.submission?.formData
+        .getAll("alcohols")
+        .includes(alcohol.title);
+    else if (data.filterAlcohols.includes(alcohol.title)) return true;
+    else return false;
+  };
+
   return (
     <>
-      <div className="flex flex-col gap-10 p-6 bg-gray-50">
-        <h1 className="text-4xl uppercase">Dranks</h1>
+      <div className="flex flex-col gap-10 p-6 bg-gray-50 h-screen">
+        <h1 className="text-4xl uppercase">
+          Dranks{" "}
+          <span
+            className={`inline-block ${
+              isSubmitting
+                ? "transition-opacity duration-500 delay-700 opacity-75 animate-spin"
+                : "opacity-0"
+            }`}
+          >
+            🍹
+          </span>
+        </h1>
         <div>
-          <Form method="get" className="flex flex-col gap-4">
+          <Form method="get" className="flex flex-col gap-4" reloadDocument>
             <input
               className="w-full bg-gray-200 rounded px-3 py-2"
               type="search"
@@ -128,23 +152,21 @@ export default function Drinker() {
             />
             <div className="flex flex-row gap-3">
               {data.alcoholOrdered.map((alcohol) => (
-                <>
+                <Fragment key={alcohol.title}>
                   <label className="cursor-pointer">
                     <input
                       type="checkbox"
                       name="alcohols"
                       className="sr-only peer"
                       value={alcohol.title}
-                      defaultChecked={data.filterAlcohols.includes(
-                        alcohol.title
-                      )}
+                      checked={isAlcoholChecked(alcohol)}
                       onChange={(e) => submit(e.currentTarget.form)}
                     />
                     <span className="rounded px-3 py-2 bg-gray-200 peer-checked:bg-teal-100 peer-focus:outline-teal-200 peer-focus:outline peer-focus:outline-4">
                       {alcohol.title}
                     </span>
                   </label>
-                </>
+                </Fragment>
               ))}
             </div>
           </Form>
@@ -170,13 +192,13 @@ const DrankCard = ({ drank }: DrankCardProps) => {
     <a href="#" className="overflow-hidden rounded-md shadow">
       <div className="relative pb-[120%] group">
         <img
-          className="absolute w-full h-full object-cover group-hover:scale-[1.2] transition-all ease-in-out duration-500"
+          className="absolute w-full h-full object-cover group-hover:scale-[1.1] transition-all ease-in-out duration-500"
           src={optimizedImageUrl(drank.Illustrasjon)}
           alt=""
         />
         <span
           className="absolute bottom-0 p-4 text-2xl text-white font-semibold drop-shadow-lg"
-          style={{ textShadow: "0 0 10px rgb(0 0 0 / 33%);" }}
+          style={{ textShadow: "0 0 10px rgb(0 0 0 / 33%)" }}
         >
           {drank.Tittel}
         </span>
