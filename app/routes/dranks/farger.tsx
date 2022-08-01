@@ -193,7 +193,7 @@ const DrankCard = ({ drank }: DrankCardProps) => {
       <div className="relative pb-[120%] group">
         <img
           className="absolute w-full h-full object-cover group-hover:scale-[1.1] transition-all ease-in-out duration-500"
-          src={optimizedImageUrl(drank.Illustrasjon)}
+          src={optimizedImageUrl(drank.Illustrasjon, { width: 300 })}
           alt=""
         />
         <span
