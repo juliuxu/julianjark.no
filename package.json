@@ -19,9 +19,9 @@
     "@fontsource/source-sans-pro": "4.5.10",
     "@notionhq/client": "1.0.4",
     "@picocss/pico": "1.5.3",
-    "@remix-run/node": "1.6.5",
-    "@remix-run/react": "1.6.5",
-    "@remix-run/serve": "1.6.5",
+    "@remix-run/node": "1.6.7",
+    "@remix-run/react": "1.6.7",
+    "@remix-run/serve": "1.6.7",
     "memoize-fs": "2.2.0",
     "prism-react-renderer": "1.3.5",
     "prismjs": "1.28.0",
@@ -33,16 +33,16 @@
     "shiki": "0.10.1"
   },
   "devDependencies": {
-    "@remix-run/dev": "1.6.5",
-    "@remix-run/eslint-config": "1.6.5",
+    "@remix-run/dev": "1.6.7",
+    "@remix-run/eslint-config": "1.6.7",
     "@types/react": "18.0.15",
     "@types/react-dom": "18.0.6",
     "@types/serialize-javascript": "5.0.2",
     "@types/sharp": "0.30.4",
-    "eslint": "8.20.0",
+    "eslint": "8.21.0",
     "npm-run-all": "4.1.5",
     "patch-package": "6.4.7",
-    "tailwindcss": "3.1.6",
+    "tailwindcss": "3.1.7",
     "typescript": "4.7.4"
   },
   "engines": {
