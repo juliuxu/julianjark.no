@@ -37,6 +37,8 @@ export const optimizedImageUrl = (
     width?: number | string;
     height?: number | string;
     fit?: string;
+    blur?: number;
+    format?: string;
   } = {}
 ) => {
   const imageOptimizeUrl = `/api/image`;
@@ -101,7 +103,7 @@ export const getBooleanOrUndefined = (s?: string | null) => {
   return undefined;
 };
 export function getOneOfOrUndefined<T extends string>(
-  list: T[],
+  list: readonly T[],
   s?: string | null
 ) {
   if (list.includes(s as any)) return s as T;

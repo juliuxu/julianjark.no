@@ -22,12 +22,16 @@ function badImageResponse() {
   });
 }
 
+const SUPPORTED_OUTPUT_FORMATS = ["avif", "webp", "png", "jpeg"] as const;
+const imageFormatToContentType = (s?: string) => (s ? `image/${s}` : undefined);
+
 interface ProccessingOptions {
   fit?: keyof FitEnum;
   width?: number;
   height?: number;
   quality: number;
   blur?: number;
+  format?: typeof SUPPORTED_OUTPUT_FORMATS[number];
 }
 export let fetchAndProccessImage = async (
   href: string,
@@ -89,16 +93,20 @@ export let fetchAndProccessImage = async (
   }
 
   // Always optimize
-  if (upstreamContentType === WEBP) {
+  const outputContentType =
+    imageFormatToContentType(options.format) ?? upstreamContentType;
+  if (outputContentType === WEBP) {
     transformer.webp({ quality: options.quality });
-  } else if (upstreamContentType === PNG) {
-    transformer.png({ quality: options.quality });
-  } else if (upstreamContentType === JPEG) {
+  } else if (outputContentType === AVIF) {
+    transformer.avif({ quality: options.quality });
+  } else if (outputContentType === JPEG) {
     transformer.jpeg({ quality: options.quality, mozjpeg: true });
+  } else if (outputContentType === PNG) {
+    transformer.png({ quality: options.quality });
   }
 
   const buffer = await transformer.toBuffer();
-  return { buffer, contentType: upstreamContentType };
+  return { buffer, contentType: outputContentType };
 };
 
 if (process.env.NODE_ENV === "development") {
@@ -141,6 +149,10 @@ export const loader = async ({ request }: LoaderArgs) => {
     height: getNumberOrUndefined(url.searchParams.get("height")),
     quality: getNumberOrUndefined(url.searchParams.get("quality")) ?? 75,
     blur: getNumberOrUndefined(url.searchParams.get("blur")),
+    format: getOneOfOrUndefined(
+      SUPPORTED_OUTPUT_FORMATS,
+      url.searchParams.get("format")
+    ),
   };
 
   try {
