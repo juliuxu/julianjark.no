@@ -162,6 +162,7 @@ export const loader = async ({ request }: LoaderArgs) => {
     return new Response(buffer, {
       headers: {
         "Content-Type": contentType,
+        "Content-Length": String(buffer.byteLength),
         "Cache-Control": "public, max-age=31536000, immutable",
       },
     });
