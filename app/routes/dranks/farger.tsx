@@ -190,7 +190,15 @@ interface DrankCardProps {
 const DrankCard = ({ drank }: DrankCardProps) => {
   return (
     <a href="#" className="overflow-hidden rounded-md shadow">
-      <div className="relative pb-[120%] group">
+      <div className="relative pb-[120%] group bg-gradient-to-b from-cyan-400 via-green-200 to-yellow-200">
+        {/* <img
+          className="absolute w-full h-full object-cover blur-xl"
+          src={optimizedImageUrl(drank.Illustrasjon, {
+            height: 10,
+            format: "webp",
+          })}
+          alt=""
+        /> */}
         <img
           className="absolute w-full h-full object-cover group-hover:scale-[1.1] transition-all ease-in-out duration-500"
           src={optimizedImageUrl(drank.Illustrasjon, { height: 400 })}
