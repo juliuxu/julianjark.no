@@ -1,7 +1,9 @@
 import { optimizedImageUrl } from "../app/utils.ts";
 
 const cachePurge = false;
-const local = true;
+const local = false;
+const verbose = false;
+const mode: "sync" | "async" = "async" as "sync" | "async";
 
 const baseUrl = local ? "http://localhost:3000" : "https://julianjark.no";
 const dranksRequest = await fetch(`${baseUrl}/api/dranks.json`);
@@ -13,6 +15,7 @@ const imagesShort = imagesFull.slice(0, 3);
 const imageSet = imagesFull;
 
 const fetchImageSize = async (finalUrl: string) => {
+  verbose && console.log("fetching for", finalUrl);
   const response = await fetch(finalUrl, {
     headers: { "Cache-Purge": cachePurge ? "1" : "0" },
   });
@@ -39,11 +42,25 @@ const fetchForOptions = async (
   images: readonly string[],
   options: Parameters<typeof optimizedImageUrl>[1]
 ) => {
-  const results = await Promise.all(
-    images.map((url) =>
-      fetchImageSize(baseUrl + optimizedImageUrl(url, options))
-    )
-  );
+  let results: {
+    size: number;
+    processTime: number;
+  }[] = [];
+
+  if (mode === "sync")
+    for (const url of images) {
+      results.push(
+        await fetchImageSize(baseUrl + optimizedImageUrl(url, options))
+      );
+    }
+  else {
+    results = await Promise.all(
+      images.map((url) =>
+        fetchImageSize(baseUrl + optimizedImageUrl(url, options))
+      )
+    );
+  }
+
   const sizes = results.map((x) => x.size);
   const processTimes = results.map((x) => x.processTime);
 
@@ -138,7 +155,7 @@ for (const [testName, optionsList] of tests) {
   > = {};
   console.log(testName);
   for (const [name, options] of optionsList) {
-    // console.log("fetching for", name);
+    verbose && console.log(`\ntest: ${name}\n`);
     results[name] = await fetchForOptions(imageSet, options);
   }
   console.table(results);
