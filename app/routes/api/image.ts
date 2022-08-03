@@ -57,7 +57,7 @@ export let fetchAndProccessImage = async (
     );
   }
   const stopFetchTime = performance.now();
-  const fetchTime = stopFetchTime - startFetchTime;
+  const fetchTime = Math.round(stopFetchTime - startFetchTime);
 
   // Parse image
   const upstreamContentType = upstreamRes.headers.get("Content-Type");
@@ -138,7 +138,7 @@ export let fetchAndProccessImage = async (
 
   const buffer = await transformer.toBuffer();
   const stopTransformTime = performance.now();
-  const transformTime = stopTransformTime - startTransformTime;
+  const transformTime = Math.round(stopTransformTime - startTransformTime);
   return {
     buffer,
     contentType: outputContentType,
