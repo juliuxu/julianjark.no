@@ -63,6 +63,7 @@ let fetchImage = async (href: string) => {
 
   // Buffer
   const upstreamBuffer = Buffer.from(await upstreamRes.arrayBuffer());
+  upstreamBuffer.toJSON;
 
   return { upstreamBuffer, upstreamContentType };
 };
@@ -148,6 +149,11 @@ if (process.env.NODE_ENV === "development") {
   console.log("caching images to", cachePath);
   const memoizer = memoizeFs({
     cachePath,
+    deserialize: (json) => {
+      return JSON.parse(json!, (_key, value) => {
+        return value && value.type === "Buffer" ? Buffer.from(value) : value;
+      }).data;
+    },
   });
   const memoAsync = (
     fn: memoizeFs.FnToMemoize,
@@ -163,7 +169,7 @@ if (process.env.NODE_ENV === "development") {
     };
   };
 
-  // fetchAndProccessImage = memoAsync(fetchAndProccessImage);
+  fetchImage = memoAsync(fetchImage);
 }
 
 export const loader = async ({ request }: LoaderArgs) => {
