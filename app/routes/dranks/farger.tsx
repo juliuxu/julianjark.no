@@ -137,40 +137,38 @@ export default function Drinker() {
             🍹
           </span>
         </h1>
-        <div>
-          <Form method="get" className="flex flex-col gap-4" reloadDocument>
-            <input
-              className="w-full bg-gray-200 rounded px-3 py-2"
-              type="search"
-              placeholder="Søk etter dranks"
-              name="search"
-              autoFocus
-              defaultValue={data.filterSearch ?? ""}
-              onChange={(e) =>
-                submitDebounced(e.currentTarget.form, { replace: true })
-              }
-            />
-            <div className="flex flex-row gap-3">
-              {data.alcoholOrdered.map((alcohol) => (
-                <Fragment key={alcohol.title}>
-                  <label className="cursor-pointer">
-                    <input
-                      type="checkbox"
-                      name="alcohols"
-                      className="sr-only peer"
-                      value={alcohol.title}
-                      checked={isAlcoholChecked(alcohol)}
-                      onChange={(e) => submit(e.currentTarget.form)}
-                    />
-                    <span className="rounded px-3 py-2 bg-gray-200 peer-checked:bg-teal-100 peer-focus:outline-teal-200 peer-focus:outline peer-focus:outline-4">
-                      {alcohol.title}
-                    </span>
-                  </label>
-                </Fragment>
-              ))}
-            </div>
-          </Form>
-        </div>
+        <Form method="get" className="flex flex-col gap-3" reloadDocument>
+          <input
+            className="w-full bg-gray-200 rounded px-3 py-2"
+            type="search"
+            placeholder="Søk etter dranks"
+            name="search"
+            autoFocus
+            defaultValue={data.filterSearch ?? ""}
+            onChange={(e) =>
+              submitDebounced(e.currentTarget.form, { replace: true })
+            }
+          />
+          <div className="flex flex-row gap-3 gap-y-3 flex-wrap">
+            {data.alcoholOrdered.map((alcohol) => (
+              <Fragment key={alcohol.title}>
+                <label className="cursor-pointer contents">
+                  <input
+                    type="checkbox"
+                    name="alcohols"
+                    className="sr-only peer"
+                    value={alcohol.title}
+                    checked={isAlcoholChecked(alcohol)}
+                    onChange={(e) => submit(e.currentTarget.form)}
+                  />
+                  <span className="rounded px-3 py-2 bg-gray-200 peer-checked:bg-teal-100 peer-focus:ring-teal-200 peer-focus:ring-4">
+                    {alcohol.title}
+                  </span>
+                </label>
+              </Fragment>
+            ))}
+          </div>
+        </Form>
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-6 gap-5">
           {data.drinkerByAlcoholOrder
             .flatMap(({ drinker }) => drinker)
