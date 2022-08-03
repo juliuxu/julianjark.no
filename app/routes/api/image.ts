@@ -38,6 +38,7 @@ export interface ProccessingOptions {
   format?: typeof SUPPORTED_OUTPUT_FORMATS[number];
 
   // Advanced options
+  original?: boolean;
   jpegProgressive?: boolean;
   jpegMozjpeg?: boolean;
 
@@ -62,6 +63,11 @@ export let fetchAndProccessImage = async (
     throw new Error(
       `The requested resource isn't a valid image for ${href} received ${upstreamContentType}`
     );
+  }
+
+  // Don't proccess
+  if (options.original) {
+    return { buffer: upstreamBuffer, contentType: upstreamContentType };
   }
 
   const AVIF = "image/avif";
@@ -169,6 +175,7 @@ export const loader = async ({ request }: LoaderArgs) => {
       url.searchParams.get("format")
     ),
 
+    original: getBooleanOrUndefined(url.searchParams.get("original")),
     jpegProgressive: getBooleanOrUndefined(
       url.searchParams.get("jpegProgressive")
     ),

@@ -1,4 +1,4 @@
-import { ProccessingOptions } from "./routes/api/image";
+import type { ProccessingOptions } from "./routes/api/image";
 
 export function assertItemFound<T>(item: T | undefined): asserts item is T {
   if (item === undefined)
