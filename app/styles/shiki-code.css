@@ -1,3 +1,9 @@
+/* Shiki pre */
+.shiki {
+  padding-left: 0;
+  padding-right: 0;
+}
+
 /* Shiki code block styles */
 .shiki > code {
   padding-top: 1.5rem;
@@ -40,7 +46,6 @@
   --shiki-highlight-color: #4ec9b0;
 }
 .shiki > code {
-  width: 100%;
   display: inline-block;
 }
 .shiki > code > .line {
@@ -66,6 +71,9 @@
   width: 100%;
   opacity: 0.15;
   pointer-events: none;
+
+  /* HACK: to fill over gap between lines */
+  height: 110%;
 }
 .shiki[data-line-numbers="true"] > code > .line.highlight::before {
   box-shadow: -6px 0px 0px 0px var(--shiki-highlight-color);

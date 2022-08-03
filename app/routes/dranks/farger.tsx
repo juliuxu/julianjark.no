@@ -16,11 +16,11 @@ import {
 import Debug from "~/components/debug";
 import { maybePrepareDebugData } from "~/components/debug.server";
 import config from "~/config.server";
-import globalCss from "~/global.css";
 import { getDrinker, getDrinkerDatabase, slugify } from "~/notion/notion";
 import { prepareFromPage } from "~/packages/notion-drinker/prepare.server";
 import type { Alcohol, DrinkHeader } from "~/packages/notion-drinker/types";
 import { assertDrinkHeader } from "~/packages/notion-drinker/types";
+import globalCss from "~/styles/global.css";
 import tailwind from "~/tailwind.css";
 import { debounce, optimizedImageUrl } from "~/utils";
 

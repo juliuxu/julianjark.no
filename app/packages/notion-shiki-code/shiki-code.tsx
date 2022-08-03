@@ -1,8 +1,11 @@
 interface Props {
   codeHtml: string;
+  className?: string;
 }
-export default function ShikiCode({ codeHtml }: Props) {
-  return <div dangerouslySetInnerHTML={{ __html: codeHtml }} />;
+export default function ShikiCode({ codeHtml, className }: Props) {
+  return (
+    <div className={className} dangerouslySetInnerHTML={{ __html: codeHtml }} />
+  );
 }
 
 type CollapsedShikiCodeProps = Props & {

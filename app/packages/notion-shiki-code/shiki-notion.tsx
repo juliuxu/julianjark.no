@@ -1,4 +1,5 @@
 import type { Components as NotionRenderComponents } from "~/packages/notion-render/components";
+import { useNotionRenderContext as ctx } from "~/packages/notion-render/context";
 import { ShikiCode } from ".";
 
 export const ShikiNotionCode: NotionRenderComponents["code"] = ({ block }) => {
@@ -9,5 +10,6 @@ export const ShikiNotionCode: NotionRenderComponents["code"] = ({ block }) => {
       "Notion blocks needs to be prepared with `prepareNotionBlocks` function",
     );
   }
-  return <ShikiCode codeHtml={codeHtml} />;
+  const classes = ctx().classes;
+  return <ShikiCode className={classes.code.root} codeHtml={codeHtml} />;
 };

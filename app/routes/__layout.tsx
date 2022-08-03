@@ -12,9 +12,9 @@ import TopLevelMenu, {
   loader as topLevelMenuLoader,
 } from "~/components/top-level-menu";
 import config from "~/config.server";
-import codeStyles from "~/styles/code.css";
 import commonStyles from "~/styles/common.css";
 import notionRenderStyles from "~/styles/notionRender.css";
+import codeStyles from "~/styles/shiki-code.css";
 
 export const links: LinksFunction = () => [
   {

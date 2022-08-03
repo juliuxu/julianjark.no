@@ -35,7 +35,7 @@ import {
 import notionRevealStyles from "~/packages/notion-reveal/styles.css";
 import { prepareNotionBlocks } from "~/packages/notion-shiki-code/prepare.server";
 import capraRevealTheme from "~/styles/capraRevealTheme.css";
-import codeStyles from "~/styles/code.css";
+import codeStyles from "~/styles/shiki-code.css";
 import { assertItemFound } from "~/utils";
 
 const themes = {

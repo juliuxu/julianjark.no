@@ -10,12 +10,12 @@ import { useLoaderData } from "@remix-run/react";
 import Debug from "~/components/debug";
 import { maybePrepareDebugData } from "~/components/debug.server";
 import config from "~/config.server";
-import globalCss from "~/global.css";
 import { getDrinker, getDrinkerDatabase } from "~/notion/notion";
 import type { SelectColor } from "~/notion/notion.types";
 import { prepareFromPage } from "~/packages/notion-drinker/prepare.server";
 import type { Alcohol, DrinkHeader } from "~/packages/notion-drinker/types";
 import { assertDrinkHeader } from "~/packages/notion-drinker/types";
+import globalCss from "~/styles/global.css";
 import tailwind from "~/tailwind.css";
 
 export const links: LinksFunction = () => [
