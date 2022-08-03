@@ -100,9 +100,7 @@ export const loader = async ({ params: { presentasjon = "" } }: LoaderArgs) => {
   );
 };
 
-export const headers: HeadersFunction = ({ loaderHeaders }) => {
-  return loaderHeaders;
-};
+export let headers: HeadersFunction = ({ loaderHeaders }) => loaderHeaders;
 
 export const meta: MetaFunction = ({ data }) => {
   return {

@@ -1,4 +1,10 @@
-import { LinksFunction, json, MetaFunction, LoaderArgs } from "@remix-run/node";
+import {
+  LinksFunction,
+  json,
+  MetaFunction,
+  LoaderArgs,
+  HeadersFunction,
+} from "@remix-run/node";
 import {
   Form,
   useLoaderData,
@@ -104,6 +110,8 @@ export const loader = async ({ request }: LoaderArgs) => {
 export const meta: MetaFunction = () => ({
   title: "Dranks - Farger",
 });
+
+export let headers: HeadersFunction = ({ loaderHeaders }) => loaderHeaders;
 
 export default function Drinker() {
   const data = useLoaderData<typeof loader>();
