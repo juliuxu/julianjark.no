@@ -1,7 +1,7 @@
 import { optimizedImageUrl } from "../app/utils.ts";
 
 const cachePurge = false;
-const local = false;
+const local = true;
 
 const baseUrl = local ? "http://localhost:3000" : "https://julianjark.no";
 const dranksRequest = await fetch(`${baseUrl}/api/dranks.json`);
@@ -74,8 +74,8 @@ const tests: [
     [
       ["original", { original: true }],
       ["webp", { format: "webp" }],
-      ["webp effort 1", { format: "webp", webpEffort: 1 }],
       ["webp effort 6", { format: "webp", webpEffort: 6 }],
+      ["webp effort 1", { format: "webp", webpEffort: 1 }],
       ["jpeg not mozjpeg", { format: "jpeg", jpegMozjpeg: false }],
       [
         "jpeg progressive",
@@ -87,6 +87,8 @@ const tests: [
         { format: "jpeg", jpegMozjpeg: true, jpegProgressive: true },
       ],
       ["avif", { format: "avif" }],
+      ["avif quality 50", { format: "avif", quality: 50 }],
+      ["avif quality 30", { format: "avif", quality: 30 }],
     ],
   ],
 
@@ -95,7 +97,8 @@ const tests: [
     [
       ["webp", { format: "webp", height: 400 }],
       ["jpeg", { format: "jpeg", height: 400 }],
-      ["avif", { format: "avif", height: 400 }],
+      ["avif", { format: "avif", quality: 50, height: 400 }],
+      ["avif 30", { format: "avif", quality: 30, height: 400 }],
     ],
   ],
 
@@ -104,7 +107,8 @@ const tests: [
     [
       ["webp", { format: "webp", height: 100 }],
       ["jpeg", { format: "jpeg", height: 100 }],
-      ["avif", { format: "avif", height: 100 }],
+      ["avif", { format: "avif", quality: 50, height: 100 }],
+      ["avif 30", { format: "avif", quality: 30, height: 100 }],
     ],
   ],
 
@@ -113,7 +117,7 @@ const tests: [
     [
       ["webp", { format: "webp", height: 100, blur: 15 }],
       ["jpeg", { format: "jpeg", height: 100, blur: 15 }],
-      ["avif", { format: "avif", height: 100, blur: 15 }],
+      ["avif", { format: "avif", quality: 50, height: 100, blur: 15 }],
     ],
   ],
 
@@ -122,7 +126,7 @@ const tests: [
     [
       ["webp", { format: "webp", height: 10 }],
       ["jpeg", { format: "jpeg", height: 10 }],
-      ["avif", { format: "avif", height: 10 }],
+      ["avif", { format: "avif", quality: 50, height: 10 }],
     ],
   ],
 ];
