@@ -11,8 +11,6 @@ export const notionRenderClasses: Partial<Classes> /*tw*/ = {
   image: { root: "rounded-lg" },
   code: { root: "prose xl:prose-xl prose-invert" },
 
-  paragraph: { root: "prose prose-slate prose-invert" },
-
   color_default: "",
   color_gray: "text-gray-400",
   color_brown: "text-amber-700",
