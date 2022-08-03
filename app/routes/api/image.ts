@@ -169,7 +169,7 @@ if (process.env.NODE_ENV === "development") {
     };
   };
 
-  fetchImage = memoAsync(fetchImage);
+  // fetchImage = memoAsync(fetchImage);
 }
 
 export const loader = async ({ request }: LoaderArgs) => {
