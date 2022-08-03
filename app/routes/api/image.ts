@@ -197,6 +197,9 @@ export const loader = async ({ request }: LoaderArgs) => {
       url.searchParams.get("jpegProgressive")
     ),
     jpegMozjpeg: getBooleanOrUndefined(url.searchParams.get("jpegMozjpeg")),
+    webpEffort: getNumberOrUndefined(
+      url.searchParams.get("webpEffort")
+    ) as ProccessingOptions["webpEffort"],
   };
 
   try {
