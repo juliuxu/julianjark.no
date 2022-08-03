@@ -39,7 +39,7 @@ export const optimizedImageUrl = (
   const imageOptimizeUrl = `/api/image`;
   const optionsParams = new URLSearchParams(
     Object.entries(options)
-      .filter(([key, value]) => key && value)
+      .filter(([key, value]) => key && value !== undefined)
       .map(([key, value]) => [key, String(value)])
   );
 

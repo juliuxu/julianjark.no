@@ -49,12 +49,15 @@ export let fetchAndProccessImage = async (
   options: ProccessingOptions
 ) => {
   // Fetch image
+  const startFetchTime = performance.now();
   const upstreamRes = await fetch(href);
   if (!upstreamRes.ok) {
     throw new Error(
       `upstream image response failed for ${href} ${upstreamRes.status}`
     );
   }
+  const stopFetchTime = performance.now();
+  const fetchTime = stopFetchTime - startFetchTime;
 
   // Parse image
   const upstreamContentType = upstreamRes.headers.get("Content-Type");
@@ -65,9 +68,16 @@ export let fetchAndProccessImage = async (
     );
   }
 
-  // Don't proccess
+  const startTransformTime = performance.now();
+
+  // Don't proccess when original is requested
   if (options.original) {
-    return { buffer: upstreamBuffer, contentType: upstreamContentType };
+    return {
+      buffer: upstreamBuffer,
+      contentType: upstreamContentType,
+      fetchTime,
+      transformTime: 0,
+    };
   }
 
   const AVIF = "image/avif";
@@ -127,7 +137,14 @@ export let fetchAndProccessImage = async (
   }
 
   const buffer = await transformer.toBuffer();
-  return { buffer, contentType: outputContentType };
+  const stopTransformTime = performance.now();
+  const transformTime = stopTransformTime - startTransformTime;
+  return {
+    buffer,
+    contentType: outputContentType,
+    fetchTime,
+    transformTime,
+  };
 };
 
 if (process.env.NODE_ENV === "development") {
@@ -183,7 +200,8 @@ export const loader = async ({ request }: LoaderArgs) => {
   };
 
   try {
-    const { buffer, contentType } = await fetchAndProccessImage(href, options);
+    const { buffer, contentType, fetchTime, transformTime } =
+      await fetchAndProccessImage(href, options);
 
     // Return the new image
     return new Response(buffer, {
@@ -191,6 +209,7 @@ export const loader = async ({ request }: LoaderArgs) => {
         "Content-Type": contentType,
         "Content-Length": String(buffer.byteLength),
         "Cache-Control": "public, max-age=31536000, immutable",
+        "Server-Timing": `fetch;dur=${fetchTime}, transform;dur=${transformTime}`,
       },
     });
   } catch (error) {
