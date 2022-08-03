@@ -4,7 +4,11 @@ import sharp from "sharp";
 import type { FitEnum } from "sharp";
 import type { LoaderArgs } from "@remix-run/node";
 import { Response } from "@remix-run/node";
-import { getNumberOrUndefined, getOneOfOrUndefined } from "~/utils";
+import {
+  getBooleanOrUndefined,
+  getNumberOrUndefined,
+  getOneOfOrUndefined,
+} from "~/utils";
 import { join as pathJoin } from "path";
 import memoizeFs from "memoize-fs";
 
@@ -25,13 +29,19 @@ function badImageResponse() {
 const SUPPORTED_OUTPUT_FORMATS = ["avif", "webp", "png", "jpeg"] as const;
 const imageFormatToContentType = (s?: string) => (s ? `image/${s}` : undefined);
 
-interface ProccessingOptions {
+export interface ProccessingOptions {
   fit?: keyof FitEnum;
   width?: number;
   height?: number;
-  quality: number;
+  quality?: number;
   blur?: number;
   format?: typeof SUPPORTED_OUTPUT_FORMATS[number];
+
+  // Advanced options
+  jpegProgressive?: boolean;
+  jpegMozjpeg?: boolean;
+
+  webpEffort?: 1 | 2 | 3 | 4 | 5 | 6;
 }
 export let fetchAndProccessImage = async (
   href: string,
@@ -93,16 +103,21 @@ export let fetchAndProccessImage = async (
   }
 
   // Always optimize
+  const quality = options.quality ?? 75;
   const outputContentType =
     imageFormatToContentType(options.format) ?? upstreamContentType;
   if (outputContentType === WEBP) {
-    transformer.webp({ quality: options.quality });
+    transformer.webp({ quality, effort: options.webpEffort });
   } else if (outputContentType === AVIF) {
-    transformer.avif({ quality: options.quality });
+    transformer.avif({ quality });
   } else if (outputContentType === JPEG) {
-    transformer.jpeg({ quality: options.quality, mozjpeg: true });
+    transformer.jpeg({
+      quality,
+      mozjpeg: options.jpegMozjpeg ?? true,
+      progressive: options.jpegProgressive,
+    });
   } else if (outputContentType === PNG) {
-    transformer.png({ quality: options.quality });
+    transformer.png({ quality });
   }
 
   const buffer = await transformer.toBuffer();
@@ -147,12 +162,17 @@ export const loader = async ({ request }: LoaderArgs) => {
     ),
     width: getNumberOrUndefined(url.searchParams.get("width")),
     height: getNumberOrUndefined(url.searchParams.get("height")),
-    quality: getNumberOrUndefined(url.searchParams.get("quality")) ?? 75,
+    quality: getNumberOrUndefined(url.searchParams.get("quality")),
     blur: getNumberOrUndefined(url.searchParams.get("blur")),
     format: getOneOfOrUndefined(
       SUPPORTED_OUTPUT_FORMATS,
       url.searchParams.get("format")
     ),
+
+    jpegProgressive: getBooleanOrUndefined(
+      url.searchParams.get("jpegProgressive")
+    ),
+    jpegMozjpeg: getBooleanOrUndefined(url.searchParams.get("jpegMozjpeg")),
   };
 
   try {

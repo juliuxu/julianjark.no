@@ -1,3 +1,5 @@
+import { ProccessingOptions } from "./routes/api/image";
+
 export function assertItemFound<T>(item: T | undefined): asserts item is T {
   if (item === undefined)
     throw new Response("Not Found", {
@@ -32,14 +34,7 @@ export const rewriteNotionImageUrl = (url: string, pageOrBlockId: string) => {
 // See api/image.ts
 export const optimizedImageUrl = (
   url: string,
-  options: {
-    quality?: number | string;
-    width?: number | string;
-    height?: number | string;
-    fit?: string;
-    blur?: number;
-    format?: string;
-  } = {}
+  options: ProccessingOptions = {}
 ) => {
   const imageOptimizeUrl = `/api/image`;
   const optionsParams = new URLSearchParams(
@@ -49,20 +44,6 @@ export const optimizedImageUrl = (
   );
 
   return `${imageOptimizeUrl}?src=${encodeURIComponent(url)}&${optionsParams}`;
-  // Old way of working around dynamic image url's from notion
-  // Since I now generate non-dynamic url's, this is no longer needed
-  //
-  // let cacheKey: string;
-  // const m = url.match(/secure\.notion-static\.com\/(?<uuid>[\w\-]+)\//);
-  // if (m?.groups?.uuid) {
-  //   cacheKey = encodeURIComponent(m.groups.uuid + optionsParams);
-  // } else {
-  //   cacheKey = encodeURIComponent(url + optionsParams);
-  // }
-
-  // return `${imageOptimizeUrl}?src=${encodeURIComponent(
-  //   url
-  // )}&${optionsParams}&juliancachekey=${cacheKey}`;
 };
 
 export function getKeyValueOptions<T extends Record<string, string>>(
