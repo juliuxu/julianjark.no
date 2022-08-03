@@ -103,7 +103,11 @@ export const loader = async ({ request }: LoaderArgs) => {
       filterSearch,
       filterAlcohols,
     },
-    { headers: config.cacheControlHeaders }
+    {
+      headers: config.cacheControlHeadersDynamic(
+        (drinkerDatabase as any).last_edited_time
+      ),
+    }
   );
 };
 
