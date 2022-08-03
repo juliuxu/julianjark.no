@@ -36,9 +36,16 @@ export const optimizedImageUrl = (
   url: string,
   options: ProccessingOptions = {}
 ) => {
+  const optionsWithDefaults: ProccessingOptions = {
+    // Webp is better for small images
+    // Jpeg with mozjpeg is about the same or better for larger images
+    // png and uncompressed images are terrible
+    format: "webp",
+    ...options,
+  };
   const imageOptimizeUrl = `/api/image`;
   const optionsParams = new URLSearchParams(
-    Object.entries(options)
+    Object.entries(optionsWithDefaults)
       .filter(([key, value]) => key && value !== undefined)
       .map(([key, value]) => [key, String(value)])
   );
