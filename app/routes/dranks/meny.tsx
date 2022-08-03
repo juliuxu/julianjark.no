@@ -18,7 +18,7 @@ import {
   DrinkHeader,
 } from "~/packages/notion-drinker/types";
 import tailwind from "~/tailwind.css";
-import global from "~/global.css";
+import globalCss from "~/global.css";
 
 export const links: LinksFunction = () => [
   {
@@ -27,7 +27,7 @@ export const links: LinksFunction = () => [
   },
   {
     rel: "stylesheet",
-    href: global,
+    href: globalCss,
   },
 ];
 

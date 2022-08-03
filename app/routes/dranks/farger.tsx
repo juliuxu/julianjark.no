@@ -8,7 +8,6 @@ import {
 import {
   Form,
   useLoaderData,
-  useSearchParams,
   useSubmit,
   useTransition,
 } from "@remix-run/react";
@@ -23,7 +22,7 @@ import {
   DrinkHeader,
 } from "~/packages/notion-drinker/types";
 import tailwind from "~/tailwind.css";
-import global from "~/global.css";
+import globalCss from "~/global.css";
 import { debounce, optimizedImageUrl } from "~/utils";
 import React, { Fragment, useCallback } from "react";
 
@@ -34,7 +33,7 @@ export const links: LinksFunction = () => [
   },
   {
     rel: "stylesheet",
-    href: global,
+    href: globalCss,
   },
 ];
 
