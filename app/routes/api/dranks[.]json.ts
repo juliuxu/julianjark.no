@@ -1,16 +1,12 @@
-import { json, LoaderArgs } from "@remix-run/node";
+import type { LoaderArgs } from "@remix-run/node";
+import { json } from "@remix-run/node";
+
 import config from "~/config.server";
-import {
-  getDrinker,
-  getDrinkerDatabase as getDrinkerDatabase,
-} from "~/notion/notion";
-import {
-  DatabasePage,
-  getBlocksWithChildren,
-  getPage,
-} from "~/notion/notion-api.server";
+import { getDrinker, getDrinkerDatabase } from "~/notion/notion";
 import { getTextFromRichText } from "~/notion/notion";
-import { BlockWithChildren } from "~/notion/notion.types";
+import type { BlockWithChildren } from "~/notion/notion.types";
+import type { DatabasePage } from "~/notion/notion-api.server";
+import { getBlocksWithChildren, getPage } from "~/notion/notion-api.server";
 import { prepare as notionDrinkerPrepare } from "~/packages/notion-drinker/prepare.server";
 import { assertDrink } from "~/packages/notion-drinker/types";
 import { chunked } from "~/utils";
@@ -84,12 +80,12 @@ export const loader = async ({ request }: LoaderArgs) => {
   if (drinkerDatabase.properties["Alkohol"].type !== "select")
     throw new Error("Database mangler Alkohol");
   const alcoholOrder = drinkerDatabase.properties["Alkohol"].select.options.map(
-    (x) => x.name
+    (x) => x.name,
   );
 
   return json(
     { dranks, alcoholOrder, lastUpdated },
-    { headers: config.cacheControlHeadersDynamic(lastUpdated) }
+    { headers: config.cacheControlHeadersDynamic(lastUpdated) },
   );
 };
 
@@ -100,7 +96,8 @@ const prepare = (page: DatabasePage, blocks: BlockWithChildren[]): Drank => {
 
   const ingredients = drink.Ingredienser.filter(
     (block) =>
-      block.type === "bulleted_list_item" || block.type === "numbered_list_item"
+      block.type === "bulleted_list_item" ||
+      block.type === "numbered_list_item",
   )
     .map((block) => {
       if (block.type === "bulleted_list_item") {
@@ -127,7 +124,8 @@ const prepare = (page: DatabasePage, blocks: BlockWithChildren[]): Drank => {
 
   const steps = drink.Fremgangsmåte.filter(
     (block) =>
-      block.type === "bulleted_list_item" || block.type === "numbered_list_item"
+      block.type === "bulleted_list_item" ||
+      block.type === "numbered_list_item",
   )
     .map((block) => {
       if (block.type === "bulleted_list_item") {

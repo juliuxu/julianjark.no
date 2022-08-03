@@ -1,5 +1,7 @@
-import { LinksFunction, json, MetaFunction, LoaderArgs } from "@remix-run/node";
+import type { LinksFunction, LoaderArgs, MetaFunction } from "@remix-run/node";
+import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
+
 import config from "~/config.server";
 import { getDrinker } from "~/notion/notion";
 import tailwind from "~/tailwind.css";

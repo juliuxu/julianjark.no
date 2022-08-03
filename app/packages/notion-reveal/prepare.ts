@@ -1,12 +1,9 @@
 import { getText } from "~/notion/notion";
 import { getCheckbox, getSelect, getTextFromRichText } from "~/notion/notion";
+import type { Block } from "~/notion/notion.types";
 import type { DatabasePage } from "~/notion/notion-api.server";
-
-import { Block } from "~/notion/notion.types";
-import {
-  getThemeOrDefault,
-  Theme,
-} from "~/routes/presentasjoner.$presentasjon";
+import type { Theme } from "~/routes/presentasjoner.$presentasjon";
+import { getThemeOrDefault } from "~/routes/presentasjoner.$presentasjon";
 
 export interface PreparedData {
   slides: Slide[];
@@ -34,7 +31,7 @@ export type PresentationProperties = {
   "Show debug slides": boolean;
 };
 export const parsePresentationProperties = (
-  page: DatabasePage
+  page: DatabasePage,
 ): PresentationProperties => {
   const themeProperty = getSelect("Theme", page) ?? "";
   const transitionProperty = getSelect("Transition", page) ?? "";
@@ -98,12 +95,12 @@ const HIDE_HEADING_TOKENS = ["—", "~"];
 export const prepareSlides = (blocks: Block[]): Slide[] => {
   // STEP: Remove unsupported blocks
   const filteredBlocks = blocks.filter(
-    (block) => block.type !== "divider" && block.type !== "table_of_contents"
+    (block) => block.type !== "divider" && block.type !== "table_of_contents",
   );
 
   // Figure out if we are using h1 or h2 as slide dividers
   const firstHeadingBlock = filteredBlocks.find(
-    (block) => block.type === "heading_1" || block.type === "heading_2"
+    (block) => block.type === "heading_1" || block.type === "heading_2",
   );
   let headingTypeLevel1: "heading_1" | "heading_2";
   let headingTypeLevel2: "heading_2" | "heading_3";
@@ -136,7 +133,7 @@ export const prepareSlides = (blocks: Block[]): Slide[] => {
 
     // Group the rest based on h2 headings into subSlides
     const subSlides = groupByBlockType(headingTypeLevel2, blockListInner).map(
-      (content) => ({ content })
+      (content) => ({ content }),
     );
 
     return {
@@ -147,13 +144,13 @@ export const prepareSlides = (blocks: Block[]): Slide[] => {
 
   // Extract notes
   const extractNotes = (
-    withoutNotes: SlideWithoutNotes | SubSlideWithoutNotes
+    withoutNotes: SlideWithoutNotes | SubSlideWithoutNotes,
   ) => {
     const notes = withoutNotes.content.filter(
-      (block) => block.type === NOTES_BLOCK_TYPE
+      (block) => block.type === NOTES_BLOCK_TYPE,
     );
     const content = withoutNotes.content.filter(
-      (block) => block.type !== NOTES_BLOCK_TYPE
+      (block) => block.type !== NOTES_BLOCK_TYPE,
     );
     return { notes, content };
   };
@@ -175,8 +172,8 @@ export const prepareSlides = (blocks: Block[]): Slide[] => {
       headingBlockTypes.includes(block.type) &&
       HIDE_HEADING_TOKENS.some((token) =>
         getTextFromRichText((block as any)[block.type].rich_text).startsWith(
-          token
-        )
+          token,
+        ),
       )
     ) {
       return false;

@@ -1,5 +1,5 @@
-import { useFetcher } from "@remix-run/react";
 import { useState } from "react";
+import { useFetcher } from "@remix-run/react";
 
 export function CachePurgeCurrentPageButton() {
   const [isSubmitting, setIsSubmitting] = useState(false);

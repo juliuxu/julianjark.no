@@ -1,8 +1,9 @@
 import Highlight, { Prism } from "prism-react-renderer";
 import vsDark from "prism-react-renderer/themes/vsDark";
 import prismTomorrow from "prismjs/themes/prism-tomorrow.css";
-import { getPlainTextFromRichTextList } from "~/packages/notion-render/components";
+
 import type { Components as NotionRenderComponents } from "~/packages/notion-render/components";
+import { getPlainTextFromRichTextList } from "~/packages/notion-render/components";
 
 export const prismStyles = prismTomorrow;
 

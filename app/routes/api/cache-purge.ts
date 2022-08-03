@@ -1,7 +1,9 @@
-import { ActionFunction } from "@remix-run/node";
+import type { ActionFunction } from "@remix-run/node";
+
 import config from "~/config.server";
+import type { Page } from "~/sitemap.server";
+import { flattenDepthFirst, getSitemapTree } from "~/sitemap.server";
 import { getDateOrUndefined, getNumberOrUndefined } from "~/utils";
-import { Page, flattenDepthFirst, getSitemapTree } from "~/sitemap.server";
 
 export const isChangedPage = (before: Date) => (page: Page) => {
   // Notion timestamps are stored only to minute precision
@@ -28,14 +30,14 @@ export const purgePage = (page: Page) => {
   const requests = paths.map((path) =>
     fetch(`${config.baseUrl}${path}`, {
       headers: { "Cache-Purge": "1" },
-    })
+    }),
   );
   return Promise.allSettled(requests);
 };
 
 export const purgeUpdatedPages = async (
   before: Date,
-  logger: (message: string, level: "silent" | "info" | "verbose") => void
+  logger: (message: string, level: "silent" | "info" | "verbose") => void,
 ) => {
   // Fetch sitemap
   logger("🌍 fetching sitemap", "info");
@@ -46,7 +48,7 @@ export const purgeUpdatedPages = async (
   pages
     .slice()
     .sort(
-      (a, b) => new Date(b.lastmod).valueOf() - new Date(a.lastmod).valueOf()
+      (a, b) => new Date(b.lastmod).valueOf() - new Date(a.lastmod).valueOf(),
     )
     .forEach((page) => {
       logger(`: ${page.lastmod} ${page.path}`, "verbose");
@@ -72,7 +74,7 @@ export const purgeUpdatedPages = async (
 
 export const createReadableStreamLogger = (
   controller: ReadableStreamController<any>,
-  currentLoglevel: "silent" | "info" | "verbose"
+  currentLoglevel: "silent" | "info" | "verbose",
 ) => {
   const loglevelStringToInt: Record<typeof currentLoglevel, number> = {
     silent: 0,
@@ -81,7 +83,7 @@ export const createReadableStreamLogger = (
   };
   return function readableStreamLogger(
     message: string,
-    loglevel: typeof currentLoglevel
+    loglevel: typeof currentLoglevel,
   ) {
     if (loglevelStringToInt[currentLoglevel] >= loglevelStringToInt[loglevel]) {
       controller.enqueue(message);
@@ -93,10 +95,10 @@ export const createReadableStreamLogger = (
 export const action: ActionFunction = async ({ request }) => {
   const url = new URL(request.url);
   const onlyEditedLastNSeconds = getNumberOrUndefined(
-    url.searchParams.get("onlyEditedLastNSeconds")
+    url.searchParams.get("onlyEditedLastNSeconds"),
   );
   const onlyEditedSinceDate = getDateOrUndefined(
-    url.searchParams.get("onlyEditedSinceDate")
+    url.searchParams.get("onlyEditedSinceDate"),
   );
 
   const before = () => {
@@ -117,7 +119,7 @@ export const action: ActionFunction = async ({ request }) => {
     async start(controller) {
       await purgeUpdatedPages(
         before(),
-        createReadableStreamLogger(controller, "info")
+        createReadableStreamLogger(controller, "info"),
       );
       controller.close();
     },

@@ -20,7 +20,7 @@ const config = {
   // The idea is that if the page was recently edited, chances are that it will be edited again soon
   cacheControlHeadersDynamic: (lastUpdated: string) => {
     const diffInSeconds = Math.abs(
-      Math.floor(new Date().getTime() - new Date(lastUpdated).getTime() / 1000)
+      Math.floor(new Date().getTime() - new Date(lastUpdated).getTime() / 1000),
     );
 
     const thresholds = [
@@ -36,7 +36,7 @@ const config = {
       [Infinity, 60 * 60 * 4],
     ] as const;
     const serverCacheMaxAge = thresholds.find(
-      ([threshold]) => diffInSeconds < threshold
+      ([threshold]) => diffInSeconds < threshold,
     )![1];
     return {
       "Cache-Control": `public, s-maxage=${serverCacheMaxAge}, stale-while-revalidate=${YEAR_IN_SECONDS}`,

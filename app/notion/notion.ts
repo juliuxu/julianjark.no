@@ -1,19 +1,15 @@
 import config from "~/config.server";
-import { RichTextItem } from "./notion.types";
-import {
-  DatabasePage,
-  getDatabase,
-  getDatabasePages,
-  PageResponse,
-} from "./notion-api.server";
+import type { RichTextItem } from "./notion.types";
+import type { DatabasePage, PageResponse } from "./notion-api.server";
+import { getDatabase, getDatabasePages } from "./notion-api.server";
 
 export function slugify(text: string) {
   return text
     .trim()
     .toLowerCase()
     .replace(/\s+/g, "-")
-    .replace(/[^\w\-]+/g, "")
-    .replace(/\-\-+/g, "-")
+    .replace(/[^\w-]+/g, "")
+    .replace(/--+/g, "-")
     .replace(/^-+/, "")
     .replace(/-+$/, "");
 }
@@ -21,7 +17,7 @@ export function slugify(text: string) {
 // Notion/Domain helpers
 export const getTitle = (fromPage: PageResponse | DatabasePage) => {
   const title = Object.values(fromPage.properties).find(
-    (property) => property.type === "title"
+    (property) => property.type === "title",
   );
   if (title?.type !== "title")
     throw new Error("Could not get title from passed notion page");
@@ -90,7 +86,7 @@ export const getDrinker = async () =>
       multi_select: {
         contains: "🌐",
       },
-    }
+    },
   );
 
 export const getPresentasjoner = async () =>
@@ -102,7 +98,7 @@ export const getPresentasjoner = async () =>
 
 export const getNotionDrivenPages = async () =>
   (await getDatabasePages(config.notionDrivenPagesDatabaseId)).filter(
-    filterPublishedPredicate
+    filterPublishedPredicate,
   );
 
 // ENV stuff

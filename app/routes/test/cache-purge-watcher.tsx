@@ -1,6 +1,7 @@
-import { LinksFunction } from "@remix-run/node";
-import picoCss from "@picocss/pico/css/pico.min.css";
 import { useEffect, useRef, useState } from "react";
+import type { LinksFunction } from "@remix-run/node";
+
+import picoCss from "@picocss/pico/css/pico.min.css";
 
 export const links: LinksFunction = () => [
   {
@@ -15,7 +16,7 @@ export default function CachePurgeWatcher() {
   const [isWatching, setIsWatching] = useState(false);
   const [watchInterval, setWatchInterval] = useState(15000);
   const [loglevel, setLoglevel] = useState<"silent" | "info" | "verbose">(
-    "silent"
+    "silent",
   );
 
   useEffect(() => {
@@ -30,7 +31,7 @@ export default function CachePurgeWatcher() {
             `/api/cache-purge-watcher-stream?loglevel=${loglevel}&watchInterval=${watchInterval}`,
             {
               signal: abortController.current.signal,
-            }
+            },
           );
           const reader = response.body
             ?.pipeThrough(new TextDecoderStream())

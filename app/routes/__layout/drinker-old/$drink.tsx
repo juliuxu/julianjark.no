@@ -1,23 +1,22 @@
-import {
-  json,
-  MetaFunction,
+import type {
   HeadersFunction,
   LoaderArgs,
+  MetaFunction,
 } from "@remix-run/node";
+import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 
+import Debug from "~/components/debug";
+import { maybePrepareDebugData } from "~/components/debug.server";
+import { OptimizedNotionImage } from "~/components/notion-components";
+import config from "~/config.server";
 import { findPageBySlugPredicate, getDrinker, getTitle } from "~/notion/notion";
 import { getBlocksWithChildren } from "~/notion/notion-api.server";
-import { assertItemFound, optimizedImageUrl } from "~/utils";
-
-import config from "~/config.server";
-import Debug from "~/components/debug";
+import { prepare } from "~/packages/notion-drinker/prepare.server";
+import { assertDrink } from "~/packages/notion-drinker/types";
 import NotionRender from "~/packages/notion-render";
 import type { Components as NotionRenderComponents } from "~/packages/notion-render/components";
-import { OptimizedNotionImage } from "~/components/notion-components";
-import { maybePrepareDebugData } from "~/components/debug.server";
-import { assertDrink } from "~/packages/notion-drinker/types";
-import { prepare } from "~/packages/notion-drinker/prepare.server";
+import { assertItemFound, optimizedImageUrl } from "~/utils";
 
 export const notionRenderComponents: Partial<NotionRenderComponents> = {
   image: OptimizedNotionImage,
@@ -25,7 +24,7 @@ export const notionRenderComponents: Partial<NotionRenderComponents> = {
 
 export const loader = async ({ request, params }: LoaderArgs) => {
   const page = (await getDrinker()).find(
-    findPageBySlugPredicate(params.drink ?? "")
+    findPageBySlugPredicate(params.drink ?? ""),
   );
   assertItemFound(page);
 
@@ -39,7 +38,7 @@ export const loader = async ({ request, params }: LoaderArgs) => {
       drink,
       debugData: await maybePrepareDebugData(request, { drink, page, blocks }),
     },
-    { headers: config.cacheControlHeadersDynamic(page.last_edited_time) }
+    { headers: config.cacheControlHeadersDynamic(page.last_edited_time) },
   );
 };
 

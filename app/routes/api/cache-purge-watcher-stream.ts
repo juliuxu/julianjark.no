@@ -1,4 +1,5 @@
-import { LoaderArgs } from "@remix-run/node";
+import type { LoaderArgs } from "@remix-run/node";
+
 import { getNumberOrUndefined, getOneOfOrUndefined } from "~/utils";
 import { createReadableStreamLogger, purgeUpdatedPages } from "./cache-purge";
 
@@ -8,12 +9,12 @@ export const loader = ({ request }: LoaderArgs) => {
   const currentLoglevel =
     getOneOfOrUndefined(
       ["silent", "info", "verbose"],
-      url.searchParams.get("loglevel")
+      url.searchParams.get("loglevel"),
     ) ?? "info";
   const watchInterval = Math.max(
     getNumberOrUndefined(url.searchParams.get("watchInterval")) ??
       DEFAULT_WATCH_INTERVAL,
-    4000
+    4000,
   );
 
   const stream = new ReadableStream({

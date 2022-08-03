@@ -1,11 +1,7 @@
 import { Client } from "@notionhq/client";
 import type { ListBlockChildrenResponse } from "@notionhq/client/build/src/api-endpoints";
-import { join as pathJoin } from "path";
 import memoizeFs from "memoize-fs";
-
-import serializeJavascript from "serialize-javascript";
-const deserializeJavascript = (serializedJsString?: string) =>
-  eval(`(() => (${serializedJsString}))()`).data;
+import { join as pathJoin } from "path";
 
 const notion = new Client({
   auth: process.env.NOTION_TOKEN,
@@ -17,7 +13,7 @@ type Filter = Parameters<typeof notion.databases.query>[0]["filter"];
 export let getDatabasePages = async (
   databaseId: string,
   sorts?: Sorts,
-  filter?: Filter
+  filter?: Filter,
 ) => {
   const response = await notion.databases.query({
     database_id: databaseId,
@@ -56,7 +52,7 @@ export let getBlocks = async (blockId: string) => {
 };
 
 export let getBlocksWithChildren = async (
-  blockId: string
+  blockId: string,
 ): Promise<BlockWithChildren[]> => {
   const blocks = await getBlocks(blockId);
   // Retrieve block children for nested blocks (one level deep), for example toggle blocks
@@ -69,7 +65,7 @@ export let getBlocksWithChildren = async (
           id: block.id,
           children: await getBlocksWithChildren(block.id),
         };
-      })
+      }),
   );
 
   const blocksWithChildren = blocks.map((block) => {
@@ -77,7 +73,7 @@ export let getBlocksWithChildren = async (
     // Add child blocks if the block should contain children but none exists
     if (innerBlock.has_children && !innerBlock[innerBlock.type].children) {
       innerBlock[innerBlock.type]["children"] = childBlocks.find(
-        (x) => x.id === innerBlock.id
+        (x) => x.id === innerBlock.id,
       )?.children;
     }
     return innerBlock;
@@ -144,12 +140,10 @@ if (process.env.NODE_ENV === "development") {
   console.log("caching notion to", cachePath);
   const memoizer = memoizeFs({
     cachePath,
-    serialize: serializeJavascript,
-    deserialize: deserializeJavascript,
   });
   const memoAsync = (
     fn: memoizeFs.FnToMemoize,
-    opts: memoizeFs.Options = {}
+    opts: memoizeFs.Options = {},
   ) => {
     const p = memoizer.fn(fn, opts);
     let mfn: memoizeFs.FnToMemoize | undefined = undefined;

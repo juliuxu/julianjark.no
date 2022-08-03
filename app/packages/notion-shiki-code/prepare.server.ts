@@ -1,7 +1,8 @@
-import * as shiki from "shiki";
 import type { Lang, Theme } from "shiki";
+import * as shiki from "shiki";
+
+import type { Block } from "~/notion/notion.types";
 import { getPlainTextFromRichTextList } from "~/packages/notion-render/components";
-import { Block } from "~/notion/notion.types";
 
 interface LineOption {
   line: number;
@@ -19,7 +20,7 @@ export default async function prepare(codeText: string, options: Options) {
 }
 
 const parseCaption = (
-  caption: string
+  caption: string,
 ): {
   language?: string;
   filename?: string;
@@ -33,12 +34,12 @@ const parseCaption = (
 
 const prepareNotionBlock = async (
   block: Block,
-  highlighter: shiki.Highlighter
+  highlighter: shiki.Highlighter,
 ) => {
   if (block.type !== "code") return;
 
   const { language, filename, linenumbers, copy, highlight } = parseCaption(
-    getPlainTextFromRichTextList(block.code.caption)
+    getPlainTextFromRichTextList(block.code.caption),
   );
 
   const lineOptions: LineOption[] = [];
@@ -71,14 +72,14 @@ const prepareNotionBlock = async (
 
   let shikiCodeHtml = highlighter.codeToHtml(
     getPlainTextFromRichTextList(block.code.rich_text),
-    { lang: language ?? block.code.language, lineOptions }
+    { lang: language ?? block.code.language, lineOptions },
   );
 
   // We could create our own renderer, probably better
   if (filename) {
     shikiCodeHtml = shikiCodeHtml.replace(
       `<pre`,
-      `<pre data-filename="${filename}"`
+      `<pre data-filename="${filename}"`,
     );
   }
   if (copy === "true") {
@@ -87,7 +88,7 @@ const prepareNotionBlock = async (
   if (linenumbers === "true") {
     shikiCodeHtml = shikiCodeHtml.replace(
       `<pre`,
-      `<pre data-line-numbers="true"`
+      `<pre data-line-numbers="true"`,
     );
   }
 
@@ -98,7 +99,7 @@ const prepareNotionBlock = async (
 // TODO: Update psuedo ListBlock block.bullet_list.children instead of block.children
 export const prepareNotionBlocks = async (
   blocks: Block[],
-  options: Omit<Options, "lang">
+  options: Omit<Options, "lang">,
 ) => {
   const highlighter = await shiki.getHighlighter({ theme: options.theme });
 

@@ -1,12 +1,8 @@
-import { Block, BlockType, RichTextItem } from "~/notion/notion.types";
+import type { Block, BlockType, RichTextItem } from "~/notion/notion.types";
 import NotionRender from ".";
 import { useNotionRenderContext as ctx } from "./context";
-import {
-  ListBlock,
-  ListBlockType,
-  BulletedList,
-  NumberedList,
-} from "./pseudo-components";
+import type { ListBlock, ListBlockType } from "./pseudo-components";
+import { BulletedList, NumberedList } from "./pseudo-components";
 
 /**
  * Rich Text
@@ -296,7 +292,7 @@ export const Video = ({ block }: BlockComponentProps) => {
   function YouTubeGetID(url: string) {
     const urlSplit = url.split(/(vi\/|v=|\/v\/|youtu\.be\/|\/embed\/)/);
     return urlSplit[2] !== undefined
-      ? urlSplit[2].split(/[^0-9a-z_\-]/i)[0]
+      ? urlSplit[2].split(/[^0-9a-z_-]/i)[0]
       : urlSplit[0];
   }
 
@@ -305,7 +301,7 @@ export const Video = ({ block }: BlockComponentProps) => {
       <iframe
         className={ctx().classes.embed.root}
         src={`https://www.youtube-nocookie.com/embed/${YouTubeGetID(
-          block.video.external.url
+          block.video.external.url,
         )}`}
         title={getPlainTextFromRichTextList(block.video.caption)}
         width="560"

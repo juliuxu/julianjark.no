@@ -1,4 +1,4 @@
-import { Block, SelectColor } from "~/notion/notion.types";
+import type { Block, SelectColor } from "~/notion/notion.types";
 
 export type DrinkHeader = {
   Tittel: string;
@@ -44,13 +44,13 @@ export function assertDrink(drink: Partial<Drink>): asserts drink is Drink {
         .join(",")} mangler fra drinken i Notion\n${JSON.stringify(
         drink.Tittel,
         null,
-        2
-      )}`
+        2,
+      )}`,
   );
 }
 
 export function assertDrinkHeader(
-  drinkHeader: Partial<DrinkHeader>
+  drinkHeader: Partial<DrinkHeader>,
 ): asserts drinkHeader is DrinkHeader {
   assertObjectByKeys(
     drinkHeader,
@@ -69,15 +69,15 @@ export function assertDrinkHeader(
         .join(",")} mangler fra drinken i Notion\n${JSON.stringify(
         drinkHeader.Tittel,
         null,
-        2
-      )}`
+        2,
+      )}`,
   );
 }
 
 export function assertObjectByKeys<T extends object>(
   object: Partial<T>,
   keys: Array<keyof T>,
-  errorMessage: (missingKeys: Array<keyof T>) => string
+  errorMessage: (missingKeys: Array<keyof T>) => string,
 ): asserts object is T {
   const missingKeys = keys.filter((key) => object[key] === undefined);
   if (missingKeys.length > 0)

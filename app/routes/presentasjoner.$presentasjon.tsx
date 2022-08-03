@@ -1,52 +1,50 @@
-import {
-  json,
-  MetaFunction,
-  LinksFunction,
+import type {
   HeadersFunction,
+  LinksFunction,
   LoaderArgs,
+  MetaFunction,
 } from "@remix-run/node";
+import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 
-import NotionReveal from "~/packages/notion-reveal";
+import revealCss from "reveal.js/dist/reveal.css";
+import beigeRevealTheme from "reveal.js/dist/theme/beige.css";
+import blackRevealTheme from "reveal.js/dist/theme/black.css";
+import bloodRevealTheme from "reveal.js/dist/theme/blood.css";
+import leagueRevealTheme from "reveal.js/dist/theme/league.css";
+import moonRevealTheme from "reveal.js/dist/theme/moon.css";
+import nightRevealTheme from "reveal.js/dist/theme/night.css";
+import serifRevealTheme from "reveal.js/dist/theme/serif.css";
+import simpleRevealTheme from "reveal.js/dist/theme/simple.css";
+import skyRevealTheme from "reveal.js/dist/theme/sky.css";
+import solarizedRevealTheme from "reveal.js/dist/theme/solarized.css";
+import whiteRevealTheme from "reveal.js/dist/theme/white.css";
+
+import config from "~/config.server";
 import {
   findPageBySlugPredicate,
   getPresentasjoner,
   getTitle,
 } from "~/notion/notion";
+import { Block } from "~/notion/notion.types";
 import {
   DatabasePage,
   getBlocksWithChildren,
 } from "~/notion/notion-api.server";
-import { assertItemFound } from "~/utils";
-
-import { Block } from "~/notion/notion.types";
-
+import NotionReveal from "~/packages/notion-reveal";
 import type {
   PresentationProperties,
   Slide,
 } from "~/packages/notion-reveal/prepare";
 import {
-  prepareSlides,
   parsePresentationProperties,
+  prepareSlides,
 } from "~/packages/notion-reveal/prepare";
 import notionRevealStyles from "~/packages/notion-reveal/styles.css";
-import codeStyles from "~/styles/code.css";
 import { prepareNotionBlocks } from "~/packages/notion-shiki-code/prepare.server";
-
-import revealCss from "reveal.js/dist/reveal.css";
-import blackRevealTheme from "reveal.js/dist/theme/black.css";
-import whiteRevealTheme from "reveal.js/dist/theme/white.css";
-import leagueRevealTheme from "reveal.js/dist/theme/league.css";
-import beigeRevealTheme from "reveal.js/dist/theme/beige.css";
-import skyRevealTheme from "reveal.js/dist/theme/sky.css";
-import nightRevealTheme from "reveal.js/dist/theme/night.css";
-import serifRevealTheme from "reveal.js/dist/theme/serif.css";
-import simpleRevealTheme from "reveal.js/dist/theme/simple.css";
-import solarizedRevealTheme from "reveal.js/dist/theme/solarized.css";
-import bloodRevealTheme from "reveal.js/dist/theme/blood.css";
-import moonRevealTheme from "reveal.js/dist/theme/moon.css";
 import capraRevealTheme from "~/styles/capraRevealTheme.css";
-import config from "~/config.server";
+import codeStyles from "~/styles/code.css";
+import { assertItemFound } from "~/utils";
 
 const themes = {
   black: blackRevealTheme,
@@ -85,7 +83,7 @@ export const links: LinksFunction = () => [
 
 export const loader = async ({ params: { presentasjon = "" } }: LoaderArgs) => {
   const page = (await getPresentasjoner()).find(
-    findPageBySlugPredicate(presentasjon)
+    findPageBySlugPredicate(presentasjon),
   );
   assertItemFound(page);
 
@@ -96,7 +94,7 @@ export const loader = async ({ params: { presentasjon = "" } }: LoaderArgs) => {
 
   return json(
     { page, blocks, properties, slides },
-    { headers: config.cacheControlHeadersDynamic(page.last_edited_time) }
+    { headers: config.cacheControlHeadersDynamic(page.last_edited_time) },
   );
 };
 

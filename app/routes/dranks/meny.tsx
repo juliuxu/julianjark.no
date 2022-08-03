@@ -1,24 +1,22 @@
-import {
-  LinksFunction,
-  json,
-  MetaFunction,
-  LoaderArgs,
+import type {
   HeadersFunction,
+  LinksFunction,
+  LoaderArgs,
+  MetaFunction,
 } from "@remix-run/node";
+import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
+
 import Debug from "~/components/debug";
 import { maybePrepareDebugData } from "~/components/debug.server";
 import config from "~/config.server";
-import { getDrinker, getDrinkerDatabase } from "~/notion/notion";
-import { SelectColor } from "~/notion/notion.types";
-import { prepareFromPage } from "~/packages/notion-drinker/prepare.server";
-import {
-  Alcohol,
-  assertDrinkHeader,
-  DrinkHeader,
-} from "~/packages/notion-drinker/types";
-import tailwind from "~/tailwind.css";
 import globalCss from "~/global.css";
+import { getDrinker, getDrinkerDatabase } from "~/notion/notion";
+import type { SelectColor } from "~/notion/notion.types";
+import { prepareFromPage } from "~/packages/notion-drinker/prepare.server";
+import type { Alcohol, DrinkHeader } from "~/packages/notion-drinker/types";
+import { assertDrinkHeader } from "~/packages/notion-drinker/types";
+import tailwind from "~/tailwind.css";
 
 export const links: LinksFunction = () => [
   {
@@ -39,7 +37,7 @@ export const loader = async ({ request }: LoaderArgs) => {
         const result = prepareFromPage(drinkPage);
         assertDrinkHeader(result);
         return result;
-      })
+      }),
     ),
   ] as const);
 
@@ -51,7 +49,7 @@ export const loader = async ({ request }: LoaderArgs) => {
       return { title: x.name, color: x.color };
     })
     .filter((alcohol) =>
-      drinker.some((drink) => drink.alcohol.title === alcohol.title)
+      drinker.some((drink) => drink.alcohol.title === alcohol.title),
     );
 
   const drinkerByAlcoholOrder = alcoholOrdered.map((alcohol) => ({
@@ -63,7 +61,7 @@ export const loader = async ({ request }: LoaderArgs) => {
 
   return json(
     { alcoholOrdered, drinker, drinkerByAlcoholOrder, debugData },
-    { headers: config.cacheControlHeaders }
+    { headers: config.cacheControlHeaders },
   );
 };
 
@@ -140,7 +138,7 @@ const DranksAndAlcohol = ({
         }`}
       >
         {drinker.map((drink) => (
-          <div>
+          <div key={drink.Tittel}>
             <span
               className={`${
                 drinker.find((x) => x.groups.includes("⭐️"))?.Tittel ===

@@ -9,7 +9,7 @@ const baseUrl = local ? "http://localhost:3000" : "https://julianjark.no";
 const dranksRequest = await fetch(`${baseUrl}/api/dranks.json`);
 const dranks = await dranksRequest.json();
 const imagesFull = (dranks.dranks as { illustrationUrl: string }[]).map(
-  (x) => x.illustrationUrl
+  (x) => x.illustrationUrl,
 );
 const imagesShort = imagesFull.slice(0, 3);
 const imageSet = imagesFull;
@@ -30,7 +30,7 @@ const fetchImageSize = async (finalUrl: string) => {
     })
     .reduce(
       (acc, x) => ({ ...acc, ...x }),
-      {} as Partial<Record<string, number>>
+      {} as Partial<Record<string, number>>,
     );
 
   const size = (await response.arrayBuffer()).byteLength;
@@ -40,7 +40,7 @@ const fetchImageSize = async (finalUrl: string) => {
 
 const fetchForOptions = async (
   images: readonly string[],
-  options: Parameters<typeof optimizedImageUrl>[1]
+  options: Parameters<typeof optimizedImageUrl>[1],
 ) => {
   let results: {
     size: number;
@@ -50,14 +50,14 @@ const fetchForOptions = async (
   if (mode === "sync")
     for (const url of images) {
       results.push(
-        await fetchImageSize(baseUrl + optimizedImageUrl(url, options))
+        await fetchImageSize(baseUrl + optimizedImageUrl(url, options)),
       );
     }
   else {
     results = await Promise.all(
       images.map((url) =>
-        fetchImageSize(baseUrl + optimizedImageUrl(url, options))
-      )
+        fetchImageSize(baseUrl + optimizedImageUrl(url, options)),
+      ),
     );
   }
 
@@ -65,10 +65,10 @@ const fetchForOptions = async (
   const processTimes = results.map((x) => x.processTime);
 
   const averageSize = Math.round(
-    sizes.reduce((a, b) => a + b, 0) / sizes.length
+    sizes.reduce((a, b) => a + b, 0) / sizes.length,
   );
   const averageProcessTime = Math.round(
-    processTimes.reduce((a, b) => a + b, 0) / processTimes.length
+    processTimes.reduce((a, b) => a + b, 0) / processTimes.length,
   );
   const result = sizes.reduce((acc, x, i) => {
     acc[i] = x;
@@ -84,7 +84,7 @@ const fetchForOptions = async (
 
 const tests: [
   string,
-  [string, NonNullable<Parameters<typeof optimizedImageUrl>[1]>][]
+  [string, NonNullable<Parameters<typeof optimizedImageUrl>[1]>][],
 ][] = [
   [
     "Full size",

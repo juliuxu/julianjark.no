@@ -1,5 +1,7 @@
-import { LinksFunction } from "@remix-run/node";
+import type { LinksFunction } from "@remix-run/node";
+
 import picoCss from "@picocss/pico/css/pico.min.css";
+
 import { CachePurgeAllPagesButton } from "~/components/cache-purge-button";
 
 export const links: LinksFunction = () => [

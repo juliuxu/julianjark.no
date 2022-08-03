@@ -48,12 +48,12 @@ declare module "reveal.js" {
       addEventListener(
         type: string,
         listener: (event: any) => void,
-        useCapture?: boolean
+        useCapture?: boolean,
       ): void;
       removeEventListener(
         type: string,
         listener: (event: any) => void,
-        useCapture?: boolean
+        useCapture?: boolean,
       ): void;
 
       // State Checks

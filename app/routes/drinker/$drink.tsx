@@ -1,21 +1,20 @@
-import {
-  json,
-  MetaFunction,
+import type {
   HeadersFunction,
   LoaderArgs,
+  MetaFunction,
 } from "@remix-run/node";
+import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 
+import { OptimizedNotionImage } from "~/components/notion-components";
+import config from "~/config.server";
 import { findPageBySlugPredicate, getDrinker } from "~/notion/notion";
 import { getBlocksWithChildren } from "~/notion/notion-api.server";
-import { assertItemFound, optimizedImageUrl } from "~/utils";
-
-import config from "~/config.server";
+import { prepare } from "~/packages/notion-drinker/prepare.server";
+import { assertDrink } from "~/packages/notion-drinker/types";
 import NotionRender from "~/packages/notion-render";
 import type { Components as NotionRenderComponents } from "~/packages/notion-render/components";
-import { OptimizedNotionImage } from "~/components/notion-components";
-import { assertDrink } from "~/packages/notion-drinker/types";
-import { prepare } from "~/packages/notion-drinker/prepare.server";
+import { assertItemFound, optimizedImageUrl } from "~/utils";
 
 export const notionRenderComponents: Partial<NotionRenderComponents> = {
   image: OptimizedNotionImage,
@@ -23,7 +22,7 @@ export const notionRenderComponents: Partial<NotionRenderComponents> = {
 
 export const loader = async ({ params }: LoaderArgs) => {
   const page = (await getDrinker()).find(
-    findPageBySlugPredicate(params.drink ?? "")
+    findPageBySlugPredicate(params.drink ?? ""),
   );
   assertItemFound(page);
 
@@ -35,7 +34,7 @@ export const loader = async ({ params }: LoaderArgs) => {
     {
       drink,
     },
-    { headers: config.cacheControlHeadersDynamic(page.last_edited_time) }
+    { headers: config.cacheControlHeadersDynamic(page.last_edited_time) },
   );
 };
 

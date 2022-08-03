@@ -1,4 +1,5 @@
-import { LoaderArgs } from "@remix-run/node";
+import type { LoaderArgs } from "@remix-run/node";
+
 import Stream from "stream";
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 

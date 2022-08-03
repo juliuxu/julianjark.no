@@ -1,16 +1,18 @@
 // https://gist.github.com/jacob-ebey/3a37a86307de9ef22f47aae2e593b56f
 // https://github.com/vercel/next.js/blob/canary/packages/next/server/image-optimizer.ts
-import sharp from "sharp";
-import type { FitEnum } from "sharp";
 import type { LoaderArgs } from "@remix-run/node";
 import { Response } from "@remix-run/node";
+
+import memoizeFs from "memoize-fs";
+import { join as pathJoin } from "path";
+import type { FitEnum } from "sharp";
+import sharp from "sharp";
+
 import {
   getBooleanOrUndefined,
   getNumberOrUndefined,
   getOneOfOrUndefined,
 } from "~/utils";
-import { join as pathJoin } from "path";
-import memoizeFs from "memoize-fs";
 
 const badImageBase64 =
   "R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
@@ -49,7 +51,7 @@ let fetchImage = async (href: string) => {
   const upstreamRes = await fetch(href);
   if (!upstreamRes.ok) {
     throw new Error(
-      `upstream image response failed for ${href} ${upstreamRes.status}`
+      `upstream image response failed for ${href} ${upstreamRes.status}`,
     );
   }
 
@@ -57,13 +59,12 @@ let fetchImage = async (href: string) => {
   const upstreamContentType = upstreamRes.headers.get("Content-Type");
   if (!upstreamContentType?.startsWith("image/")) {
     throw new Error(
-      `The requested resource isn't a valid image for ${href} received ${upstreamContentType}`
+      `The requested resource isn't a valid image for ${href} received ${upstreamContentType}`,
     );
   }
 
   // Buffer
   const upstreamBuffer = Buffer.from(await upstreamRes.arrayBuffer());
-  upstreamBuffer.toJSON;
 
   return { upstreamBuffer, upstreamContentType };
 };
@@ -71,7 +72,7 @@ let fetchImage = async (href: string) => {
 export let processImage = async (
   upstreamBuffer: Buffer,
   upstreamContentType: string,
-  options: ProccessingOptions
+  options: ProccessingOptions,
 ) => {
   // Don't proccess when original is requested
   if (options.original) {
@@ -85,8 +86,6 @@ export let processImage = async (
   const WEBP = "image/webp";
   const PNG = "image/png";
   const JPEG = "image/jpeg";
-  const GIF = "image/gif";
-  const SVG = "image/svg+xml";
 
   // Begin sharp transformation logic
   const transformer = sharp(upstreamBuffer);
@@ -157,7 +156,7 @@ if (process.env.NODE_ENV === "development") {
   });
   const memoAsync = (
     fn: memoizeFs.FnToMemoize,
-    opts: memoizeFs.Options = {}
+    opts: memoizeFs.Options = {},
   ) => {
     const p = memoizer.fn(fn, opts);
     let mfn: memoizeFs.FnToMemoize | undefined = undefined;
@@ -183,7 +182,7 @@ export const loader = async ({ request }: LoaderArgs) => {
   const options: ProccessingOptions = {
     fit: getOneOfOrUndefined(
       ["fill", "contain", "cover", "inside", "outside"],
-      url.searchParams.get("fit")
+      url.searchParams.get("fit"),
     ),
     width: getNumberOrUndefined(url.searchParams.get("width")),
     height: getNumberOrUndefined(url.searchParams.get("height")),
@@ -191,16 +190,16 @@ export const loader = async ({ request }: LoaderArgs) => {
     blur: getNumberOrUndefined(url.searchParams.get("blur")),
     format: getOneOfOrUndefined(
       SUPPORTED_OUTPUT_FORMATS,
-      url.searchParams.get("format")
+      url.searchParams.get("format"),
     ),
 
     original: getBooleanOrUndefined(url.searchParams.get("original")),
     jpegProgressive: getBooleanOrUndefined(
-      url.searchParams.get("jpegProgressive")
+      url.searchParams.get("jpegProgressive"),
     ),
     jpegMozjpeg: getBooleanOrUndefined(url.searchParams.get("jpegMozjpeg")),
     webpEffort: getNumberOrUndefined(
-      url.searchParams.get("webpEffort")
+      url.searchParams.get("webpEffort"),
     ) as ProccessingOptions["webpEffort"],
   };
 
@@ -213,7 +212,7 @@ export const loader = async ({ request }: LoaderArgs) => {
     const { buffer, contentType } = await processImage(
       upstreamBuffer,
       upstreamContentType,
-      options
+      options,
     );
     const processTime = Math.round(performance.now() - startProcessTime);
 

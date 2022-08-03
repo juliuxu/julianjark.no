@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+
 import { CollapsedShikiCode } from "~/packages/notion-shiki-code";
 
 export const isDebugModeFromCookie = (cookieString: string) => {
@@ -26,7 +27,7 @@ const isDebugMode = () => {
 
 export const DebugToggle = () => {
   const onToggle: React.MouseEventHandler<HTMLInputElement> = (
-    e: React.MouseEvent<HTMLInputElement, MouseEvent>
+    e: React.MouseEvent<HTMLInputElement, MouseEvent>,
   ) => {
     setDebugMode((e.target as any).checked);
     document.location.reload();

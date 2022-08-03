@@ -1,20 +1,21 @@
-import {
+import type {
   HeadersFunction,
-  json,
   LoaderArgs,
   MetaFunction,
 } from "@remix-run/node";
+import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
+
 import Debug from "~/components/debug";
+import { maybePrepareDebugData } from "~/components/debug.server";
 import config from "~/config.server";
-import NotionRender from "~/packages/notion-render";
 import { getBlocksWithChildren } from "~/notion/notion-api.server";
+import NotionRender from "~/packages/notion-render";
+import { prepareNotionBlocks } from "~/packages/notion-shiki-code/prepare.server";
 import {
   notionRenderClasses,
   notionRenderComponents,
 } from "./$notionDrivenPage";
-import { prepareNotionBlocks } from "~/packages/notion-shiki-code/prepare.server";
-import { maybePrepareDebugData } from "~/components/debug.server";
 
 export const loader = async ({ request }: LoaderArgs) => {
   const blocks = await getBlocksWithChildren(config.forsidePageId);
@@ -24,7 +25,7 @@ export const loader = async ({ request }: LoaderArgs) => {
       blocks,
       debugData: await maybePrepareDebugData(request, blocks),
     },
-    { headers: config.cacheControlHeaders }
+    { headers: config.cacheControlHeaders },
   );
 };
 export const headers: HeadersFunction = ({ loaderHeaders }) => {

@@ -5,14 +5,15 @@ import {
   getTextFromRichText,
   getTitle,
 } from "~/notion/notion";
-import { DatabasePage } from "~/notion/notion-api.server";
 import type { Block } from "~/notion/notion.types";
+import type { DatabasePage } from "~/notion/notion-api.server";
 import {
   getOneOfOrUndefined,
   rewriteNotionImageUrl,
   takeWhileM,
 } from "~/utils";
-import { Alcohol, Drink, DrinkBody, DrinkHeader } from "./types";
+import type { Drink, DrinkBody, DrinkHeader } from "./types";
+import { Alcohol } from "./types";
 
 export const prepareFromPage = (page: DatabasePage): Partial<DrinkHeader> => {
   // Illustration
@@ -30,7 +31,7 @@ export const prepareFromPage = (page: DatabasePage): Partial<DrinkHeader> => {
   const IllustrasjonPosisjon =
     getOneOfOrUndefined(
       ["top", "center"],
-      getSelect("IllustrasjonPosisjon", page)
+      getSelect("IllustrasjonPosisjon", page),
     ) ?? "center";
 
   // Tittel
@@ -82,7 +83,7 @@ export const prepareFromBlocks = (blocks: Block[]): Partial<DrinkBody> => {
     ) {
       // Recursive
       const recursiveResult = prepareFromBlocks(
-        (block as any)[block.type].children
+        (block as any)[block.type].children,
       );
 
       // Manual merge
@@ -113,12 +114,12 @@ export const prepareFromBlocks = (blocks: Block[]): Partial<DrinkBody> => {
       if (
         headingBlockTypes.includes(block.type) &&
         getTextFromRichText((block as any)[block.type].rich_text).includes(
-          header
+          header,
         )
       ) {
         return takeWhileM(
           blocksInner,
-          (x) => !headingBlockTypes.includes(x.type)
+          (x) => !headingBlockTypes.includes(x.type),
         );
       }
       return undefined;
@@ -135,7 +136,7 @@ export const prepareFromBlocks = (blocks: Block[]): Partial<DrinkBody> => {
 
 export const prepare = (
   page: DatabasePage,
-  blocks: Block[]
+  blocks: Block[],
 ): Partial<Drink> => {
   return {
     ...prepareFromPage(page),

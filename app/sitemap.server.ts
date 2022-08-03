@@ -1,15 +1,16 @@
-import {
-  slugify,
-  getTitle,
-  getPresentasjoner,
-  getNotionDrivenPages,
-  getDrinker,
-} from "~/notion/notion";
-import { DatabasePage, getPage } from "~/notion/notion-api.server";
 import config from "~/config.server";
+import {
+  getDrinker,
+  getNotionDrivenPages,
+  getPresentasjoner,
+  getTitle,
+  slugify,
+} from "~/notion/notion";
+import type { DatabasePage } from "~/notion/notion-api.server";
+import { getPage } from "~/notion/notion-api.server";
 import { meta as indexMeta } from "~/routes/__layout";
-import { meta as presentasjonerMeta } from "~/routes/__layout/presentasjoner/index";
 import { meta as drinkerMeta } from "~/routes/__layout/drinker-old/index";
+import { meta as presentasjonerMeta } from "~/routes/__layout/presentasjoner/index";
 
 export interface Page {
   title: string;
@@ -45,7 +46,7 @@ export const getSitemapTree = async () => {
           .sort()
           .reverse()[0],
         children: resolvedDrinkerPages.map(
-          databasePagesToPage("/drinker/", "routes/drinker/$drink")
+          databasePagesToPage("/drinker/", "routes/drinker/$drink"),
         ),
       },
       {
@@ -59,13 +60,13 @@ export const getSitemapTree = async () => {
         children: resolvedPresentasjonerPages.map(
           databasePagesToPage(
             "/presentasjoner/",
-            "routes/presentasjoner.$presentasjon"
-          )
+            "routes/presentasjoner.$presentasjon",
+          ),
         ),
       },
 
       ...(await notionDrivenPages).map(
-        databasePagesToPage("/", "routes/__layout/$notionDrivenPage")
+        databasePagesToPage("/", "routes/__layout/$notionDrivenPage"),
       ),
     ],
   };

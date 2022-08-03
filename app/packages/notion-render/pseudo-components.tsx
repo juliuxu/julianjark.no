@@ -1,5 +1,6 @@
 import type { Block } from "~/notion/notion.types";
-import { BlockComponentProps, DefaultComponents } from "./components";
+import type { BlockComponentProps } from "./components";
+import { DefaultComponents } from "./components";
 
 // Pseudo blocks
 export interface ListBlock {

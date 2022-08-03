@@ -1,5 +1,7 @@
-import { json, LinksFunction } from "@remix-run/node";
+import type { LinksFunction } from "@remix-run/node";
+import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
+
 import picoCss from "@picocss/pico/css/pico.min.css";
 
 export const links: LinksFunction = () => [

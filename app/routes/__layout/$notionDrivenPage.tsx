@@ -1,30 +1,31 @@
-import {
+import type {
   HeadersFunction,
-  json,
   LoaderArgs,
   MetaFunction,
 } from "@remix-run/node";
+import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
+
+import Debug from "~/components/debug";
+import { maybePrepareDebugData } from "~/components/debug.server";
+import { OptimizedNotionImage } from "~/components/notion-components";
+import config from "~/config.server";
 import {
-  getTitle,
   findPageBySlugPredicate,
   getNotionDrivenPages,
+  getTitle,
 } from "~/notion/notion";
+import { Block } from "~/notion/notion.types";
 import {
   getBlocksWithChildren,
   PageResponse,
 } from "~/notion/notion-api.server";
-import { assertItemFound } from "~/utils";
-import Debug from "~/components/debug";
 import NotionRender from "~/packages/notion-render";
-import { Block } from "~/notion/notion.types";
 import type { Classes as NotionRenderClasses } from "~/packages/notion-render/classes";
 import type { Components as NotionRenderComponents } from "~/packages/notion-render/components";
-import { ShikiNotionCode } from "~/packages/notion-shiki-code/shiki-notion";
 import { prepareNotionBlocks } from "~/packages/notion-shiki-code/prepare.server";
-import config from "~/config.server";
-import { OptimizedNotionImage } from "~/components/notion-components";
-import { maybePrepareDebugData } from "~/components/debug.server";
+import { ShikiNotionCode } from "~/packages/notion-shiki-code/shiki-notion";
+import { assertItemFound } from "~/utils";
 
 // Notion Render Settings
 export const notionRenderClasses: Partial<NotionRenderClasses> = {
@@ -61,7 +62,7 @@ export const loader = async ({
   params: { notionDrivenPage: requestedNotionDrivenPageSlug = "" },
 }: LoaderArgs) => {
   const page = (await getNotionDrivenPages()).find(
-    findPageBySlugPredicate(requestedNotionDrivenPageSlug)
+    findPageBySlugPredicate(requestedNotionDrivenPageSlug),
   );
   assertItemFound(page);
 
@@ -75,7 +76,7 @@ export const loader = async ({
       blocks,
       debugData: await maybePrepareDebugData(request, { page, blocks }),
     },
-    { headers: config.cacheControlHeadersDynamic(page.last_edited_time) }
+    { headers: config.cacheControlHeadersDynamic(page.last_edited_time) },
   );
 };
 export const headers: HeadersFunction = ({ loaderHeaders }) => {

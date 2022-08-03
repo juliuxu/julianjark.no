@@ -1,30 +1,28 @@
-import {
-  LinksFunction,
-  json,
-  MetaFunction,
-  LoaderArgs,
+import { Fragment, useMemo } from "react";
+import type {
   HeadersFunction,
+  LinksFunction,
+  LoaderArgs,
+  MetaFunction,
 } from "@remix-run/node";
+import { json } from "@remix-run/node";
 import {
   Form,
   useLoaderData,
   useSubmit,
   useTransition,
 } from "@remix-run/react";
+
 import Debug from "~/components/debug";
 import { maybePrepareDebugData } from "~/components/debug.server";
 import config from "~/config.server";
+import globalCss from "~/global.css";
 import { getDrinker, getDrinkerDatabase } from "~/notion/notion";
 import { prepareFromPage } from "~/packages/notion-drinker/prepare.server";
-import {
-  Alcohol,
-  assertDrinkHeader,
-  DrinkHeader,
-} from "~/packages/notion-drinker/types";
+import type { Alcohol, DrinkHeader } from "~/packages/notion-drinker/types";
+import { assertDrinkHeader } from "~/packages/notion-drinker/types";
 import tailwind from "~/tailwind.css";
-import globalCss from "~/global.css";
 import { debounce, optimizedImageUrl } from "~/utils";
-import React, { Fragment, useCallback } from "react";
 
 export const links: LinksFunction = () => [
   {
@@ -45,7 +43,7 @@ export const loader = async ({ request }: LoaderArgs) => {
         const result = prepareFromPage(drinkPage);
         assertDrinkHeader(result);
         return result;
-      })
+      }),
     ),
   ] as const);
 
@@ -63,7 +61,7 @@ export const loader = async ({ request }: LoaderArgs) => {
         .trim()
         .replace(/\s+/, " ");
       return searchTargets.some((searchTarget) =>
-        searchTarget.includes(searchString)
+        searchTarget.includes(searchString),
       );
     })
     .filter((x) => {
@@ -80,13 +78,13 @@ export const loader = async ({ request }: LoaderArgs) => {
       return { title: x.name, color: x.color };
     })
     .filter((alcohol) =>
-      drinker.some((drink) => drink.alcohol.title === alcohol.title)
+      drinker.some((drink) => drink.alcohol.title === alcohol.title),
     );
 
   const drinkerByAlcoholOrder = alcoholOrdered.map((alcohol) => ({
     alcohol,
     drinker: drinkerFiltered.filter(
-      (drink) => drink.alcohol.title === alcohol.title
+      (drink) => drink.alcohol.title === alcohol.title,
     ),
   }));
 
@@ -104,9 +102,9 @@ export const loader = async ({ request }: LoaderArgs) => {
     },
     {
       headers: config.cacheControlHeadersDynamic(
-        (drinkerDatabase as any).last_edited_time
+        (drinkerDatabase as any).last_edited_time,
       ),
-    }
+    },
   );
 };
 
@@ -121,7 +119,7 @@ export default function Drinker() {
   const submit = useSubmit();
   const transition = useTransition();
 
-  const submitDebounced = useCallback(debounce(submit, 200), []);
+  const submitDebounced = useMemo(() => debounce(submit, 200), []);
 
   const isSubmitting = transition.state === "submitting";
   const isAlcoholChecked = (alcohol: Alcohol) => {

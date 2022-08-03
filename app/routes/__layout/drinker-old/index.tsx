@@ -1,14 +1,15 @@
-import {
+import type {
   HeadersFunction,
-  json,
   LoaderArgs,
   MetaFunction,
 } from "@remix-run/node";
+import { json } from "@remix-run/node";
 import { Link, useLoaderData } from "@remix-run/react";
-import { getDrinker, getTitle, slugify } from "~/notion/notion";
+
 import Debug from "~/components/debug";
-import config from "~/config.server";
 import { maybePrepareDebugData } from "~/components/debug.server";
+import config from "~/config.server";
+import { getDrinker, getTitle, slugify } from "~/notion/notion";
 
 export const loader = async ({ request }: LoaderArgs) => {
   const drinker = await getDrinker();
@@ -17,7 +18,7 @@ export const loader = async ({ request }: LoaderArgs) => {
       drinker,
       debugData: await maybePrepareDebugData(request, { drinker }),
     },
-    { headers: config.cacheControlHeaders }
+    { headers: config.cacheControlHeaders },
   );
 };
 export const headers: HeadersFunction = ({ loaderHeaders }) => {

@@ -1,9 +1,12 @@
 import { useContext } from "react";
-import { Block } from "~/notion/notion.types";
-import { Classes, EmptyClasses } from "./classes";
-import { Components, DefaultComponents, ExtendedBlock } from "./components";
+
+import type { Block } from "~/notion/notion.types";
+import type { Classes } from "./classes";
+import { EmptyClasses } from "./classes";
+import type { Components, ExtendedBlock } from "./components";
+import { DefaultComponents } from "./components";
 import NotionRenderContext from "./context";
-import { ListBlock } from "./pseudo-components";
+import type { ListBlock } from "./pseudo-components";
 
 const filterUnsupportedBlocks = (components: Components, blocks: Block[]) =>
   blocks.filter((block) => components[block.type] !== undefined);
@@ -69,7 +72,7 @@ export default function NotionRender({ blocks, classes, components }: Props) {
   const supportedBlocks = filterUnsupportedBlocks(finalComponents, blocks);
   const extendedBlocks = extendBlocks(supportedBlocks);
   const renderBlocks = extendedBlocks.map((block) =>
-    renderBlock(finalComponents, block)
+    renderBlock(finalComponents, block),
   );
   if (context === undefined) {
     return (

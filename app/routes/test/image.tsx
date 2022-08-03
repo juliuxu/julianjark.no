@@ -1,5 +1,7 @@
-import { LinksFunction } from "@remix-run/node";
+import type { LinksFunction } from "@remix-run/node";
+
 import picoCss from "@picocss/pico/css/pico.min.css";
+
 import { optimizedImageUrl } from "~/utils";
 
 export const links: LinksFunction = () => [
@@ -18,7 +20,7 @@ export default function CodeTest() {
           <h2>Through image optimzation</h2>
           <img
             src={optimizedImageUrl(
-              "https://images.unsplash.com/photo-1616530940355-351fabd9524b?ixlib=rb-1.2.1&q=85&fm=jpg&crop=entropy&cs=srgb"
+              "https://images.unsplash.com/photo-1616530940355-351fabd9524b?ixlib=rb-1.2.1&q=85&fm=jpg&crop=entropy&cs=srgb",
             )}
           />
         </div>

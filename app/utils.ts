@@ -13,7 +13,7 @@ export function assertItemFound<T>(item: T | undefined): asserts item is T {
 export const rewriteNotionImageUrl = (url: string, pageOrBlockId: string) => {
   // Determine if it's a notion aws url
   const m = url.match(
-    /^(?<awsUrl>https:\/\/.+?secure\.notion-static\.com\/[\w-]+\/.+?)\?/
+    /^(?<awsUrl>https:\/\/.+?secure\.notion-static\.com\/[\w-]+\/.+?)\?/,
   );
   const awsUrl = m?.groups?.awsUrl;
   if (awsUrl === undefined) return url;
@@ -25,7 +25,7 @@ export const rewriteNotionImageUrl = (url: string, pageOrBlockId: string) => {
     cache: "v2",
   });
   const newUrl = `https://www.notion.so/image/${encodeURIComponent(
-    awsUrl
+    awsUrl,
   )}?${optionsParams}`;
 
   return newUrl;
@@ -34,7 +34,7 @@ export const rewriteNotionImageUrl = (url: string, pageOrBlockId: string) => {
 // See api/image.ts
 export const optimizedImageUrl = (
   url: string,
-  options: ProccessingOptions = {}
+  options: ProccessingOptions = {},
 ) => {
   const optionsWithDefaults: ProccessingOptions = {
     // Webp is better for small images
@@ -47,14 +47,14 @@ export const optimizedImageUrl = (
   const optionsParams = new URLSearchParams(
     Object.entries(optionsWithDefaults)
       .filter(([key, value]) => key && value !== undefined)
-      .map(([key, value]) => [key, String(value)])
+      .map(([key, value]) => [key, String(value)]),
   );
 
   return `${imageOptimizeUrl}?src=${encodeURIComponent(url)}&${optionsParams}`;
 };
 
 export function getKeyValueOptions<T extends Record<string, string>>(
-  s: string
+  s: string,
 ): T {
   const options: Record<string, string> = {};
   const optionsList = s.split(" ");
@@ -92,7 +92,7 @@ export const getBooleanOrUndefined = (s?: string | null) => {
 };
 export function getOneOfOrUndefined<T extends string>(
   list: readonly T[],
-  s?: string | null
+  s?: string | null,
 ) {
   if (list.includes(s as any)) return s as T;
   return undefined;

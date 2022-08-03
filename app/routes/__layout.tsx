@@ -1,21 +1,21 @@
-import {
+import type {
   HeadersFunction,
-  json,
   LinksFunction,
   LoaderArgs,
   MetaFunction,
 } from "@remix-run/node";
+import { json } from "@remix-run/node";
 import { Outlet, useLoaderData } from "@remix-run/react";
-import TopLevelMenu, {
-  loader as topLevelMenuLoader,
-} from "~/components/top-level-menu";
 
 import picoCss from "@picocss/pico/css/pico.min.css";
 
-import commonStyles from "~/styles/common.css";
-import codeStyles from "~/styles/code.css";
-import notionRenderStyles from "~/styles/notionRender.css";
+import TopLevelMenu, {
+  loader as topLevelMenuLoader,
+} from "~/components/top-level-menu";
 import config from "~/config.server";
+import codeStyles from "~/styles/code.css";
+import commonStyles from "~/styles/common.css";
+import notionRenderStyles from "~/styles/notionRender.css";
 
 export const links: LinksFunction = () => [
   {
@@ -41,7 +41,7 @@ export const loader = async ({}: LoaderArgs) => {
     {
       ...(await topLevelMenuLoader()),
     },
-    { headers: config.cacheControlHeaders }
+    { headers: config.cacheControlHeaders },
   );
 };
 

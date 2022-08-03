@@ -1,6 +1,8 @@
-import { LoaderArgs } from "@remix-run/node";
+import type { LoaderArgs } from "@remix-run/node";
+
 import config from "~/config.server";
-import { Page, getSitemapTree, flattenDepthFirst } from "~/sitemap.server";
+import type { Page } from "~/sitemap.server";
+import { flattenDepthFirst, getSitemapTree } from "~/sitemap.server";
 
 function pageToEntry(page: Page): string {
   return `
@@ -37,6 +39,6 @@ export const loader = async ({}: LoaderArgs) => {
         "xml-version": "1.0",
         encoding: "UTF-8",
       },
-    }
+    },
   );
 };

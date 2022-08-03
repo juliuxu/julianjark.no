@@ -1,5 +1,5 @@
-import { RichTextItem } from "~/notion/notion.types";
-import { DefaultComponents } from "./components";
+import type { RichTextItem } from "~/notion/notion.types";
+import type { DefaultComponents } from "./components";
 
 type ClassDefintion = {
   root: string;
