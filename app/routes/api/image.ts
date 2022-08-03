@@ -44,39 +44,39 @@ export interface ProccessingOptions {
 
   webpEffort?: 1 | 2 | 3 | 4 | 5 | 6;
 }
-export let fetchAndProccessImage = async (
-  href: string,
-  options: ProccessingOptions
-) => {
-  // Fetch image
-  const startFetchTime = performance.now();
+
+let fetchImage = async (href: string) => {
   const upstreamRes = await fetch(href);
   if (!upstreamRes.ok) {
     throw new Error(
       `upstream image response failed for ${href} ${upstreamRes.status}`
     );
   }
-  const stopFetchTime = performance.now();
-  const fetchTime = Math.round(stopFetchTime - startFetchTime);
 
-  // Parse image
+  // Content type
   const upstreamContentType = upstreamRes.headers.get("Content-Type");
-  const upstreamBuffer = Buffer.from(await upstreamRes.arrayBuffer());
   if (!upstreamContentType?.startsWith("image/")) {
     throw new Error(
       `The requested resource isn't a valid image for ${href} received ${upstreamContentType}`
     );
   }
 
-  const startTransformTime = performance.now();
+  // Buffer
+  const upstreamBuffer = Buffer.from(await upstreamRes.arrayBuffer());
 
+  return { upstreamBuffer, upstreamContentType };
+};
+
+export let processImage = async (
+  upstreamBuffer: Buffer,
+  upstreamContentType: string,
+  options: ProccessingOptions
+) => {
   // Don't proccess when original is requested
   if (options.original) {
     return {
       buffer: upstreamBuffer,
       contentType: upstreamContentType,
-      fetchTime,
-      transformTime: 0,
     };
   }
 
@@ -137,13 +137,9 @@ export let fetchAndProccessImage = async (
   }
 
   const buffer = await transformer.toBuffer();
-  const stopTransformTime = performance.now();
-  const transformTime = Math.round(stopTransformTime - startTransformTime);
   return {
     buffer,
     contentType: outputContentType,
-    fetchTime,
-    transformTime,
   };
 };
 
@@ -203,8 +199,17 @@ export const loader = async ({ request }: LoaderArgs) => {
   };
 
   try {
-    const { buffer, contentType, fetchTime, transformTime } =
-      await fetchAndProccessImage(href, options);
+    const startFetchTime = performance.now();
+    const { upstreamBuffer, upstreamContentType } = await fetchImage(href);
+    const fetchTime = Math.round(performance.now() - startFetchTime);
+
+    const startProcessTime = performance.now();
+    const { buffer, contentType } = await processImage(
+      upstreamBuffer,
+      upstreamContentType,
+      options
+    );
+    const processTime = Math.round(performance.now() - startProcessTime);
 
     // Return the new image
     return new Response(buffer, {
@@ -212,7 +217,7 @@ export const loader = async ({ request }: LoaderArgs) => {
         "Content-Type": contentType,
         "Content-Length": String(buffer.byteLength),
         "Cache-Control": "public, max-age=31536000, immutable",
-        "Server-Timing": `fetch;dur=${fetchTime}, transform;dur=${transformTime}`,
+        "Server-Timing": `fetch;dur=${fetchTime}, process;dur=${processTime}`,
       },
     });
   } catch (error) {
