@@ -111,7 +111,7 @@ const prepare = (page: DatabasePage, blocks: BlockWithChildren[]): Drank => {
     .map((s) => s.trim())
     .map((s) => {
       const regex =
-        /^((?<amount>[\d\.\-]+[\s\w]*?)\s)?(?<mlAmount>\([\d-]+ml\))?\s?(?<title>[A-ZÆØÅ].+?)(\s—\s(?<recommendation>.+))?$/;
+        /^((?<amount>[\d.-]+[\s\w]*?)\s)?(?<mlAmount>\([\d-]+ml\))?\s?(?<title>[A-ZÆØÅ].+?)(\s—\s(?<recommendation>.+))?$/;
       const matches = s.match(regex);
       if (
         matches?.groups === undefined ||

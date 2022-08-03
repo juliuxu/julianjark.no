@@ -26,9 +26,9 @@ function PrismCode({ code, language, theme = "vsDark" }: PrismCodeProps) {
       {({ className, style, tokens, getLineProps, getTokenProps }) => (
         <pre className={className} style={{ ...style, padding: "1rem" }}>
           {tokens.map((line, i) => (
-            <div {...getLineProps({ line, key: i })}>
+            <div key={i} {...getLineProps({ line, key: i })}>
               {line.map((token, key) => (
-                <span {...getTokenProps({ token, key })} />
+                <span key={key} {...getTokenProps({ token, key })} />
               ))}
             </div>
           ))}

@@ -1,4 +1,4 @@
-import type { LoaderArgs } from "@remix-run/node";
+import type { LoaderFunction } from "@remix-run/node";
 
 import config from "~/config.server";
 import type { Page } from "~/sitemap.server";
@@ -16,7 +16,7 @@ function pageToEntry(page: Page): string {
 */
 }
 
-export const loader = async ({}: LoaderArgs) => {
+export const loader: LoaderFunction = async () => {
   const sitemapTree = await getSitemapTree();
   const sitemapContent = flattenDepthFirst(sitemapTree)
     .map(pageToEntry)

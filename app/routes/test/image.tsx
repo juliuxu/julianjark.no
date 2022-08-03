@@ -22,11 +22,15 @@ export default function CodeTest() {
             src={optimizedImageUrl(
               "https://images.unsplash.com/photo-1616530940355-351fabd9524b?ixlib=rb-1.2.1&q=85&fm=jpg&crop=entropy&cs=srgb",
             )}
+            alt=""
           />
         </div>
         <div>
           <h2>Original</h2>
-          <img src="https://images.unsplash.com/photo-1616530940355-351fabd9524b?ixlib=rb-1.2.1&q=85&fm=jpg&crop=entropy&cs=srgb" />
+          <img
+            src="https://images.unsplash.com/photo-1616530940355-351fabd9524b?ixlib=rb-1.2.1&q=85&fm=jpg&crop=entropy&cs=srgb"
+            alt=""
+          />
         </div>
       </div>
     </main>

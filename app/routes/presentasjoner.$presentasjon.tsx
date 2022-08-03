@@ -26,16 +26,8 @@ import {
   getPresentasjoner,
   getTitle,
 } from "~/notion/notion";
-import { Block } from "~/notion/notion.types";
-import {
-  DatabasePage,
-  getBlocksWithChildren,
-} from "~/notion/notion-api.server";
+import { getBlocksWithChildren } from "~/notion/notion-api.server";
 import NotionReveal from "~/packages/notion-reveal";
-import type {
-  PresentationProperties,
-  Slide,
-} from "~/packages/notion-reveal/prepare";
 import {
   parsePresentationProperties,
   prepareSlides,

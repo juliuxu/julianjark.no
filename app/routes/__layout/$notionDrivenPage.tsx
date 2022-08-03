@@ -15,11 +15,7 @@ import {
   getNotionDrivenPages,
   getTitle,
 } from "~/notion/notion";
-import { Block } from "~/notion/notion.types";
-import {
-  getBlocksWithChildren,
-  PageResponse,
-} from "~/notion/notion-api.server";
+import { getBlocksWithChildren } from "~/notion/notion-api.server";
 import NotionRender from "~/packages/notion-render";
 import type { Classes as NotionRenderClasses } from "~/packages/notion-render/classes";
 import type { Components as NotionRenderComponents } from "~/packages/notion-render/components";

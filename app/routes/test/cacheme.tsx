@@ -38,7 +38,7 @@ export default function CacheMe() {
  *
  * curl "https://julianjark.no/cacheme" -H 'Cache-Purge: 1' -I
  */
-const nginxConfig = `
+export const nginxConfig = `
 # Server caching
 
 ## This must be directely inside the http block of the configuration
@@ -58,7 +58,7 @@ etag on;
 
 `;
 
-const onlyNginxConfig = `
+export const onlyNginxConfig = `
 location / {
   include conf.d/include/proxy.conf;
   
@@ -73,7 +73,7 @@ location / {
 }
 `;
 
-const cacheEnabledButControlledByApp = `
+export const cacheEnabledButControlledByApp = `
 location / {
   include conf.d/include/proxy.conf;
   
@@ -86,7 +86,7 @@ location / {
 }
 `;
 
-const cacheEnabledButControlledByAppCustomCacheKey = `
+export const cacheEnabledButControlledByAppCustomCacheKey = `
 location / {
   include conf.d/include/proxy.conf;
   

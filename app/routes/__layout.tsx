@@ -1,7 +1,7 @@
 import type {
   HeadersFunction,
   LinksFunction,
-  LoaderArgs,
+  LoaderFunction,
   MetaFunction,
 } from "@remix-run/node";
 import { json } from "@remix-run/node";
@@ -36,7 +36,7 @@ export const links: LinksFunction = () => [
   },
 ];
 
-export const loader = async ({}: LoaderArgs) => {
+export const loader: LoaderFunction = async () => {
   return json(
     {
       ...(await topLevelMenuLoader()),

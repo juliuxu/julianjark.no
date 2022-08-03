@@ -73,7 +73,7 @@ export default function DrinkView() {
         </div>
         {data.drink.Illustrasjon && (
           <div>
-            <img src={optimizedImageUrl(data.drink.Illustrasjon)} />
+            <img src={optimizedImageUrl(data.drink.Illustrasjon)} alt="" />
           </div>
         )}
       </div>

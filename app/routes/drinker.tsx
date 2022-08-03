@@ -1,4 +1,4 @@
-import type { LinksFunction, LoaderArgs } from "@remix-run/node";
+import type { LinksFunction, LoaderFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { NavLink, Outlet, useLoaderData } from "@remix-run/react";
 
@@ -13,7 +13,7 @@ export const links: LinksFunction = () => [
   },
 ];
 
-export const loader = async ({}: LoaderArgs) => {
+export const loader: LoaderFunction = async () => {
   const drinker = await getDrinker();
 
   return json({ drinker }, { headers: config.cacheControlHeaders });

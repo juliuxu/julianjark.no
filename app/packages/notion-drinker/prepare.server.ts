@@ -13,7 +13,6 @@ import {
   takeWhileM,
 } from "~/utils";
 import type { Drink, DrinkBody, DrinkHeader } from "./types";
-import { Alcohol } from "./types";
 
 export const prepareFromPage = (page: DatabasePage): Partial<DrinkHeader> => {
   // Illustration

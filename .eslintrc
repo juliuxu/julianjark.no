@@ -7,6 +7,9 @@
   ],
   "plugins": ["import", "simple-import-sort"],
   "rules": {
+    "@typescript-eslint/no-unused-vars": "off",
+    "react-hooks/exhaustive-deps": "off",
+
     // Enforces no extra curly braces around string props or children
     "react/jsx-curly-brace-presence": [
       2,

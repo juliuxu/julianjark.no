@@ -103,6 +103,7 @@ export default function DrinkView() {
                     : "object-center"
                 }`}
                 src={optimizedImageUrl(data.drink.Illustrasjon)}
+                alt=""
               />
             </div>
           )}

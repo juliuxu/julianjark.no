@@ -1,6 +1,9 @@
-import type { LinksFunction, LoaderArgs, MetaFunction } from "@remix-run/node";
+import type {
+  LinksFunction,
+  LoaderFunction,
+  MetaFunction,
+} from "@remix-run/node";
 import { json } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
 
 import config from "~/config.server";
 import { getDrinker } from "~/notion/notion";
@@ -13,7 +16,7 @@ export const links: LinksFunction = () => [
   },
 ];
 
-export const loader = async ({}: LoaderArgs) => {
+export const loader: LoaderFunction = async () => {
   const drinker = await getDrinker();
   return json({ drinker }, { headers: config.cacheControlHeaders });
 };
@@ -23,6 +26,5 @@ export const meta: MetaFunction = () => ({
 });
 
 export default function Drinker() {
-  const data = useLoaderData<typeof loader>();
   return <div>Velg en drink</div>;
 }

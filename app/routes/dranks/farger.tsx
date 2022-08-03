@@ -17,7 +17,7 @@ import Debug from "~/components/debug";
 import { maybePrepareDebugData } from "~/components/debug.server";
 import config from "~/config.server";
 import globalCss from "~/global.css";
-import { getDrinker, getDrinkerDatabase } from "~/notion/notion";
+import { getDrinker, getDrinkerDatabase, slugify } from "~/notion/notion";
 import { prepareFromPage } from "~/packages/notion-drinker/prepare.server";
 import type { Alcohol, DrinkHeader } from "~/packages/notion-drinker/types";
 import { assertDrinkHeader } from "~/packages/notion-drinker/types";
@@ -196,7 +196,10 @@ interface DrankCardProps {
 }
 const DrankCard = ({ drank }: DrankCardProps) => {
   return (
-    <a href="#" className="overflow-hidden rounded-md shadow">
+    <a
+      href={`#${slugify(drank.Tittel)}`}
+      className="overflow-hidden rounded-md shadow"
+    >
       <div className="relative pb-[120%] group bg-gradient-to-b from-cyan-400 via-green-200 to-yellow-200">
         {/* <img
           className="absolute w-full h-full object-cover blur-xl"

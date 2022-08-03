@@ -1,4 +1,4 @@
-import type { LoaderArgs } from "@remix-run/node";
+import type { LoaderFunction } from "@remix-run/node";
 
 import Stream from "stream";
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
@@ -42,7 +42,7 @@ const responseStreamFromSomethingThatICanPushTo = () => {
   });
 };
 
-export const loader = ({}: LoaderArgs) => {
+export const loader: LoaderFunction = () => {
   // return responseStreamFromGenerator();
   return responseStreamFromSomethingThatICanPushTo();
 };
