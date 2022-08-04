@@ -1,6 +1,7 @@
 import type { LinksFunction } from "@remix-run/node";
 import { NavLink, Outlet } from "@remix-run/react";
 
+import { slugify } from "~/notion/notion";
 import globalCss from "~/styles/global.css";
 import newLayoutCss from "~/styles/new-layout.css";
 import shikiCodeCss from "~/styles/shiki-code.css";
@@ -39,6 +40,8 @@ export default function NewLayout() {
   );
 }
 
+const menuItems = ["Prosjekter", "Blogg", "Today I Learned"];
+
 const baseUrl = "/new-layout";
 const link = (path: string) => baseUrl + path;
 const Header = () => {
@@ -47,6 +50,11 @@ const Header = () => {
       <NavLink to={link("/")} className="text-4xl">
         Julian Jark
       </NavLink>
+      {menuItems.map((x) => (
+        <NavLink key={x} to={slugify(x)}>
+          {x}
+        </NavLink>
+      ))}
     </nav>
   );
 };
