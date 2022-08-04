@@ -11,6 +11,7 @@ import { getPage } from "~/notion/notion-api.server";
 import { meta as indexMeta } from "~/routes/__layout";
 import { meta as drinkerMeta } from "~/routes/__layout/drinker-old/index";
 import { meta as presentasjonerMeta } from "~/routes/__layout/presentasjoner/index";
+import { flattenDepthFirst } from "./utils";
 
 export interface Page {
   title: string;
@@ -86,21 +87,6 @@ const databasePagesToPage =
       lastmod: page.last_edited_time,
     };
   };
-
-export function flattenDepthFirst<T extends { children: T[] }>(root: T) {
-  const result: T[] = [];
-
-  const stack: T[] = [];
-  let current: T | undefined = root;
-  while (current !== undefined) {
-    const currentWithoutChildren = { ...current, children: [] };
-    result.push(currentWithoutChildren);
-    stack.unshift(...current.children);
-    current = stack.shift();
-  }
-
-  return result;
-}
 
 export const asUrlList = (rootPage: Page): string[] =>
   flattenDepthFirst(rootPage).map((page) => `${config.baseUrl}${page.path}`);

@@ -117,10 +117,25 @@ export function chunked<T>(l: T[], chunkSize: number) {
 }
 
 // TODO: Type this
-export function debounce(fn: (...args: any) => unknown, ms: number) {
+export function debounce<T extends Function>(fn: T, ms: number) {
   let timeout: NodeJS.Timeout;
   return (...args: any) => {
     clearTimeout(timeout);
     timeout = setTimeout(() => fn(...args), ms);
   };
+}
+
+export function flattenDepthFirst<T extends { children: T[] }>(root: T) {
+  const result: T[] = [];
+
+  const stack: T[] = [];
+  let current: T | undefined = root;
+  while (current !== undefined) {
+    const currentWithoutChildren = { ...current, children: [] };
+    result.push(currentWithoutChildren);
+    stack.unshift(...current.children);
+    current = stack.shift();
+  }
+
+  return result;
 }
