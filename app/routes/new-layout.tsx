@@ -1,5 +1,5 @@
 import type { LinksFunction } from "@remix-run/node";
-import { Outlet } from "@remix-run/react";
+import { NavLink, Outlet } from "@remix-run/react";
 
 import globalCss from "~/styles/global.css";
 import newLayoutCss from "~/styles/new-layout.css";
@@ -28,13 +28,25 @@ export const links: LinksFunction = () => [
 export default function NewLayout() {
   return (
     <>
-      <header className="h-20">
-        <h2 className="text-white">hallo</h2>
+      <header className="h-20 container mx-auto px-8 sm:px-16 xl:px-48">
+        <Header />
       </header>
-      <main className="container mx-auto px-8 sm:px-16 xl:px-48 ">
+      <main className="container mx-auto px-8 sm:px-16 xl:px-48 py-10">
         <Outlet />
       </main>
       <footer className="h-10"></footer>
     </>
   );
 }
+
+const baseUrl = "/new-layout";
+const link = (path: string) => baseUrl + path;
+const Header = () => {
+  return (
+    <nav className="text-white flex flex-row items-center h-full">
+      <NavLink to={link("/")} className="text-4xl">
+        Julian Jark
+      </NavLink>
+    </nav>
+  );
+};

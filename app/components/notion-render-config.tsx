@@ -9,7 +9,7 @@ export const notionRenderClasses: Partial<Classes> /*tw*/ = {
   },
   column: { root: "" },
   image: { root: "rounded-lg" },
-  code: { root: "" },
+  code: { root: "text-white" },
 
   color_default: "text-white",
   color_gray: "text-gray-400",
