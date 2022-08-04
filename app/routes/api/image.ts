@@ -8,11 +8,7 @@ import { join as pathJoin } from "path";
 import type { FitEnum } from "sharp";
 import sharp from "sharp";
 
-import {
-  getBooleanOrUndefined,
-  getNumberOrUndefined,
-  getOneOfOrUndefined,
-} from "~/utils";
+import { parseImageProccessingOptions } from "~/utils";
 
 const badImageBase64 =
   "R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
@@ -179,29 +175,9 @@ export const loader = async ({ request }: LoaderArgs) => {
     return badImageResponse();
   }
 
-  const options: ProccessingOptions = {
-    fit: getOneOfOrUndefined(
-      ["fill", "contain", "cover", "inside", "outside"],
-      url.searchParams.get("fit"),
-    ),
-    width: getNumberOrUndefined(url.searchParams.get("width")),
-    height: getNumberOrUndefined(url.searchParams.get("height")),
-    quality: getNumberOrUndefined(url.searchParams.get("quality")),
-    blur: getNumberOrUndefined(url.searchParams.get("blur")),
-    format: getOneOfOrUndefined(
-      SUPPORTED_OUTPUT_FORMATS,
-      url.searchParams.get("format"),
-    ),
-
-    original: getBooleanOrUndefined(url.searchParams.get("original")),
-    jpegProgressive: getBooleanOrUndefined(
-      url.searchParams.get("jpegProgressive"),
-    ),
-    jpegMozjpeg: getBooleanOrUndefined(url.searchParams.get("jpegMozjpeg")),
-    webpEffort: getNumberOrUndefined(
-      url.searchParams.get("webpEffort"),
-    ) as ProccessingOptions["webpEffort"],
-  };
+  const options = parseImageProccessingOptions(
+    Object.fromEntries(url.searchParams),
+  );
 
   try {
     const startFetchTime = performance.now();

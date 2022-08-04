@@ -28,10 +28,13 @@ export const links: LinksFunction = () => [
 export default function NewLayout() {
   return (
     <>
-      <header></header>
+      <header className="h-20">
+        <h2 className="text-white">hallo</h2>
+      </header>
       <main className="container mx-auto px-8 sm:px-16 xl:px-48 ">
         <Outlet />
       </main>
+      <footer className="h-10"></footer>
     </>
   );
 }

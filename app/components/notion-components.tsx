@@ -2,8 +2,8 @@ import { getTextFromRichText } from "~/notion/notion";
 import type { Components as NotionRenderComponents } from "~/packages/notion-render/components";
 import { useNotionRenderContext as ctx } from "~/packages/notion-render/context";
 import {
-  getNumberOrUndefined,
   optimizedImageUrl,
+  parseImageProccessingOptions,
   rewriteNotionImageUrl,
 } from "~/utils";
 
@@ -26,15 +26,12 @@ export const OptimizedNotionImage: NotionRenderComponents["image"] = ({
   const params = Object.fromEntries(
     new URLSearchParams(getTextFromRichText(block.image.caption)),
   );
-  const { unoptimized, width, height, alt, lazy } = params as Partial<
-    typeof params
-  >;
+  const { unoptimized, alt, lazy, ...rest } = params as Partial<typeof params>;
 
-  if (unoptimized !== "true")
-    url = optimizedImageUrl(rewriteNotionImageUrl(url, block.id), {
-      width: getNumberOrUndefined(width),
-      height: getNumberOrUndefined(height),
-    });
+  if (unoptimized !== "true") {
+    const options = parseImageProccessingOptions(rest);
+    url = optimizedImageUrl(rewriteNotionImageUrl(url, block.id), options);
+  }
 
   return (
     <img

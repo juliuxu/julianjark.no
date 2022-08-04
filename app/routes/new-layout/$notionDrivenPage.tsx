@@ -59,7 +59,7 @@ export default function NotionDrivenPage() {
   const data = useLoaderData<typeof loader>();
   return (
     <>
-      <div className="prose prose-invert">
+      <div className="prose prose-invert max-w-full">
         <NotionRender
           components={notionRenderComponents}
           classes={notionRenderClasses}

@@ -53,6 +53,32 @@ export const optimizedImageUrl = (
   return `${imageOptimizeUrl}?src=${encodeURIComponent(url)}&${optionsParams}`;
 };
 
+export const parseImageProccessingOptions = (
+  object: Partial<Record<string, string>>,
+): ProccessingOptions => {
+  return {
+    fit: getOneOfOrUndefined(
+      ["fill", "contain", "cover", "inside", "outside"],
+      object["fit"],
+    ),
+    width: getNumberOrUndefined(object["width"]),
+    height: getNumberOrUndefined(object["height"]),
+    quality: getNumberOrUndefined(object["quality"]),
+    blur: getNumberOrUndefined(object["blur"]),
+    format: getOneOfOrUndefined(
+      ["avif", "webp", "png", "jpeg"],
+      object["format"],
+    ),
+
+    original: getBooleanOrUndefined(object["original"]),
+    jpegProgressive: getBooleanOrUndefined(object["jpegProgressive"]),
+    jpegMozjpeg: getBooleanOrUndefined(object["jpegMozjpeg"]),
+    webpEffort: getNumberOrUndefined(
+      object["webpEffort"],
+    ) as ProccessingOptions["webpEffort"],
+  };
+};
+
 export function getKeyValueOptions<T extends Record<string, string>>(
   s: string,
 ): T {

@@ -9,9 +9,9 @@ export const notionRenderClasses: Partial<Classes> /*tw*/ = {
   },
   column: { root: "" },
   image: { root: "rounded-lg" },
-  code: { root: "prose xl:prose-xl prose-invert" },
+  code: { root: "" },
 
-  color_default: "",
+  color_default: "text-white",
   color_gray: "text-gray-400",
   color_brown: "text-amber-700",
   color_orange: "text-orange-400",
