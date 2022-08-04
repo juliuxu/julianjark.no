@@ -28,12 +28,24 @@ export const OptimizedNotionImage: NotionRenderComponents["image"] = ({
   );
   const { unoptimized, alt, lazy, ...rest } = params as Partial<typeof params>;
 
+  // Safari does not support avif yet
+  let isAvif = false;
+  let nonAvifUrl = "";
   if (unoptimized !== "true") {
     const options = parseImageProccessingOptions(rest);
+    if (options.format === "avif") {
+      isAvif = true;
+      nonAvifUrl = optimizedImageUrl(rewriteNotionImageUrl(url, block.id), {
+        ...options,
+        format: undefined,
+        quality: undefined,
+      });
+    }
+
     url = optimizedImageUrl(rewriteNotionImageUrl(url, block.id), options);
   }
 
-  return (
+  const imgTag = (
     <img
       className={classes.image.root}
       src={url}
@@ -41,4 +53,20 @@ export const OptimizedNotionImage: NotionRenderComponents["image"] = ({
       alt={alt}
     />
   );
+
+  if (isAvif) {
+    return (
+      <picture>
+        <source srcSet={url} type="image/avif" />
+        <img
+          className={classes.image.root}
+          src={nonAvifUrl}
+          loading={lazy !== "false" ? "lazy" : "eager"}
+          alt={alt}
+        />
+      </picture>
+    );
+  }
+
+  return imgTag;
 };
