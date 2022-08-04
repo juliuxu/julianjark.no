@@ -9,7 +9,9 @@ import {
 import type { DatabasePage } from "~/notion/notion-api.server";
 import { getPage } from "~/notion/notion-api.server";
 import { meta as indexMeta } from "~/routes/__layout";
+// import * as Index from "~/routes/__layout";
 import { meta as drinkerMeta } from "~/routes/__layout/drinker-old/index";
+// import * as PresentasjonerIndex from "~/routes/__layout/presentasjoner/index";
 import { meta as presentasjonerMeta } from "~/routes/__layout/presentasjoner/index";
 import { flattenDepthFirst } from "./utils";
 
@@ -20,6 +22,21 @@ export interface Page {
   children: Page[];
   lastmod: string;
 }
+
+// const pages = [
+//   async () => ({
+//     title: Index.meta({} as any).title!,
+//     path: "/",
+//     codePath: "routes/__layout/index",
+//     children: [],
+//   }),
+//   async () => ({
+//     title: PresentasjonerIndex.meta({} as any),
+//     path: "/presentasjoner",
+//     codePath: "routes/__layout/presentasjoner/index",
+//     children: [],
+//   }),
+// ];
 
 export const getSitemapTree = async () => {
   // Initiate async call at once, await them later
