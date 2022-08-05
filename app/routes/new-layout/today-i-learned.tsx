@@ -6,6 +6,7 @@ import type {
 import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 
+import { AnchorHeading } from "~/components/AnchorHeading";
 import Debug from "~/components/debug";
 import { maybePrepareDebugData } from "~/components/debug.server";
 import {
@@ -17,6 +18,7 @@ import {
   getMultiSelect,
   getTitle,
   getTodayILearnedEntries,
+  slugify,
   takeBlocksAfterHeader,
 } from "~/notion/notion";
 import type { Block } from "~/notion/notion.types";
@@ -82,8 +84,14 @@ export default function TodayILearned() {
     <>
       <div lang="no">
         {data.entries.map((entry) => (
-          <article key={entry.title}>
-            <h3 className="text-2xl text-white">{entry.title}</h3>
+          <article key={entry.title} className="">
+            <AnchorHeading
+              as="h3"
+              className="text-3xl text-white"
+              id={slugify(entry.title)}
+            >
+              {entry.title}
+            </AnchorHeading>
             <span className="text-gray-300">
               {new Date(entry.created).toLocaleDateString("no", {
                 weekday: "short",
