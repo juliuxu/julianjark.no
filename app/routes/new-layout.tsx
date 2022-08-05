@@ -1,7 +1,8 @@
-import type { LinksFunction } from "@remix-run/node";
+import type { LinksFunction, MetaFunction } from "@remix-run/node";
 import { NavLink, Outlet } from "@remix-run/react";
 
 import { slugify } from "~/notion/notion";
+import designTokens from "~/styles/design-tokens.json";
 import globalCss from "~/styles/global.css";
 import newLayoutCss from "~/styles/new-layout.css";
 import shikiCodeCss from "~/styles/shiki-code.css";
@@ -25,6 +26,10 @@ export const links: LinksFunction = () => [
     href: newLayoutCss,
   },
 ];
+
+export const meta: MetaFunction = () => ({
+  "theme-color": designTokens.colors.dark,
+});
 
 export default function NewLayout() {
   return (

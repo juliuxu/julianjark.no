@@ -11,6 +11,7 @@ const config = {
   drinkerDatabaseId: "2ae3c50cf7284db19648aefbd688e45d",
   presentasjonerDatabaseId: "3017a0bad8744638b380b3a7aed7dd5e",
   notionDrivenPagesDatabaseId: "f61d11c80e4b40e2a4329cde350bb31a",
+  todayILearnedDatabaseId: "2114376d77f34c0390d81fa606a43fbb",
 
   cacheControlHeaders: {
     "Cache-Control": `public, s-maxage=${60}, stale-while-revalidate=${YEAR_IN_SECONDS}`,

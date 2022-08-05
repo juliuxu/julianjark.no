@@ -8,13 +8,10 @@ import {
   ScrollRestoration,
 } from "@remix-run/react";
 
-import designTokens from "./styles/design-tokens.json";
-
 export const meta: MetaFunction = () => ({
   charset: "utf-8",
   title: "Julian Jark",
   viewport: "width=device-width,initial-scale=1",
-  "theme-color": designTokens.colors.dark,
 });
 
 export const links: LinksFunction = () => [

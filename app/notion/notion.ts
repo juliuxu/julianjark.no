@@ -1,5 +1,6 @@
 import config from "~/config.server";
-import type { RichTextItem } from "./notion.types";
+import { takeWhileM } from "~/utils";
+import type { Block, RichTextItem } from "./notion.types";
 import type { DatabasePage, PageResponse } from "./notion-api.server";
 import { getDatabase, getDatabasePages } from "./notion-api.server";
 
@@ -101,6 +102,9 @@ export const getNotionDrivenPages = async () =>
     filterPublishedPredicate,
   );
 
+export const getTodayILearnedEntries = async () =>
+  await getDatabasePages(config.todayILearnedDatabaseId);
+
 // ENV stuff
 type PublishedEnv = "PUBLISHED" | "DEV" | "UNPUBLISHED";
 const getPublisedProperty = (fromPage: DatabasePage): PublishedEnv => {
@@ -122,4 +126,32 @@ export const filterPublishedPredicate = (page: DatabasePage) => {
   if (getEnv() === "DEV")
     return published === "PUBLISHED" || published === "DEV";
   return false;
+};
+
+// Utils
+export const takeBlocksAfterHeader = (header: string, blocks: Block[]) => {
+  const headingBlockTypes: Block["type"][] = [
+    "heading_1",
+    "heading_2",
+    "heading_3",
+  ];
+  const blocksCopy = blocks.slice();
+  const remainingBlocks: Block[] = [];
+  let takenBlocks: Block[] = [];
+  let block: Block | undefined;
+  while ((block = blocksCopy.shift()) !== undefined) {
+    if (
+      headingBlockTypes.includes(block.type) &&
+      getTextFromRichText((block as any)[block.type].rich_text).includes(header)
+    ) {
+      takenBlocks = takeWhileM(
+        blocksCopy,
+        (x) => !headingBlockTypes.includes(x.type),
+      );
+    } else {
+      remainingBlocks.push(block);
+    }
+  }
+
+  return [takenBlocks, remainingBlocks];
 };

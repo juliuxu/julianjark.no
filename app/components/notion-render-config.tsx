@@ -11,6 +11,8 @@ export const notionRenderClasses: Partial<Classes> /*tw*/ = {
   image: { root: "rounded-lg" },
   code: { root: "text-white" },
 
+  annotation_code: "text-red-500 bg-[#1E1E1E] ring-[#1E1E1E] ring-2 rounded-sm",
+
   color_default: "text-white",
   color_gray: "text-gray-400",
   color_brown: "text-amber-700",

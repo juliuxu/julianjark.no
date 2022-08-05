@@ -13,6 +13,7 @@ import TopLevelMenu, {
 } from "~/components/top-level-menu";
 import config from "~/config.server";
 import commonStyles from "~/styles/common.css";
+import designTokens from "~/styles/design-tokens.json";
 import notionRenderStyles from "~/styles/notionRender.css";
 import codeStyles from "~/styles/shiki-code.css";
 
@@ -46,6 +47,7 @@ export const loader = async () => {
 
 export const meta: MetaFunction = () => ({
   title: "Julian Jark",
+  "theme-color": designTokens.colors.dark,
 });
 
 export const headers: HeadersFunction = () => {

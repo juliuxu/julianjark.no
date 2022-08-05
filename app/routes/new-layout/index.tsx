@@ -28,9 +28,7 @@ export const loader = async ({ request }: LoaderArgs) => {
     { headers: config.cacheControlHeaders },
   );
 };
-export const headers: HeadersFunction = ({ loaderHeaders }) => {
-  return loaderHeaders;
-};
+export const headers: HeadersFunction = ({ loaderHeaders }) => loaderHeaders;
 
 export const meta: MetaFunction = () => ({
   title: "Julian Jark",
