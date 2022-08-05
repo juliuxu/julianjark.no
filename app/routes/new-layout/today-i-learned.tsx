@@ -80,13 +80,18 @@ export default function TodayILearned() {
   const data = useLoaderData<typeof loader>();
   return (
     <>
-      <div>
+      <div lang="no">
         {data.entries.map((entry) => (
           <article key={entry.title}>
             <h3 className="text-2xl text-white">{entry.title}</h3>
-            <caption className="text-gray-300">
-              {new Date(entry.created).toLocaleDateString("no")}
-            </caption>
+            <span className="text-gray-300">
+              {new Date(entry.created).toLocaleDateString("no", {
+                weekday: "short",
+                year: "numeric",
+                month: "long",
+                day: "2-digit",
+              })}
+            </span>
             <div className="prose prose-invert">
               <NotionRender
                 components={notionRenderComponents}
