@@ -4,6 +4,8 @@ interface AnchorHeadingProps extends React.HTMLAttributes<HTMLHeadingElement> {
   children: React.ReactNode;
   className?: string;
 }
+
+// Variant 1: Icon on left side
 export const AnchorHeading = ({
   as: Component,
   children,
@@ -23,3 +25,9 @@ export const AnchorHeading = ({
     </Component>
   );
 };
+
+// Variant 2: Icon on right side
+// TODO
+
+// Variant 3: Whole anchor is a link
+// TODO
