@@ -92,3 +92,20 @@ pre.shiki {
   font-size: 0.7rem;
   opacity: 0.7;
 }
+
+/* Copy */
+.shiki[data-copy]::after {
+  content: "copy";
+  cursor: pointer;
+  position: absolute;
+  right: 8px;
+  top: 4px;
+  font-size: 0.7rem;
+  opacity: 0;
+}
+.shiki[data-copy]:hover:after {
+  opacity: 0.7;
+}
+.shiki[data-copied]::after {
+  content: "✅ copied";
+}
