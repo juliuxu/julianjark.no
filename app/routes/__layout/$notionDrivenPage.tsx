@@ -8,7 +8,7 @@ import { useLoaderData } from "@remix-run/react";
 
 import Debug from "~/components/debug";
 import { maybePrepareDebugData } from "~/components/debug.server";
-import { OptimizedNotionImage } from "~/components/notion-components";
+import { buildOptimizedNotionImage } from "~/components/notion-components";
 import config from "~/config.server";
 import {
   findPageBySlugPredicate,
@@ -50,7 +50,7 @@ export const notionRenderClasses: Partial<NotionRenderClasses> = {
 };
 export const notionRenderComponents: Partial<NotionRenderComponents> = {
   code: ShikiNotionCode,
-  image: OptimizedNotionImage,
+  image: buildOptimizedNotionImage(),
 };
 
 export const loader = async ({

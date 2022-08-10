@@ -88,8 +88,8 @@ export default function TodayILearned() {
   }));
   return (
     <>
-      <div lang="no">
-        <div className="text-white">
+      <div lang="no" className="mx-[10vw]">
+        <div className="text-white flex gap-1 flex-col">
           {entries.map((entry) => (
             <a href={`#${slugify(entry.title)}`} key={entry.title}>
               {entry.title}
@@ -112,12 +112,13 @@ const InlineTodayILearnedEntry = ({ entry }: InlineTodayILearnedEntryProps) => {
   return (
     <article className="">
       <AnchorHeading
-        as="h3"
-        className="text-3xl text-white"
+        as="h2"
+        className="text-white text-3xl"
         id={slugify(entry.title)}
       >
         {entry.title}
       </AnchorHeading>
+
       <span className="text-gray-300">
         {new Date(entry.created).toLocaleDateString("no", {
           weekday: "short",
@@ -126,13 +127,15 @@ const InlineTodayILearnedEntry = ({ entry }: InlineTodayILearnedEntryProps) => {
           day: "2-digit",
         })}
       </span>
-      <div className="prose prose-invert">
+
+      <div className="prose prose-invert max-w-full mx-auto">
         <NotionRender
           components={notionRenderComponents}
           classes={notionRenderClasses}
           blocks={entry.notionBlocks}
         />
       </div>
+
       {entry.references.length > 0 && (
         <ul>
           {entry.references.map((reference) => (

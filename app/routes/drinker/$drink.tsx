@@ -6,7 +6,7 @@ import type {
 import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 
-import { OptimizedNotionImage } from "~/components/notion-components";
+import { buildOptimizedNotionImage } from "~/components/notion-components";
 import config from "~/config.server";
 import { findPageBySlugPredicate, getDrinker } from "~/notion/notion";
 import { getBlocksWithChildren } from "~/notion/notion-api.server";
@@ -17,7 +17,7 @@ import type { Components as NotionRenderComponents } from "~/packages/notion-ren
 import { assertItemFound, optimizedImageUrl } from "~/utils";
 
 export const notionRenderComponents: Partial<NotionRenderComponents> = {
-  image: OptimizedNotionImage,
+  image: buildOptimizedNotionImage(),
 };
 
 export const loader = async ({ params }: LoaderArgs) => {

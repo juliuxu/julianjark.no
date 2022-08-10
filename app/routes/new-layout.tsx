@@ -37,7 +37,7 @@ export default function NewLayout() {
       <header className="h-20 container mx-auto px-8 sm:px-16 xl:px-48">
         <Header />
       </header>
-      <main className="container mx-auto px-8 sm:px-16 xl:px-48 py-10">
+      <main>
         <Outlet />
       </main>
       <footer className="h-10"></footer>

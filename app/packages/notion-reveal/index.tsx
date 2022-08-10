@@ -3,7 +3,7 @@ import { useEffect, useRef } from "react";
 import Reveal from "reveal.js";
 import RevealNotes from "reveal.js/plugin/notes/notes";
 
-import { OptimizedNotionImage } from "~/components/notion-components";
+import { buildOptimizedNotionImage } from "~/components/notion-components";
 import PrismCode from "~/components/prism-code";
 import NotionRender from "~/packages/notion-render";
 import type { Classes as NotionRenderClasses } from "~/packages/notion-render/classes";
@@ -17,7 +17,7 @@ const classes: Partial<NotionRenderClasses> = {
 };
 const components: Partial<NotionRenderComponents> = {
   code: ShikiNotionCode,
-  image: OptimizedNotionImage,
+  image: buildOptimizedNotionImage(),
 };
 
 type Props = PreparedData;

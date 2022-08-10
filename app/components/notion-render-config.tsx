@@ -1,7 +1,7 @@
 import type { Classes } from "~/packages/notion-render/classes";
 import type { Components } from "~/packages/notion-render/components";
 import { ShikiNotionCode } from "~/packages/notion-shiki-code/shiki-notion";
-import { OptimizedNotionImage } from "./notion-components";
+import { buildOptimizedNotionImage } from "./notion-components";
 
 export const notionRenderClasses: Partial<Classes> /*tw*/ = {
   column_list: {
@@ -35,5 +35,5 @@ export const notionRenderClasses: Partial<Classes> /*tw*/ = {
 };
 export const notionRenderComponents: Partial<Components> = {
   code: ShikiNotionCode,
-  image: OptimizedNotionImage,
+  image: buildOptimizedNotionImage(),
 };
