@@ -1,6 +1,11 @@
 import config from "~/config.server";
-import { takeWhileM } from "~/utils";
-import type { Block, RichTextItem } from "./notion.types";
+import { flattenListDepthFirst, takeWhileM } from "~/utils";
+import type {
+  Block,
+  BlockWithChildren,
+  RichTextColor,
+  RichTextItem,
+} from "./notion.types";
 import type { DatabasePage, PageResponse } from "./notion-api.server";
 import { getDatabase, getDatabasePages } from "./notion-api.server";
 
@@ -75,6 +80,79 @@ export const findPageBySlugPredicate =
   (slug: string) => (page: PageResponse | DatabasePage) =>
     slugify(getTitle(page)) === slug;
 
+type HeadingBlocks = Extract<
+  Block,
+  { type: "heading_1" | "heading_2" | "heading_3" }
+>;
+const headingBlockTypes: HeadingBlocks["type"][] = [
+  "heading_1",
+  "heading_2",
+  "heading_3",
+];
+
+export const takeBlocksAfterHeader = (header: string, blocks: Block[]) => {
+  const blocksCopy = blocks.slice();
+  const remainingBlocks: Block[] = [];
+  let takenBlocks: Block[] = [];
+  let block: Block | undefined;
+  while ((block = blocksCopy.shift()) !== undefined) {
+    if (
+      headingBlockTypes.includes(block.type as any) &&
+      getTextFromRichText((block as any)[block.type].rich_text).includes(header)
+    ) {
+      takenBlocks = takeWhileM(
+        blocksCopy,
+        (x) => !headingBlockTypes.includes(x.type as any),
+      );
+    } else {
+      remainingBlocks.push(block);
+    }
+  }
+
+  return [takenBlocks, remainingBlocks];
+};
+
+export interface Heading {
+  title: string;
+  color: RichTextColor;
+  subHeadings: Heading[];
+}
+export const getTableOfContents = (blocks: BlockWithChildren[]) => {
+  const flatBlocks = flattenListDepthFirst(
+    blocks as { children?: any }[],
+  ) as Block[];
+  const headingBlocks = flatBlocks.filter((x) =>
+    headingBlockTypes.includes(x.type as any),
+  ) as HeadingBlocks[];
+
+  const result: Heading[] = [];
+
+  let indents: Heading[][] = [result];
+  for (const headingBlock of headingBlocks) {
+    const heading: Heading = {
+      color: (headingBlock as any)[headingBlock.type].color,
+      title: getTextFromRichText(
+        (headingBlock as any)[headingBlock.type].rich_text,
+      ),
+      subHeadings: [],
+    };
+
+    // Pop out to the proper indent
+    if (headingBlock.type === "heading_1") indents = indents.slice(0, 1);
+    if (headingBlock.type === "heading_2") indents = indents.slice(0, 2);
+    if (headingBlock.type === "heading_3") indents = indents.slice(0, 3);
+
+    // Push self into the correct parent
+    indents[indents.length - 1].push(heading);
+
+    // Increase indent
+    indents.push(heading.subHeadings);
+  }
+
+  return result;
+};
+
+// Application specific
 export const getDrinkerDatabase = async () =>
   await getDatabase(config.drinkerDatabaseId);
 
@@ -120,38 +198,11 @@ const getEnv = () => {
   if (process.env.NODE_ENV === "production") return "PROD";
   else if (process.env.NODE_ENV === "development") return "DEV";
 };
+
 export const filterPublishedPredicate = (page: DatabasePage) => {
   const published = getPublisedProperty(page);
   if (getEnv() === "PROD") return published === "PUBLISHED";
   if (getEnv() === "DEV")
     return published === "PUBLISHED" || published === "DEV";
   return false;
-};
-
-// Utils
-export const takeBlocksAfterHeader = (header: string, blocks: Block[]) => {
-  const headingBlockTypes: Block["type"][] = [
-    "heading_1",
-    "heading_2",
-    "heading_3",
-  ];
-  const blocksCopy = blocks.slice();
-  const remainingBlocks: Block[] = [];
-  let takenBlocks: Block[] = [];
-  let block: Block | undefined;
-  while ((block = blocksCopy.shift()) !== undefined) {
-    if (
-      headingBlockTypes.includes(block.type) &&
-      getTextFromRichText((block as any)[block.type].rich_text).includes(header)
-    ) {
-      takenBlocks = takeWhileM(
-        blocksCopy,
-        (x) => !headingBlockTypes.includes(x.type),
-      );
-    } else {
-      remainingBlocks.push(block);
-    }
-  }
-
-  return [takenBlocks, remainingBlocks];
 };

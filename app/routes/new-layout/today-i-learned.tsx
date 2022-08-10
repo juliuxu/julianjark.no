@@ -14,6 +14,7 @@ import {
   notionRenderComponents,
 } from "~/components/notion-render-config";
 import config from "~/config.server";
+import type { Heading } from "~/notion/notion";
 import {
   getMultiSelect,
   getTitle,
@@ -21,6 +22,7 @@ import {
   slugify,
   takeBlocksAfterHeader,
 } from "~/notion/notion";
+import { getTableOfContents } from "~/notion/notion";
 import type { Block } from "~/notion/notion.types";
 import { getBlocksWithChildren } from "~/notion/notion-api.server";
 import NotionRender from "~/packages/notion-render";
@@ -80,46 +82,66 @@ export const meta: MetaFunction = () => ({
 
 export default function TodayILearned() {
   const data = useLoaderData<typeof loader>();
+  const entries = data.entries.map((x) => ({
+    ...x,
+    created: new Date(x.created),
+  }));
   return (
     <>
       <div lang="no">
-        {data.entries.map((entry) => (
-          <article key={entry.title} className="">
-            <AnchorHeading
-              as="h3"
-              className="text-3xl text-white"
-              id={slugify(entry.title)}
-            >
+        <div className="text-white">
+          {entries.map((entry) => (
+            <a href={`#${slugify(entry.title)}`} key={entry.title}>
               {entry.title}
-            </AnchorHeading>
-            <span className="text-gray-300">
-              {new Date(entry.created).toLocaleDateString("no", {
-                weekday: "short",
-                year: "numeric",
-                month: "long",
-                day: "2-digit",
-              })}
-            </span>
-            <div className="prose prose-invert">
-              <NotionRender
-                components={notionRenderComponents}
-                classes={notionRenderClasses}
-                blocks={entry.notionBlocks}
-              />
-            </div>
-            {entry.references.length > 0 && (
-              <ul>
-                {entry.references.map((reference) => (
-                  <li key={reference}>
-                    <a href={reference}>{reference}</a>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </article>
+            </a>
+          ))}
+        </div>
+        {entries.map((entry) => (
+          <InlineTodayILearnedEntry key={entry.title} entry={entry} />
         ))}
       </div>
       <Debug debugData={data.debugData} />
     </>
   );
 }
+
+interface InlineTodayILearnedEntryProps {
+  entry: TodayILearnedEntry;
+}
+const InlineTodayILearnedEntry = ({ entry }: InlineTodayILearnedEntryProps) => {
+  return (
+    <article className="">
+      <AnchorHeading
+        as="h3"
+        className="text-3xl text-white"
+        id={slugify(entry.title)}
+      >
+        {entry.title}
+      </AnchorHeading>
+      <span className="text-gray-300">
+        {new Date(entry.created).toLocaleDateString("no", {
+          weekday: "short",
+          year: "numeric",
+          month: "long",
+          day: "2-digit",
+        })}
+      </span>
+      <div className="prose prose-invert">
+        <NotionRender
+          components={notionRenderComponents}
+          classes={notionRenderClasses}
+          blocks={entry.notionBlocks}
+        />
+      </div>
+      {entry.references.length > 0 && (
+        <ul>
+          {entry.references.map((reference) => (
+            <li key={reference}>
+              <a href={reference}>{reference}</a>
+            </li>
+          ))}
+        </ul>
+      )}
+    </article>
+  );
+};

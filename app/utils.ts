@@ -151,7 +151,7 @@ export function debounce<T extends Function>(fn: T, ms: number) {
   };
 }
 
-export function flattenDepthFirst<T extends { children: T[] }>(root: T) {
+export function flattenDepthFirst<T extends { children?: T[] }>(root: T) {
   const result: T[] = [];
 
   const stack: T[] = [];
@@ -159,9 +159,15 @@ export function flattenDepthFirst<T extends { children: T[] }>(root: T) {
   while (current !== undefined) {
     const currentWithoutChildren = { ...current, children: [] };
     result.push(currentWithoutChildren);
-    stack.unshift(...current.children);
+    if (current.children) {
+      stack.unshift(...current.children);
+    }
     current = stack.shift();
   }
 
   return result;
+}
+
+export function flattenListDepthFirst<T extends { children?: T[] }>(list: T[]) {
+  return list.flatMap(flattenDepthFirst);
 }
