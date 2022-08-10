@@ -1,7 +1,21 @@
+import type { SelectColor } from "~/notion/notion.types";
 import type { Classes } from "~/packages/notion-render/classes";
 import type { Components } from "~/packages/notion-render/components";
 import { ShikiNotionCode } from "~/packages/notion-shiki-code/shiki-notion";
 import { buildOptimizedNotionImage } from "./notion-components";
+
+export const notionSelectClasses: Record<SelectColor, string> = {
+  default: "text-white",
+  gray: "text-gray-400",
+  brown: "text-amber-700",
+  orange: "text-orange-400",
+  yellow: "text-yellow-400",
+  green: "text-green-400",
+  blue: "text-blue-400",
+  purple: "text-purple-400",
+  pink: "text-pink-400",
+  red: "text-red-400",
+};
 
 export const notionRenderClasses: Partial<Classes> /*tw*/ = {
   column_list: {

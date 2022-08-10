@@ -12,18 +12,17 @@ import { maybePrepareDebugData } from "~/components/debug.server";
 import {
   notionRenderClasses,
   notionRenderComponents,
+  notionSelectClasses,
 } from "~/components/notion-render-config";
 import config from "~/config.server";
-import type { Heading } from "~/notion/notion";
 import {
-  getMultiSelect,
+  getMultiSelectAndColor,
   getTitle,
   getTodayILearnedEntries,
   slugify,
   takeBlocksAfterHeader,
 } from "~/notion/notion";
-import { getTableOfContents } from "~/notion/notion";
-import type { Block } from "~/notion/notion.types";
+import type { Block, SelectColor } from "~/notion/notion.types";
 import { getBlocksWithChildren } from "~/notion/notion-api.server";
 import NotionRender from "~/packages/notion-render";
 import { prepareNotionBlocks } from "~/packages/notion-shiki-code/prepare.server";
@@ -31,7 +30,7 @@ import { prepareNotionBlocks } from "~/packages/notion-shiki-code/prepare.server
 interface TodayILearnedEntry {
   title: string;
   created: Date;
-  tags: string[];
+  tags: { title: string; color: SelectColor }[];
   notionBlocks: Block[];
   references: string[];
 }
@@ -57,7 +56,7 @@ export const loader = async ({ request }: LoaderArgs) => {
       const result: TodayILearnedEntry = {
         title: getTitle(page),
         created: new Date(page.created_time),
-        tags: getMultiSelect("Tags", page) ?? [],
+        tags: getMultiSelectAndColor("Tags", page) ?? [],
         notionBlocks,
         references,
       };
@@ -89,16 +88,18 @@ export default function TodayILearned() {
   return (
     <>
       <div lang="no" className="mx-[10vw]">
-        <div className="text-white flex gap-1 flex-col">
+        <div className="mx-auto max-w-4xl flex flex-col gap-6">
+          <div className="text-white flex gap-1 flex-col">
+            {entries.map((entry) => (
+              <a href={`#${slugify(entry.title)}`} key={entry.title}>
+                {entry.title}
+              </a>
+            ))}
+          </div>
           {entries.map((entry) => (
-            <a href={`#${slugify(entry.title)}`} key={entry.title}>
-              {entry.title}
-            </a>
+            <InlineTodayILearnedEntry key={entry.title} entry={entry} />
           ))}
         </div>
-        {entries.map((entry) => (
-          <InlineTodayILearnedEntry key={entry.title} entry={entry} />
-        ))}
       </div>
       <Debug debugData={data.debugData} />
     </>
@@ -127,6 +128,14 @@ const InlineTodayILearnedEntry = ({ entry }: InlineTodayILearnedEntryProps) => {
           day: "2-digit",
         })}
       </span>
+
+      <div className="flex">
+        {entry.tags.map((x) => (
+          <span key={x.title} className={`${notionSelectClasses[x.color]}`}>
+            {x.title}
+          </span>
+        ))}
+      </div>
 
       <div className="prose prose-invert max-w-full mx-auto">
         <NotionRender

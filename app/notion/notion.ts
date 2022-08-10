@@ -43,13 +43,7 @@ export const getCheckbox = (name: string, fromPage: DatabasePage) => {
   }
   return undefined;
 };
-export const getSelect = (name: string, fromPage: DatabasePage) => {
-  const property = fromPage.properties[name];
-  if (property?.type === "select") {
-    return property.select?.name;
-  }
-  return undefined;
-};
+
 export const getSelectAndColor = (name: string, fromPage: DatabasePage) => {
   const property = fromPage.properties[name];
   if (
@@ -64,14 +58,24 @@ export const getSelectAndColor = (name: string, fromPage: DatabasePage) => {
   }
   return undefined;
 };
+export const getSelect = (name: string, fromPage: DatabasePage) =>
+  getSelectAndColor(name, fromPage)?.title;
 
-export const getMultiSelect = (name: string, fromPage: DatabasePage) => {
+export const getMultiSelectAndColor = (
+  name: string,
+  fromPage: DatabasePage,
+) => {
   const property = fromPage.properties[name];
   if (property?.type === "multi_select") {
-    return property.multi_select.map((x) => x.name);
+    return property.multi_select.map((x) => ({
+      title: x.name,
+      color: x.color,
+    }));
   }
   return undefined;
 };
+export const getMultiSelect = (name: string, fromPage: DatabasePage) =>
+  getMultiSelectAndColor(name, fromPage)?.map((x) => x.title);
 
 export const getTextFromRichText = (richText: RichTextItem[]) =>
   richText.map((richTextBlock) => richTextBlock.plain_text).join("");
