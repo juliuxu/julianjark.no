@@ -90,7 +90,9 @@ export default function TodayILearned() {
       <div lang="no" className="mx-[10vw]">
         <div className="mx-auto max-w-4xl flex flex-col md:flex-row-reverse gap-6">
           <div className="w-full md:w-1/4">
-            <TodayILearnedMenu entries={entries} />
+            <div className="sticky top-32">
+              <TodayILearnedMenu entries={entries} />
+            </div>
           </div>
           <div className="w-full md:w-3/4 flex flex-col gap-4">
             {entries.map((entry) => (
@@ -112,7 +114,7 @@ const TodayILearnedMenu = ({ entries }: TodayILearnedMenuProps) => {
     <div className="flex gap-3 flex-col rounded ring-1 p-2">
       {entries.map((entry) => (
         <a
-          className="text-gray-400 focus:text-white hover:text-white"
+          className="text-gray-400 focus:text-white hover:text-white transition"
           href={`#${slugify(entry.title)}`}
           key={entry.title}
         >
@@ -136,7 +138,7 @@ const InlineTodayILearnedEntry = ({ entry }: InlineTodayILearnedEntryProps) => {
     <article>
       <AnchorHeading
         as="h2"
-        className="text-gray-100 text-3xl"
+        className="text-gray-100 text-3xl scroll-mt-4"
         id={slugify(entry.title)}
       >
         {entry.title}
