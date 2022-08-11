@@ -8,11 +8,11 @@ import {
 } from "~/notion/notion";
 import type { DatabasePage } from "~/notion/notion-api.server";
 import { getPage } from "~/notion/notion-api.server";
-import { meta as indexMeta } from "~/routes/__layout";
+import { meta as indexMeta } from "~/routes/old-layout";
 // import * as Index from "~/routes/__layout";
-import { meta as drinkerMeta } from "~/routes/__layout/drinker-old/index";
+import { meta as drinkerMeta } from "~/routes/old-layout/old-drinker/index";
 // import * as PresentasjonerIndex from "~/routes/__layout/presentasjoner/index";
-import { meta as presentasjonerMeta } from "~/routes/__layout/presentasjoner/index";
+import { meta as presentasjonerMeta } from "~/routes/old-layout/presentasjoner/index";
 import { flattenDepthFirst } from "./utils";
 
 export interface Page {

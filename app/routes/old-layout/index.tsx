@@ -8,14 +8,14 @@ import { useLoaderData } from "@remix-run/react";
 
 import Debug from "~/components/debug";
 import { maybePrepareDebugData } from "~/components/debug.server";
-import {
-  notionRenderClasses,
-  notionRenderComponents,
-} from "~/components/notion-render-config";
 import config from "~/config.server";
 import { getBlocksWithChildren } from "~/notion/notion-api.server";
 import NotionRender from "~/packages/notion-render";
 import { prepareNotionBlocks } from "~/packages/notion-shiki-code/prepare.server";
+import {
+  notionRenderClasses,
+  notionRenderComponents,
+} from "./$notionDrivenPage";
 
 export const loader = async ({ request }: LoaderArgs) => {
   const blocks = await getBlocksWithChildren(config.forsidePageId);
@@ -28,7 +28,9 @@ export const loader = async ({ request }: LoaderArgs) => {
     { headers: config.cacheControlHeaders },
   );
 };
-export const headers: HeadersFunction = ({ loaderHeaders }) => loaderHeaders;
+export const headers: HeadersFunction = ({ loaderHeaders }) => {
+  return loaderHeaders;
+};
 
 export const meta: MetaFunction = () => ({
   title: "Julian Jark",
@@ -38,15 +40,11 @@ export default function Index() {
   const data = useLoaderData<typeof loader>();
   return (
     <>
-      <div className="mx-[5vw]">
-        <div className="max-w-full mx-auto mt-4 prose prose-invert">
-          <NotionRender
-            components={notionRenderComponents}
-            classes={notionRenderClasses}
-            blocks={data.blocks}
-          />
-        </div>
-      </div>
+      <NotionRender
+        components={notionRenderComponents}
+        classes={notionRenderClasses}
+        blocks={data.blocks}
+      />
       <Debug debugData={data.debugData} />
     </>
   );

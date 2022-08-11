@@ -1,71 +1,69 @@
-import type {
-  HeadersFunction,
-  LinksFunction,
-  MetaFunction,
-} from "@remix-run/node";
-import { json } from "@remix-run/node";
-import { Outlet, useLoaderData } from "@remix-run/react";
+import type { LinksFunction, MetaFunction } from "@remix-run/node";
+import { NavLink, Outlet } from "@remix-run/react";
 
-import picoCss from "@picocss/pico/css/pico.min.css";
-
-import TopLevelMenu, {
-  loader as topLevelMenuLoader,
-} from "~/components/top-level-menu";
-import config from "~/config.server";
-import commonStyles from "~/styles/common.css";
+import { slugify } from "~/notion/notion";
 import designTokens from "~/styles/design-tokens.json";
-import notionRenderStyles from "~/styles/notionRender.css";
-import codeStyles from "~/styles/shiki-code.css";
+import globalCss from "~/styles/global.css";
+import newLayoutCss from "~/styles/new-layout.css";
+import shikiCodeCss from "~/styles/shiki-code.css";
+import tailwind from "~/tailwind.css";
 
 export const links: LinksFunction = () => [
   {
     rel: "stylesheet",
-    href: picoCss,
+    href: tailwind,
   },
   {
     rel: "stylesheet",
-    href: commonStyles,
+    href: globalCss,
   },
   {
     rel: "stylesheet",
-    href: codeStyles,
+    href: shikiCodeCss,
   },
   {
     rel: "stylesheet",
-    href: notionRenderStyles,
+    href: newLayoutCss,
   },
 ];
 
-export const loader = async () => {
-  return json(
-    {
-      ...(await topLevelMenuLoader()),
-    },
-    { headers: config.cacheControlHeaders },
-  );
-};
-
 export const meta: MetaFunction = () => ({
-  title: "Julian Jark",
   "theme-color": designTokens.colors.dark,
 });
 
-export const headers: HeadersFunction = () => {
-  return {
-    ...config.cacheControlHeaders,
-  };
-};
-
-export default function Layout() {
-  const data = useLoaderData<typeof loader>();
+export default function NewLayout() {
   return (
     <>
-      <header className="container">
-        <TopLevelMenu sitemapTree={data.sitemapTree} />
+      <header className="h-20 mx-[10vw] md:mx-[5vw]">
+        <div className="mx-auto h-full">
+          <Header />
+        </div>
       </header>
-      <main className="container">
+      <main className="pt-10">
         <Outlet />
       </main>
+      <footer className="h-10"></footer>
     </>
   );
 }
+
+const menuItems = ["🚧 Prosjekter", "🚧 Blogg", "Today I Learned"];
+
+const baseUrl = "/new-layout";
+const link = (path: string) => baseUrl + path;
+const Header = () => {
+  return (
+    <nav className="text-white font-mono flex items-center gap-8 h-full">
+      <NavLink to={link("/")} className="text-3xl">
+        Julian <span className="hidden sm:inline-block">Jark</span>
+      </NavLink>
+      <div className="flex items-center gap-4">
+        {menuItems.map((x) => (
+          <NavLink key={x} to={slugify(x)}>
+            {x}
+          </NavLink>
+        ))}
+      </div>
+    </nav>
+  );
+};

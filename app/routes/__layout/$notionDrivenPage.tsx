@@ -8,7 +8,10 @@ import { useLoaderData } from "@remix-run/react";
 
 import Debug from "~/components/debug";
 import { maybePrepareDebugData } from "~/components/debug.server";
-import { buildOptimizedNotionImage } from "~/components/notion-components";
+import {
+  notionRenderClasses,
+  notionRenderComponents,
+} from "~/components/notion-render-config";
 import config from "~/config.server";
 import {
   findPageBySlugPredicate,
@@ -17,41 +20,8 @@ import {
 } from "~/notion/notion";
 import { getBlocksWithChildren } from "~/notion/notion-api.server";
 import NotionRender from "~/packages/notion-render";
-import type { Classes as NotionRenderClasses } from "~/packages/notion-render/classes";
-import type { Components as NotionRenderComponents } from "~/packages/notion-render/components";
 import { prepareNotionBlocks } from "~/packages/notion-shiki-code/prepare.server";
-import { ShikiNotionCode } from "~/packages/notion-shiki-code/shiki-notion";
 import { assertItemFound } from "~/utils";
-
-// Notion Render Settings
-export const notionRenderClasses: Partial<NotionRenderClasses> = {
-  column_list: { root: "grid" },
-  image: { root: "notion-image" },
-
-  color_default: "color_default",
-  color_gray: "color_gray",
-  color_brown: "color_brown",
-  color_orange: "color_orange",
-  color_yellow: "color_yellow",
-  color_green: "color_green",
-  color_blue: "color_blue",
-  color_purple: "color_purple",
-  color_pink: "color_pink",
-  color_red: "color_red",
-  color_gray_background: "color_gray_background",
-  color_brown_background: "color_brown_background",
-  color_orange_background: "color_orange_background",
-  color_yellow_background: "color_yellow_background",
-  color_green_background: "color_green_background",
-  color_blue_background: "color_blue_background",
-  color_purple_background: "color_purple_background",
-  color_pink_background: "color_pink_background",
-  color_red_background: "color_red_background",
-};
-export const notionRenderComponents: Partial<NotionRenderComponents> = {
-  code: ShikiNotionCode,
-  image: buildOptimizedNotionImage(),
-};
 
 export const loader = async ({
   request,
@@ -89,11 +59,13 @@ export default function NotionDrivenPage() {
   const data = useLoaderData<typeof loader>();
   return (
     <>
-      <NotionRender
-        components={notionRenderComponents}
-        classes={notionRenderClasses}
-        blocks={data.blocks}
-      />
+      <div className="prose prose-invert max-w-full">
+        <NotionRender
+          components={notionRenderComponents}
+          classes={notionRenderClasses}
+          blocks={data.blocks}
+        />
+      </div>
       <Debug debugData={data.debugData} />
     </>
   );
