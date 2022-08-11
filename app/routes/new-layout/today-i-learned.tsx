@@ -92,7 +92,7 @@ export default function TodayILearned() {
           <div className="w-full md:w-1/4">
             <TodayILearnedMenu entries={entries} />
           </div>
-          <div className="w-full md:w-3/4">
+          <div className="w-full md:w-3/4 flex flex-col gap-4">
             {entries.map((entry) => (
               <InlineTodayILearnedEntry key={entry.title} entry={entry} />
             ))}
@@ -165,17 +165,20 @@ const InlineTodayILearnedEntry = ({ entry }: InlineTodayILearnedEntryProps) => {
           classes={notionRenderClasses}
           blocks={entry.notionBlocks}
         />
-      </div>
 
-      {entry.references.length > 0 && (
-        <ul>
-          {entry.references.map((reference) => (
-            <li key={reference}>
-              <a href={reference}>{reference}</a>
-            </li>
-          ))}
-        </ul>
-      )}
+        {entry.references.length > 0 && (
+          <details>
+            <summary className="cursor-pointer">Referanser</summary>
+            <ul className="my-0">
+              {entry.references.map((reference) => (
+                <li key={reference}>
+                  <a href={reference}>{reference}</a>
+                </li>
+              ))}
+            </ul>
+          </details>
+        )}
+      </div>
     </article>
   );
 };
