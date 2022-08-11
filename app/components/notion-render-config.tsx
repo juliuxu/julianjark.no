@@ -4,17 +4,18 @@ import type { Components } from "~/packages/notion-render/components";
 import { ShikiNotionCode } from "~/packages/notion-shiki-code/shiki-notion";
 import { buildOptimizedNotionImage } from "./notion-components";
 
-export const notionSelectClasses: Record<SelectColor, string> = {
-  default: "text-white",
-  gray: "text-gray-400",
-  brown: "text-amber-700",
-  orange: "text-orange-400",
-  yellow: "text-yellow-400",
-  green: "text-green-400",
-  blue: "text-blue-400",
-  purple: "text-purple-400",
-  pink: "text-pink-400",
-  red: "text-red-400",
+const common = `py-1 px-2 rounded`;
+export const notionSelectClasses: Record<SelectColor, string> /*tw*/ = {
+  default: `text-white ${common}`,
+  gray: `text-gray-200 bg-gray-900 ${common}`,
+  brown: `text-amber-200 bg-amber-900 ${common}`,
+  orange: `text-orange-200 bg-orange-900 ${common}`,
+  yellow: `text-yellow-200 bg-yellow-900 ${common}`,
+  green: `text-green-200 bg-green-900 ${common}`,
+  blue: `text-blue-200 bg-blue-900 ${common}`,
+  purple: `text-purple-200 bg-purple-900 ${common}`,
+  pink: `text-pink-200 bg-pink-900 ${common}`,
+  red: `text-red-200 bg-red-900 ${common}`,
 };
 
 export const notionRenderClasses: Partial<Classes> /*tw*/ = {
@@ -27,7 +28,7 @@ export const notionRenderClasses: Partial<Classes> /*tw*/ = {
 
   annotation_code: "text-red-500 bg-[#1E1E1E] ring-[#1E1E1E] ring-2 rounded-sm",
 
-  color_default: "text-white",
+  color_default: "",
   color_gray: "text-gray-400",
   color_brown: "text-amber-700",
   color_orange: "text-orange-400",

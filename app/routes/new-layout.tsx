@@ -34,10 +34,12 @@ export const meta: MetaFunction = () => ({
 export default function NewLayout() {
   return (
     <>
-      <header className="h-20 container mx-auto px-8 sm:px-16 xl:px-48">
-        <Header />
+      <header className="h-20 mx-[10vw]">
+        <div className="mx-auto max-w-4xl h-full">
+          <Header />
+        </div>
       </header>
-      <main>
+      <main className="pt-10">
         <Outlet />
       </main>
       <footer className="h-10"></footer>
@@ -45,21 +47,23 @@ export default function NewLayout() {
   );
 }
 
-const menuItems = ["Prosjekter", "Blogg", "Today I Learned"];
+const menuItems = ["🚧 Prosjekter", "🚧 Blogg", "Today I Learned"];
 
 const baseUrl = "/new-layout";
 const link = (path: string) => baseUrl + path;
 const Header = () => {
   return (
-    <nav className="text-white flex flex-row items-center h-full">
-      <NavLink to={link("/")} className="text-4xl">
-        Julian Jark
+    <nav className="text-white font-mono flex items-center gap-8 h-full">
+      <NavLink to={link("/")} className="text-3xl">
+        Julian <span className="hidden sm:inline-block">Jark</span>
       </NavLink>
-      {menuItems.map((x) => (
-        <NavLink key={x} to={slugify(x)}>
-          {x}
-        </NavLink>
-      ))}
+      <div className="flex items-center gap-4">
+        {menuItems.map((x) => (
+          <NavLink key={x} to={slugify(x)}>
+            {x}
+          </NavLink>
+        ))}
+      </div>
     </nav>
   );
 };

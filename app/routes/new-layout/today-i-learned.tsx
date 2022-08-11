@@ -133,33 +133,36 @@ interface InlineTodayILearnedEntryProps {
 }
 const InlineTodayILearnedEntry = ({ entry }: InlineTodayILearnedEntryProps) => {
   return (
-    <article className="">
+    <article>
       <AnchorHeading
         as="h2"
-        className="text-white text-3xl"
+        className="text-gray-100 text-3xl"
         id={slugify(entry.title)}
       >
         {entry.title}
       </AnchorHeading>
 
-      <span className="text-gray-300">
+      <div className="text-sm text-gray-400 mt-1">
         {new Date(entry.created).toLocaleDateString("no", {
           weekday: "short",
           year: "numeric",
           month: "long",
           day: "2-digit",
         })}
-      </span>
+      </div>
 
-      <div className="flex">
+      <div className="flex mt-2">
         {entry.tags.map((x) => (
-          <span key={x.title} className={`${notionSelectClasses[x.color]}`}>
+          <span
+            key={x.title}
+            className={`text-xs ${notionSelectClasses[x.color]}`}
+          >
             {x.title}
           </span>
         ))}
       </div>
 
-      <div className="prose prose-invert max-w-full mx-auto">
+      <div className="max-w-full mx-auto mt-4 prose prose-invert">
         <NotionRender
           components={notionRenderComponents}
           classes={notionRenderClasses}

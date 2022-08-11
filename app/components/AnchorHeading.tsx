@@ -66,4 +66,4 @@ export const AnchorHeading3 = ({
   );
 };
 
-export const AnchorHeading = AnchorHeading2;
+export const AnchorHeading = AnchorHeading1;
