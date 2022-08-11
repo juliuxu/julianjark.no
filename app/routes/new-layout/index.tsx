@@ -38,11 +38,15 @@ export default function Index() {
   const data = useLoaderData<typeof loader>();
   return (
     <>
-      <NotionRender
-        components={notionRenderComponents}
-        classes={notionRenderClasses}
-        blocks={data.blocks}
-      />
+      <div className="mx-[5vw]">
+        <div className="max-w-full mx-auto mt-4 prose prose-invert">
+          <NotionRender
+            components={notionRenderComponents}
+            classes={notionRenderClasses}
+            blocks={data.blocks}
+          />
+        </div>
+      </div>
       <Debug debugData={data.debugData} />
     </>
   );

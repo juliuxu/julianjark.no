@@ -90,9 +90,7 @@ export default function TodayILearned() {
       <div lang="no" className="mx-[10vw]">
         <div className="mx-auto max-w-4xl flex flex-col md:flex-row-reverse gap-6">
           <div className="w-full md:w-1/4">
-            <div className="sticky top-32">
-              <TodayILearnedMenu entries={entries} />
-            </div>
+            <TodayILearnedMenu entries={entries} />
           </div>
           <div className="w-full md:w-3/4 flex flex-col gap-4">
             {entries.map((entry) => (
