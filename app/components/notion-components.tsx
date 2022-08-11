@@ -40,7 +40,7 @@ export const buildOptimizedNotionImage = (
 
     // Safari does not support avif yet
     let isAvif = false;
-    let nonAvifUrl = "";
+    let nonAvifUrl: string | undefined;
     if (unoptimized !== "true") {
       const options = parseImageProccessingOptions(rest);
       if (options.format === "avif") {
