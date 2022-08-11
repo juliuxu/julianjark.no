@@ -88,23 +88,45 @@ export default function TodayILearned() {
   return (
     <>
       <div lang="no" className="mx-[10vw]">
-        <div className="mx-auto max-w-4xl flex flex-col gap-6">
-          <div className="text-white flex gap-1 flex-col">
+        <div className="mx-auto max-w-4xl flex flex-col md:flex-row-reverse gap-6">
+          <div className="w-full md:w-1/4">
+            <TodayILearnedMenu entries={entries} />
+          </div>
+          <div className="w-full md:w-3/4">
             {entries.map((entry) => (
-              <a href={`#${slugify(entry.title)}`} key={entry.title}>
-                {entry.title}
-              </a>
+              <InlineTodayILearnedEntry key={entry.title} entry={entry} />
             ))}
           </div>
-          {entries.map((entry) => (
-            <InlineTodayILearnedEntry key={entry.title} entry={entry} />
-          ))}
         </div>
       </div>
       <Debug debugData={data.debugData} />
     </>
   );
 }
+
+interface TodayILearnedMenuProps {
+  entries: TodayILearnedEntry[];
+}
+const TodayILearnedMenu = ({ entries }: TodayILearnedMenuProps) => {
+  return (
+    <div className="flex gap-3 flex-col rounded ring-1 p-2">
+      {entries.map((entry) => (
+        <a
+          className="text-gray-400 focus:text-white hover:text-white"
+          href={`#${slugify(entry.title)}`}
+          key={entry.title}
+        >
+          {entry.title}{" "}
+          <div className="text-gray-500 text-sm">
+            {new Date(entry.created).toLocaleDateString("no", {
+              dateStyle: "short",
+            })}
+          </div>
+        </a>
+      ))}
+    </div>
+  );
+};
 
 interface InlineTodayILearnedEntryProps {
   entry: TodayILearnedEntry;
