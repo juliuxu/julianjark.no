@@ -69,9 +69,13 @@ interface Props {
   debugData?: string;
 }
 export default function Debug({ debugData }: Props) {
+  if (!debugData) return null;
   return (
-    <OnlyDebugMode>
-      <CollapsedShikiCode codeHtml={debugData ?? ""} />
-    </OnlyDebugMode>
+    // <OnlyDebugMode>
+    <CollapsedShikiCode
+      titleClassName="text-white"
+      codeHtml={debugData ?? ""}
+    />
+    // </OnlyDebugMode>
   );
 }

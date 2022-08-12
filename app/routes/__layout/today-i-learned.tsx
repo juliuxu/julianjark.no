@@ -48,9 +48,23 @@ export const loader = async ({ request }: LoaderArgs) => {
         blocks,
       );
       const references = referenceBlocks
-        .filter((x) => x.type === "bookmark")
         .map((x) => {
-          return (x as any).bookmark.url;
+          if (x.type === "bookmark") {
+            return x.bookmark.url;
+          }
+          if (x.type === "paragraph") {
+            const firstLink = x.paragraph.rich_text.find(
+              (r) => r.href !== null,
+            );
+            if (firstLink && firstLink.href !== null) {
+              return firstLink.href;
+            }
+          }
+
+          return undefined;
+        })
+        .filter(function <T>(x: T | undefined): x is T {
+          return x !== undefined;
         });
 
       const result: TodayILearnedEntry = {
@@ -172,7 +186,7 @@ const InlineTodayILearnedEntry = ({ entry }: InlineTodayILearnedEntryProps) => {
 
         {entry.references.length > 0 && (
           <details>
-            <summary className="cursor-pointer">Referanser</summary>
+            <summary className="cursor-pointer text-sm">Referanser</summary>
             <ul className="my-0">
               {entry.references.map((reference) => (
                 <li key={reference}>

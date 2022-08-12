@@ -39,15 +39,17 @@ export default function ShikiCode({ codeHtml, className }: Props) {
 type CollapsedShikiCodeProps = Props & {
   open?: boolean;
   title?: React.ReactNode;
+  titleClassName?: string;
 };
 
 export const CollapsedShikiCode = ({
   open,
   title = "Show code",
+  titleClassName,
   ...rest
 }: CollapsedShikiCodeProps) => (
   <details open={open}>
-    <summary>{title}</summary>
+    <summary className={titleClassName}>{title}</summary>
     <ShikiCode {...rest} />
   </details>
 );
