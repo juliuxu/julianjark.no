@@ -6,8 +6,8 @@ import { buildOptimizedNotionImage } from "./notion-components";
 
 const common = `py-1 px-2 rounded`;
 export const notionSelectClasses: Record<SelectColor, string> /*tw*/ = {
-  default: `text-white ${common}`,
-  gray: `text-gray-200 bg-gray-900 ${common}`,
+  default: `text-gray-900 bg-gray-100 ${common}`,
+  gray: `text-gray-900 bg-gray-300 ${common}`,
   brown: `text-amber-200 bg-amber-900 ${common}`,
   orange: `text-orange-200 bg-orange-900 ${common}`,
   yellow: `text-yellow-200 bg-yellow-900 ${common}`,
