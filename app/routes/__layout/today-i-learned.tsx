@@ -76,7 +76,8 @@ export const loader = async ({ request }: LoaderArgs) => {
 };
 
 export const meta: MetaFunction = () => ({
-  title: "Julian Jark",
+  title: "I dag lærte jeg",
+  description: "Her publiserer jeg småting jeg lærer",
 });
 
 export default function TodayILearned() {
@@ -92,7 +93,7 @@ export default function TodayILearned() {
           <div className="w-full md:w-1/4">
             <TodayILearnedMenu entries={entries} />
           </div>
-          <div className="w-full md:w-3/4 flex flex-col gap-4">
+          <div className="w-full md:w-3/4 flex flex-col gap-8">
             {entries.map((entry) => (
               <InlineTodayILearnedEntry key={entry.title} entry={entry} />
             ))}
@@ -136,7 +137,7 @@ const InlineTodayILearnedEntry = ({ entry }: InlineTodayILearnedEntryProps) => {
     <article>
       <AnchorHeading
         as="h2"
-        className="text-gray-100 text-3xl scroll-mt-4"
+        className="text-gray-100 text-3xl scroll-mt-8"
         id={slugify(entry.title)}
       >
         {entry.title}
