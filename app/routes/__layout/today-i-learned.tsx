@@ -127,12 +127,12 @@ const TodayILearnedMenu = ({ entries }: TodayILearnedMenuProps) => {
     <div className="flex gap-3 flex-col rounded ring-1 p-2">
       {entries.map((entry) => (
         <a
-          className="text-gray-400 focus:text-white hover:text-white transition"
+          className="text-gray-300 focus:text-white hover:text-white transition"
           href={`#${slugify(entry.title)}`}
           key={entry.title}
         >
           {entry.title}{" "}
-          <div className="text-gray-500 text-sm">
+          <div className="text-gray-400 text-sm">
             {new Date(entry.created).toLocaleDateString("no", {
               dateStyle: "short",
             })}
