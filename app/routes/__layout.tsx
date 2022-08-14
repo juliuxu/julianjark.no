@@ -34,7 +34,7 @@ export const meta: MetaFunction = () => ({
 export default function NewLayout() {
   return (
     <>
-      <header className="h-20 mx-[10vw] md:mx-[5vw]">
+      <header className="h-20 mx-[5vw]">
         <div className="mx-auto h-full">
           <Header />
         </div>
