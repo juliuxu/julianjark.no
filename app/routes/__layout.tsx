@@ -49,12 +49,10 @@ export default function NewLayout() {
 
 const menuItems = ["🚧 Prosjekter", "🚧 Blogg", "Today I Learned"];
 
-const baseUrl = "/";
-const link = (path: string) => baseUrl + path;
 const Header = () => {
   return (
     <nav className="text-white font-mono flex flex-wrap items-center gap-8 h-full">
-      <NavLink to={link("/")} className="text-3xl" prefetch="intent">
+      <NavLink to="/" className="text-3xl" prefetch="intent">
         Julian <span className="hidden sm:inline-block">Jark</span>
       </NavLink>
       <div className="flex items-center gap-4">
