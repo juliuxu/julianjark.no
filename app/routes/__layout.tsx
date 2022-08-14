@@ -53,7 +53,7 @@ const baseUrl = "/";
 const link = (path: string) => baseUrl + path;
 const Header = () => {
   return (
-    <nav className="text-white font-mono flex items-center gap-8 h-full">
+    <nav className="text-white font-mono flex flex-wrap items-center gap-8 h-full">
       <NavLink to={link("/")} className="text-3xl" prefetch="intent">
         Julian <span className="hidden sm:inline-block">Jark</span>
       </NavLink>

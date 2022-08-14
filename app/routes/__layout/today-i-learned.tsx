@@ -102,7 +102,7 @@ export default function TodayILearned() {
   }));
   return (
     <>
-      <div lang="no" className="mx-[10vw]">
+      <div lang="no" className="mx-[5vw] md:mx-[10vw]">
         <div className="mx-auto max-w-4xl flex flex-col md:flex-row-reverse gap-6">
           <div className="w-full md:w-1/4">
             <TodayILearnedMenu entries={entries} />
