@@ -151,7 +151,7 @@ const InlineTodayILearnedEntry = ({ entry }: InlineTodayILearnedEntryProps) => {
     <article>
       <AnchorHeading
         as="h2"
-        className="text-gray-100 text-3xl scroll-mt-8"
+        className="text-gray-100 text-3xl scroll-mt-4"
         id={slugify(entry.title)}
       >
         {entry.title}
