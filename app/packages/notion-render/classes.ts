@@ -110,9 +110,14 @@ export const EmptyClasses: Classes = {
   },
   table: {
     root: "",
+    thead: "",
+    tbody: "",
   },
   table_row: {
     root: "",
+    td: "",
+    th_row: "",
+    th_column: "",
   },
   embed: {
     root: "",

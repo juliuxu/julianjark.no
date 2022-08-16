@@ -132,7 +132,26 @@ const assertDatabaseResponse = (page: MaybeDatabaseResponse) => {
   throw new Error("passed page is not a DatabaseResponse");
 };
 
-// Cache during development
+// Cache to memory during production
+if (process.env.NODE_ENV === "production" && false) {
+  const inMemoryCache: Partial<Record<string, any>> = {};
+  const inMemoryMemo = (fn: (...args: any[]) => Promise<any>) => {
+    return async (...args: any) => {
+      const key = JSON.stringify(args);
+      if (!(key in inMemoryCache)) {
+        inMemoryCache[key] = await fn(...args);
+      }
+      return inMemoryCache[key];
+    };
+  };
+
+  getPage = inMemoryMemo(getPage);
+  getDatabase = inMemoryMemo(getDatabase);
+  getBlocks = inMemoryMemo(getBlocks);
+  getDatabasePages = inMemoryMemo(getDatabasePages);
+}
+
+// Cache to disk during development
 // Since the notion api is pretty slow,
 // this lets us speed up development significantly when doing rapid design changes
 if (process.env.NODE_ENV === "development") {

@@ -1,3 +1,5 @@
+import { Fragment } from "react";
+
 import type { Block, BlockType, RichTextItem } from "~/notion/notion.types";
 import NotionRender from ".";
 import { useNotionRenderContext as ctx } from "./context";
@@ -18,33 +20,40 @@ export const RichText = ({ richText }: RichTextProps) => {
   if (richText.type === "equation") return null;
 
   const classes = ctx().classes;
+  const color = classes[`color_${richText.annotations.color}`];
 
   let element: JSX.Element;
-  element = (
-    <span className={classes[`color_${richText.annotations.color}`]}>
-      {richText.plain_text}
-    </span>
-  );
+  element = <span className={color}>{richText.plain_text}</span>;
 
   if (richText.annotations.bold) {
     element = (
-      <strong className={classes.annotation_bold}>{richText.plain_text}</strong>
+      <strong className={color + " " + classes.annotation_bold}>
+        {richText.plain_text}
+      </strong>
     );
   } else if (richText.annotations.code) {
     element = (
-      <code className={classes.annotation_code}>{richText.plain_text}</code>
+      <code className={color + " " + classes.annotation_code}>
+        {richText.plain_text}
+      </code>
     );
   } else if (richText.annotations.italic) {
     element = (
-      <em className={classes.annotation_italic}>{richText.plain_text}</em>
+      <em className={color + " " + classes.annotation_italic}>
+        {richText.plain_text}
+      </em>
     );
   } else if (richText.annotations.strikethrough) {
     element = (
-      <s className={classes.annotation_strikethrough}>{richText.plain_text}</s>
+      <s className={color + " " + classes.annotation_strikethrough}>
+        {richText.plain_text}
+      </s>
     );
   } else if (richText.annotations.underline) {
     element = (
-      <u className={classes.annotation_underline}>{richText.plain_text}</u>
+      <u className={color + " " + classes.annotation_underline}>
+        {richText.plain_text}
+      </u>
     );
   }
 
@@ -323,6 +332,83 @@ export const Video = ({ block }: BlockComponentProps) => {
   );
 };
 
+export const Table = ({ block }: BlockComponentProps) => {
+  if (block.type !== "table") return null;
+  if (!block.has_children) return null;
+
+  // block.table.table_width; // antall kolonner
+  // block.table.has_column_header; // marker første kolonne
+  // block.table.has_row_header; // marker første rad
+
+  const children = ((block.table as any).children ?? []) as Block[];
+  let thead: Block | undefined;
+  let tbody: Block[] = [];
+  if (block.table.has_row_header) {
+    thead = children[0];
+    tbody = children.slice(1);
+  } else {
+    tbody = children;
+  }
+
+  return (
+    <table className={ctx().classes.table.root}>
+      {thead && (
+        <thead className={ctx().classes.table.thead}>
+          <TableRow block={thead} isRowHeader />
+        </thead>
+      )}
+      <tbody className={ctx().classes.table.tbody}>
+        {tbody.map((x, i) => (
+          <TableRow
+            key={x.id}
+            block={x}
+            hasColumnHeader={block.table.has_column_header}
+          />
+        ))}
+      </tbody>
+    </table>
+  );
+};
+export const TableRow = ({
+  block,
+  isRowHeader,
+  hasColumnHeader,
+}: BlockComponentProps & {
+  isRowHeader?: boolean;
+  hasColumnHeader?: boolean;
+}) => {
+  if (block.type !== "table_row") return null;
+  return (
+    <tr className={ctx().classes.table_row.root}>
+      {block.table_row.cells.map((cell, i) => {
+        if (isRowHeader) {
+          return (
+            <th key={i} scope="col" className={ctx().classes.table_row.th_row}>
+              <RichTextList richTextList={cell} />
+            </th>
+          );
+        } else if (hasColumnHeader && i === 0) {
+          return (
+            <th
+              key={i}
+              scope="row"
+              className={ctx().classes.table_row.th_column}
+            >
+              <RichTextList richTextList={cell} />
+            </th>
+          );
+        } else {
+          return (
+            <td key={i} className={ctx().classes.table_row.td}>
+              <RichTextList richTextList={cell} />
+            </td>
+          );
+        }
+      })}
+    </tr>
+  );
+};
+
 export type ExtendedBlock = Block | ListBlock;
 export interface BlockComponentProps {
   block: ExtendedBlock;
@@ -358,8 +444,8 @@ export const DefaultComponents: Record<
   column_list: ColumnList,
   column: Column,
   link_to_page: undefined,
-  table: undefined,
-  table_row: undefined,
+  table: Table,
+  table_row: TableRow,
   embed: Embed,
   bookmark: undefined,
   image: Image,
