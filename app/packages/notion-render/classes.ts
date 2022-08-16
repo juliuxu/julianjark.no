@@ -89,6 +89,8 @@ export const EmptyClasses: Classes = {
   },
   callout: {
     root: "",
+    icon: "",
+    content: "",
   },
   divider: {
     root: "",

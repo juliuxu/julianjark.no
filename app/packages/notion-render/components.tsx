@@ -194,8 +194,8 @@ const ToggleInner = ({
   children: React.ReactNode;
 }) => (
   <details className={ctx().classes.toggle.root}>
-    <summary>{heading}</summary>
-    <div>{children}</div>
+    <summary className={ctx().classes.toggle.heading}>{heading}</summary>
+    {children}
   </details>
 );
 export const Toggle = ({ block }: BlockComponentProps) => {
@@ -220,9 +220,20 @@ export const Code = ({ block }: BlockComponentProps) => {
 };
 export const Callout = ({ block }: BlockComponentProps) => {
   if (block.type !== "callout") return null;
+  const classes = ctx().classes;
+
   return (
-    <div className={ctx().classes.callout.root}>
-      <div>
+    <div
+      className={`${classes.callout.root} ${
+        classes.callout[block.callout.color]
+      }`}
+    >
+      {block.callout.icon && (
+        <div className={classes.callout.icon}>
+          {block.callout.icon.type === "emoji" && block.callout.icon.emoji}
+        </div>
+      )}
+      <div className={classes.callout.content}>
         <RichTextList richTextList={block.callout.rich_text} />
       </div>
     </div>
@@ -333,10 +344,7 @@ export const Video = ({ block }: BlockComponentProps) => {
 export const Table = ({ block }: BlockComponentProps) => {
   if (block.type !== "table") return null;
   if (!block.has_children) return null;
-
-  // block.table.table_width; // antall kolonner
-  // block.table.has_column_header; // marker første kolonne
-  // block.table.has_row_header; // marker første rad
+  const classes = ctx().classes;
 
   const children = ((block.table as any).children ?? []) as Block[];
   let thead: Block | undefined;
@@ -349,13 +357,13 @@ export const Table = ({ block }: BlockComponentProps) => {
   }
 
   return (
-    <table className={ctx().classes.table.root}>
+    <table className={classes.table.root}>
       {thead && (
-        <thead className={ctx().classes.table.thead}>
+        <thead className={classes.table.thead}>
           <TableRow block={thead} isRowHeader />
         </thead>
       )}
-      <tbody className={ctx().classes.table.tbody}>
+      <tbody className={classes.table.tbody}>
         {tbody.map((x, i) => (
           <TableRow
             key={x.id}
@@ -376,28 +384,25 @@ export const TableRow = ({
   hasColumnHeader?: boolean;
 }) => {
   if (block.type !== "table_row") return null;
+  const classes = ctx().classes;
   return (
-    <tr className={ctx().classes.table_row.root}>
+    <tr className={classes.table_row.root}>
       {block.table_row.cells.map((cell, i) => {
         if (isRowHeader) {
           return (
-            <th key={i} scope="col" className={ctx().classes.table_row.th_row}>
+            <th key={i} scope="col" className={classes.table_row.th_row}>
               <RichTextList richTextList={cell} />
             </th>
           );
         } else if (hasColumnHeader && i === 0) {
           return (
-            <th
-              key={i}
-              scope="row"
-              className={ctx().classes.table_row.th_column}
-            >
+            <th key={i} scope="row" className={classes.table_row.th_column}>
               <RichTextList richTextList={cell} />
             </th>
           );
         } else {
           return (
-            <td key={i} className={ctx().classes.table_row.td}>
+            <td key={i} className={classes.table_row.td}>
               <RichTextList richTextList={cell} />
             </td>
           );
@@ -405,6 +410,10 @@ export const TableRow = ({
       })}
     </tr>
   );
+};
+export const Database = ({ block }: BlockComponentProps) => {
+  if (block.type !== "child_database") return null;
+  return <div>{block.child_database.title}</div>;
 };
 
 export type ExtendedBlock = Block | ListBlock;

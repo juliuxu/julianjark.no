@@ -26,7 +26,15 @@ export const notionRenderClasses: Partial<Classes> /*tw*/ = {
   image: { root: "rounded-lg" },
   code: { root: "text-white" },
 
-  annotation_code: "text-red-500 bg-[#1E1E1E] ring-[#1E1E1E] ring-2 rounded-sm",
+  callout: {
+    root: "flex gap-2 ring-1 p-4 rounded whitespace-pre-wrap",
+    icon: "text-2xl",
+  },
+
+  toggle: { root: "cursor-default" },
+
+  annotation_code:
+    "text-red-500 bg-[#1E1E1E] ring-[#1E1E1E] ring-2 rounded-sm px-1 before:content-none after:content-none",
 
   color_default: "",
   color_gray: "text-gray-400",
@@ -37,7 +45,7 @@ export const notionRenderClasses: Partial<Classes> /*tw*/ = {
   color_blue: "text-blue-400",
   color_purple: "text-purple-400",
   color_pink: "text-pink-400",
-  color_red: "text-red-400",
+  color_red: "text-red-500",
   color_gray_background: "bg-gray-400",
   color_brown_background: "text-amber-700",
   color_orange_background: "text-orange-400",
