@@ -75,6 +75,12 @@ const prepareNotionBlock = async (
     { lang: language ?? block.code.language, lineOptions },
   );
 
+  // Add foreground and background variables
+  shikiCodeHtml = shikiCodeHtml.replace(
+    `<pre class="shiki" style="`,
+    `<pre class="shiki" style="--shiki-foreground: ${highlighter.getForegroundColor()}; --shiki-background: ${highlighter.getBackgroundColor()};`,
+  );
+
   // We could create our own renderer, probably better
   if (filename) {
     shikiCodeHtml = shikiCodeHtml.replace(

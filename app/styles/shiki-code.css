@@ -35,6 +35,9 @@ pre.shiki {
   padding-right: 1rem;
   position: sticky;
   left: 0;
+
+  color: var(--shiki-foreground);
+  opacity: 0.3;
 }
 .shiki > code,
 .shiki > code > .line,
