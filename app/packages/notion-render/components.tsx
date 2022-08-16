@@ -1,5 +1,3 @@
-import { Fragment } from "react";
-
 import type { Block, BlockType, RichTextItem } from "~/notion/notion.types";
 import NotionRender from ".";
 import { useNotionRenderContext as ctx } from "./context";
