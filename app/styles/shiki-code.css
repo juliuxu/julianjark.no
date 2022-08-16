@@ -37,7 +37,7 @@ pre.shiki {
   left: 0;
 
   color: var(--shiki-foreground);
-  opacity: 0.3;
+  opacity: 0.5;
 }
 .shiki > code,
 .shiki > code > .line,
