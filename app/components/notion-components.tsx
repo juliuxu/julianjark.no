@@ -9,7 +9,10 @@ import {
 } from "~/utils";
 
 type ImageParams = {
+  unoptimized?: "true" | "false";
   loading?: "eager" | "lazy";
+  caption?: string;
+  alt?: string;
 };
 export type OptimizedNotionImageParams = ImageParams & ProccessingOptions;
 
@@ -33,10 +36,10 @@ export const buildOptimizedNotionImage = (
     const params = Object.fromEntries(
       new URLSearchParams(getTextFromRichText(block.image.caption)),
     );
-    const { unoptimized, alt, lazy, ...rest } = {
+    const { unoptimized, loading, caption, alt, ...rest } = {
       ...defaultParams,
       ...params,
-    } as Partial<typeof params>;
+    } as Partial<ImageParams & typeof params>;
 
     // Safari does not support avif yet
     let isAvif = false;
@@ -55,21 +58,30 @@ export const buildOptimizedNotionImage = (
       url = optimizedImageUrl(rewriteNotionImageUrl(url, block.id), options);
     }
 
-    const imgTag = (
+    let imgTag = (
       <img
         className={classes.image.root}
         src={nonAvifUrl ?? url}
-        loading={lazy !== "false" ? "lazy" : "eager"}
+        loading={loading}
         alt={alt}
       />
     );
 
     if (isAvif) {
-      return (
+      imgTag = (
         <picture>
           <source srcSet={url} type="image/avif" />
           {imgTag}
         </picture>
+      );
+    }
+
+    if (caption) {
+      imgTag = (
+        <figure>
+          {imgTag}
+          <figcaption>{caption}</figcaption>
+        </figure>
       );
     }
 

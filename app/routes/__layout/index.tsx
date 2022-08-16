@@ -32,6 +32,7 @@ export const headers: HeadersFunction = ({ loaderHeaders }) => loaderHeaders;
 
 export const meta: MetaFunction = () => ({
   title: "Julian Jark",
+  description: "29 år gammel hundeelsker, drinkmaker, turgår, kodeskriver",
 });
 
 export default function Index() {

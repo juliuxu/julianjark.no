@@ -24,7 +24,6 @@ export const notionRenderClasses: Partial<Classes> /*tw*/ = {
   },
   column: { root: "" },
   image: { root: "rounded-lg" },
-  code: { root: "text-white" },
 
   callout: {
     root: "flex gap-2 ring-1 p-4 rounded whitespace-pre-wrap",
