@@ -31,7 +31,7 @@ export const notionRenderClasses: Partial<Classes> /*tw*/ = {
     icon: "text-2xl",
   },
 
-  toggle: { root: "cursor-default" },
+  toggle: { root: "cursor-default", summary: "[&>*]:inline" },
 
   annotation_code:
     "text-red-500 bg-[#1E1E1E] ring-[#1E1E1E] ring-2 rounded-sm px-1 before:content-none after:content-none",

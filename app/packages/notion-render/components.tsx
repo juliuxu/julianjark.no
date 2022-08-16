@@ -194,7 +194,7 @@ const ToggleInner = ({
   children: React.ReactNode;
 }) => (
   <details className={ctx().classes.toggle.root}>
-    <summary className={ctx().classes.toggle.heading}>{heading}</summary>
+    <summary className={ctx().classes.toggle.summary}>{heading}</summary>
     {children}
   </details>
 );
