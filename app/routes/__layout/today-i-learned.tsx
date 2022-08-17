@@ -26,6 +26,7 @@ import type { Block, SelectColor } from "~/notion/notion.types";
 import { getBlocksWithChildren } from "~/notion/notion-api.server";
 import NotionRender from "~/packages/notion-render";
 import { prepareNotionBlocks } from "~/packages/notion-shiki-code/prepare.server";
+import { commonTailwindStyles } from "./index";
 
 interface TodayILearnedEntry {
   title: string;
@@ -177,7 +178,7 @@ const InlineTodayILearnedEntry = ({ entry }: InlineTodayILearnedEntryProps) => {
         ))}
       </div>
 
-      <div className="max-w-full mx-auto mt-4 prose prose-invert">
+      <div className={`max-w-full mx-auto mt-4 ${commonTailwindStyles.prose}`}>
         <NotionRender
           components={notionRenderComponents}
           classes={notionRenderClasses}

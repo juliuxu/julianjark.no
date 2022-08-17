@@ -58,15 +58,17 @@ export const meta: MetaFunction = () => {
   };
 };
 
-const styles = /*tw*/ {
-  prose: "prose prose-invert prose-figure:my-0 prose-pre:my-0",
+export const commonTailwindStyles = /*tw*/ {
+  prose: "prose prose-slate !prose-invert prose-figure:my-0 prose-pre:my-0",
 };
 export default function Index() {
   const data = useLoaderData<typeof loader>();
   return (
     <>
       <div className="mx-[5vw]">
-        <div className={`max-w-full mx-auto mt-4 ${styles.prose}`}>
+        <div
+          className={`max-w-full mx-auto mt-4 ${commonTailwindStyles.prose}`}
+        >
           <NotionRender
             components={notionRenderComponents}
             classes={notionRenderClasses}
