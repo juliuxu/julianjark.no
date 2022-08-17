@@ -58,12 +58,15 @@ export const meta: MetaFunction = () => {
   };
 };
 
+const styles = /*tw*/ {
+  prose: "prose prose-invert prose-figure:my-0 prose-pre:my-0",
+};
 export default function Index() {
   const data = useLoaderData<typeof loader>();
   return (
     <>
       <div className="mx-[5vw]">
-        <div className="max-w-full mx-auto mt-4 prose prose-invert prose-figure:my-0">
+        <div className={`max-w-full mx-auto mt-4 ${styles.prose}`}>
           <NotionRender
             components={notionRenderComponents}
             classes={notionRenderClasses}
