@@ -63,7 +63,7 @@ export default function Index() {
   return (
     <>
       <div className="mx-[5vw]">
-        <div className="max-w-full mx-auto mt-4 prose prose-invert">
+        <div className="max-w-full mx-auto mt-4 prose prose-invert prose-figure:my-0">
           <NotionRender
             components={notionRenderComponents}
             classes={notionRenderClasses}
