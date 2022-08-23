@@ -1,5 +1,6 @@
 import { Client } from "@notionhq/client";
 import type { ListBlockChildrenResponse } from "@notionhq/client/build/src/api-endpoints";
+import LRU from "lru-cache";
 import memoizeFs from "memoize-fs";
 import { join as pathJoin } from "path";
 
@@ -133,15 +134,17 @@ const assertDatabaseResponse = (page: MaybeDatabaseResponse) => {
 };
 
 // Cache to memory during production
-if (process.env.NODE_ENV === "production" && false) {
-  const inMemoryCache: Partial<Record<string, any>> = {};
+if (process.env.NODE_ENV === "production") {
+  const inMemoryCache = new LRU({ max: 500, ttl: 60 });
   const inMemoryMemo = (fn: (...args: any[]) => Promise<any>) => {
     return async (...args: any) => {
-      const key = JSON.stringify(args);
-      if (!(key in inMemoryCache)) {
-        inMemoryCache[key] = await fn(...args);
-      }
-      return inMemoryCache[key];
+      const key = fn.name + JSON.stringify(args);
+      const cached = inMemoryCache.get(key);
+      if (cached) return cached;
+
+      const fresh = await fn(...args);
+      inMemoryCache.set(key, fresh);
+      return fresh;
     };
   };
 
