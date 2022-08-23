@@ -49,17 +49,14 @@ export const loader = async ({ request }: LoaderArgs) => {
 
   // Filtering
   const searchParams = new URL(request.url).searchParams;
-  const filterSearch = searchParams.get("search");
+  const filterQ = searchParams.get("q");
   const filterAlcohols = searchParams.getAll("alcohols");
 
   const drinkerFiltered = drinker
     .filter((x) => {
-      if (!filterSearch) return true;
+      if (!filterQ) return true;
       const searchTargets = [x.Tittel].map((x) => x.toLowerCase());
-      const searchString = filterSearch
-        .toLowerCase()
-        .trim()
-        .replace(/\s+/, " ");
+      const searchString = filterQ.toLowerCase().trim().replace(/\s+/, " ");
       return searchTargets.some((searchTarget) =>
         searchTarget.includes(searchString),
       );
@@ -97,7 +94,7 @@ export const loader = async ({ request }: LoaderArgs) => {
       drinkerByAlcoholOrder,
       debugData,
 
-      filterSearch,
+      filterQ,
       filterAlcohols,
     },
     {
@@ -130,7 +127,6 @@ export default function Drinker() {
     else if (data.filterAlcohols.includes(alcohol.title)) return true;
     else return false;
   };
-
   return (
     <>
       <div className="flex flex-col gap-10 p-6 bg-gray-50 h-screen">
@@ -146,14 +142,19 @@ export default function Drinker() {
             🍹
           </span>
         </h1>
-        <Form method="get" className="flex flex-col gap-3" action=".">
+        <Form
+          method="get"
+          className="flex flex-col gap-3"
+          action="."
+          id="dranks-filter-form"
+        >
           <input
             className="w-full bg-gray-200 rounded px-3 py-2"
             type="search"
             placeholder="Søk etter dranks"
-            name="search"
+            name="q"
             autoFocus
-            defaultValue={data.filterSearch ?? ""}
+            defaultValue={data.filterQ ?? undefined}
             onChange={(e) =>
               submitDebounced(e.currentTarget.form, { replace: true })
             }
