@@ -168,12 +168,7 @@ export default function Drinker() {
                     className="sr-only peer"
                     value={alcohol.title}
                     checked={isAlcoholChecked(alcohol)}
-                    onChange={(e) => {
-                      console.log(
-                        Object.fromEntries(new FormData(e.currentTarget.form!)),
-                      );
-                      submit(e.currentTarget.form);
-                    }}
+                    onChange={(e) => submit(e.currentTarget.form)}
                   />
                   <span className="rounded px-3 py-2 bg-gray-200 peer-checked:bg-teal-100 peer-focus:ring-teal-200 peer-focus:ring-4">
                     {alcohol.title}
