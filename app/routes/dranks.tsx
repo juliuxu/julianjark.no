@@ -2,17 +2,13 @@ import type { LinksFunction, MetaFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { Link, NavLink, Outlet, useLoaderData } from "@remix-run/react";
 
-import config from "~/config.server";
-import { getFileUrl, getText, getTitle } from "~/notion/notion";
-import { getDatabasePages } from "~/notion/notion-api.server";
+import { OptimizedImage } from "~/components/optimized-image";
+import type { ImageResource } from "~/notion/notion";
+import { fetchDranksImageResources } from "~/notion/notion";
 import fontComico from "~/styles/font-comico.css";
 import fontSatoshi from "~/styles/font-satoshi.css";
 import tailwind from "~/tailwind.css";
-import {
-  assertContainsItems,
-  optimizedImageUrl,
-  rewriteNotionImageUrl,
-} from "~/utils";
+import { optimizedImageUrl } from "~/utils";
 
 export const links: LinksFunction = () => [
   {
@@ -33,37 +29,11 @@ export const meta: MetaFunction = () => ({
   "theme-color": "#F9A613",
 });
 
-interface Image {
-  url: string;
-  alt: string;
-}
-
 export const loader = async () => {
-  const imageNames = ["sitroner", "last-ned-fra-app-store"] as const;
-
-  const resources = await getDatabasePages(
-    config.resurserDatabaseId,
-    undefined,
-    {
-      or: imageNames.map((name) => ({
-        property: "Navn",
-        title: {
-          equals: name,
-        },
-      })),
-    },
-  );
-  const images = resources.reduce((acc, x) => {
-    const name = getTitle(x);
-    const url = getFileUrl("Bilde", x);
-    if (url === undefined)
-      throw new Error(`no image resource for name ${name}`);
-    const alt = getText("Alt", x);
-    if (alt === undefined) throw new Error(`no alt for name ${name}`);
-    acc[name] = { url: rewriteNotionImageUrl(url, x.id), alt };
-    return acc;
-  }, {} as Record<string, Image>);
-  assertContainsItems(imageNames, images);
+  const images = await fetchDranksImageResources([
+    "sitroner",
+    "last-ned-fra-app-store",
+  ]);
 
   return json({ images });
 };
@@ -76,7 +46,7 @@ export default function DranksLayout() {
   return (
     <div className="flex flex-col min-h-screen font-satoshi">
       <Header />
-      <main className="flex flex-grow">
+      <main className="flex-grow">
         <Outlet />
       </main>
       <Footer images={data.images} />
@@ -126,45 +96,24 @@ export const Header = () => {
 };
 
 interface FooterProps {
-  images: Record<"sitroner" | "last-ned-fra-app-store", Image>;
+  images: Record<"sitroner" | "last-ned-fra-app-store", ImageResource>;
 }
 export const Footer = ({ images }: FooterProps) => {
   return (
-    <footer className="bg-orange h-72 flex w-full px-6 sm:px-16 md:px-32">
+    <footer className="bg-orange h-72 flex w-full px-6 sm:px-16 md:px-32 mt-14">
       <div className="flex-grow" />
       <div className="flex flex-col justify-between">
         <div className="-mt-12">
           <OptimizedImage
-            src={images.sitroner.url}
-            alt={images.sitroner.alt}
+            {...images["sitroner"]}
             className="w-36 rotate-6 -top-12"
           />
         </div>
         <a href="#">
-          <OptimizedImage
-            src={images["last-ned-fra-app-store"].url}
-            alt={images["last-ned-fra-app-store"].alt}
-          />
+          <OptimizedImage {...images["last-ned-fra-app-store"]} />
         </a>
         <div />
       </div>
     </footer>
   );
-};
-
-type OptimizedImageProps = {
-  src: string;
-} & React.DetailedHTMLProps<
-  React.ImgHTMLAttributes<HTMLImageElement>,
-  HTMLImageElement
->;
-const OptimizedImage = ({ src, ...rest }: OptimizedImageProps) => {
-  let url = src;
-
-  // Optimize Image
-  url = optimizedImageUrl(url);
-
-  // TODO: Screen size optimizations
-
-  return <img src={url} alt={rest.alt} {...rest} />;
 };

@@ -1,5 +1,10 @@
 import config from "~/config.server";
-import { flattenListDepthFirst, takeWhileM } from "~/utils";
+import {
+  assertContainsItems,
+  flattenListDepthFirst,
+  rewriteNotionImageUrl,
+  takeWhileM,
+} from "~/utils";
 import type {
   Block,
   BlockWithChildren,
@@ -224,3 +229,37 @@ export const filterPublishedPredicate = (page: DatabasePage) => {
     return published === "PUBLISHED" || published === "DEV";
   return false;
 };
+
+export interface ImageResource {
+  src: string;
+  alt: string;
+}
+export async function fetchDranksImageResources<T extends string>(
+  names: T[],
+): Promise<Record<T, ImageResource>> {
+  const resources = await getDatabasePages(
+    config.resurserDatabaseId,
+    undefined,
+    {
+      or: names.map((name) => ({
+        property: "Navn",
+        title: {
+          equals: name,
+        },
+      })),
+    },
+  );
+  const images = resources.reduce((acc, x) => {
+    const name = getTitle(x);
+    const url = getFileUrl("Bilde", x);
+    if (url === undefined)
+      throw new Error(`no image resource for name ${name}`);
+    const alt = getText("Alt", x);
+    if (alt === undefined) throw new Error(`no alt for name ${name}`);
+    acc[name] = { src: rewriteNotionImageUrl(url, x.id), alt };
+    return acc;
+  }, {} as Record<string, ImageResource>);
+  assertContainsItems(names, images);
+
+  return images;
+}
