@@ -148,6 +148,24 @@ if (process.env.NODE_ENV === "production") {
     };
   };
 
+  // const inMemoryMemo2 = (fn: (...args: any[]) => Promise<any>) => {
+  //   const inMemoryCache = new LRU({
+  //     max: 500,
+  //     ttl: 60,
+  //     allowStale: true,
+  //     fetchMethod: fn,
+  //   });
+  //   return async (...args: any) => {
+  //     const key = fn.name + JSON.stringify(args);
+  //     const cached = inMemoryCache.get(key);
+  //     if (cached) return cached;
+
+  //     const fresh = await fn(...args);
+  //     inMemoryCache.set(key, fresh);
+  //     return fresh;
+  //   };
+  // };
+
   getPage = inMemoryMemo(getPage);
   getDatabase = inMemoryMemo(getDatabase);
   getBlocks = inMemoryMemo(getBlocks);

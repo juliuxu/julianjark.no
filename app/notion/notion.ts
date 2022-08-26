@@ -29,6 +29,20 @@ export const getTitle = (fromPage: PageResponse | DatabasePage) => {
     throw new Error("Could not get title from passed notion page");
   return title.title[0].plain_text;
 };
+export const getFileUrl = (name: string, fromPage: DatabasePage) => {
+  const property = fromPage.properties[name];
+  if (property?.type === "files") {
+    if (property.files.length === 0) return undefined;
+
+    const file = property.files[0];
+    if (file?.type === "external") {
+      return file.external.url;
+    } else if (file.type === "file") {
+      return file.file.url;
+    }
+  }
+  return undefined;
+};
 export const getText = (name: string, fromPage: DatabasePage) => {
   const property = fromPage.properties[name];
   if (property?.type === "rich_text") {

@@ -13,6 +13,9 @@ const config = {
   notionDrivenPagesDatabaseId: "f61d11c80e4b40e2a4329cde350bb31a",
   todayILearnedDatabaseId: "2114376d77f34c0390d81fa606a43fbb",
 
+  // Dranks
+  resurserDatabaseId: "12b68d0b65834a4b8419287f83dcd874",
+
   cacheControlHeaders: {
     "Cache-Control": `public, s-maxage=${60}, stale-while-revalidate=${YEAR_IN_SECONDS}`,
   },

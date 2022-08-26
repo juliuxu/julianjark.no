@@ -65,27 +65,28 @@ let fetchImage = async (href: string) => {
   return { upstreamBuffer, upstreamContentType };
 };
 
+const AVIF = "image/avif";
+const WEBP = "image/webp";
+const PNG = "image/png";
+const JPEG = "image/jpeg";
+const SVG = "image/svg+xml";
+
 export let processImage = async (
   upstreamBuffer: Buffer,
   upstreamContentType: string,
   options: ProccessingOptions,
 ) => {
   // Don't proccess when original is requested
-  if (options.original) {
+  if (options.original || upstreamContentType === SVG) {
     return {
       buffer: upstreamBuffer,
       contentType: upstreamContentType,
     };
   }
 
-  const AVIF = "image/avif";
-  const WEBP = "image/webp";
-  const PNG = "image/png";
-  const JPEG = "image/jpeg";
-
   // Begin sharp transformation logic
   const transformer = sharp(upstreamBuffer);
-  transformer.rotate();
+  // transformer.rotate();
 
   // Resize if requested
   const { width: actualWidth, height: actualHeight } =
@@ -114,22 +115,26 @@ export let processImage = async (
     transformer.blur(options.blur);
   }
 
-  // Always optimize
-  const quality = options.quality ?? 75;
-  const outputContentType =
-    imageFormatToContentType(options.format) ?? upstreamContentType;
-  if (outputContentType === WEBP) {
-    transformer.webp({ quality, effort: options.webpEffort });
-  } else if (outputContentType === AVIF) {
-    transformer.avif({ quality });
-  } else if (outputContentType === JPEG) {
-    transformer.jpeg({
-      quality,
-      mozjpeg: options.jpegMozjpeg ?? true,
-      progressive: options.jpegProgressive,
-    });
-  } else if (outputContentType === PNG) {
-    transformer.png({ quality });
+  let outputContentType = upstreamContentType;
+
+  const shouldOptimize = true;
+  if (shouldOptimize) {
+    const quality = options.quality ?? 75;
+    outputContentType =
+      imageFormatToContentType(options.format) ?? upstreamContentType;
+    if (outputContentType === WEBP) {
+      transformer.webp({ quality, effort: options.webpEffort });
+    } else if (outputContentType === AVIF) {
+      transformer.avif({ quality });
+    } else if (outputContentType === JPEG) {
+      transformer.jpeg({
+        quality,
+        mozjpeg: options.jpegMozjpeg ?? true,
+        progressive: options.jpegProgressive,
+      });
+    } else if (outputContentType === PNG) {
+      transformer.png({ quality });
+    }
   }
 
   const buffer = await transformer.toBuffer();

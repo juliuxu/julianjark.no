@@ -7,6 +7,18 @@ export function assertItemFound<T>(item: T | undefined): asserts item is T {
     });
 }
 
+export function assertContainsItems<K extends string, V, T extends K>(
+  properties: readonly T[],
+  record: Record<K, V> | Record<T, V>,
+): asserts record is Record<T, V> {
+  const s = new Set(properties);
+  Object.keys(record).forEach((key) => {
+    if (!s.has(key as any)) {
+      throw new Error(`${key} is missing`);
+    }
+  });
+}
+
 // Rewrite secure notion image urls
 // The downside of this is that the page/block needs to be public
 // Ok for my use-case
