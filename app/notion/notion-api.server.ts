@@ -135,7 +135,7 @@ const assertDatabaseResponse = (page: MaybeDatabaseResponse) => {
 
 // Cache to memory during production
 if (process.env.NODE_ENV === "production") {
-  const inMemoryCache = new LRU({ max: 500, ttl: 60 * 60 });
+  const inMemoryCache = new LRU({ max: 500, ttl: 1000 * 60 });
   const inMemoryMemo = (fn: (...args: any[]) => Promise<any>) => {
     return async (...args: any) => {
       const key = fn.name + JSON.stringify(args);
