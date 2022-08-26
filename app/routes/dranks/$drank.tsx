@@ -123,7 +123,12 @@ export default function DrinkView() {
               />
             </div>
           )}
-          <OptimizedImage {...data.images.appelsiner} className="-mt-12" />
+          <div className="w-1/2 relative overflow-visible">
+            <OptimizedImage
+              {...data.images.appelsiner}
+              className="-mt-12 w-full object-cover"
+            />
+          </div>
         </div>
 
         {data.drink.Referanser && (

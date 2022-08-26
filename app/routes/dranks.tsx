@@ -109,7 +109,7 @@ export const Footer = ({ images }: FooterProps) => {
             className="w-36 rotate-6 -top-12"
           />
         </div>
-        <a href="#">
+        <a href="#" className="flex justify-center">
           <OptimizedImage {...images["last-ned-fra-app-store"]} />
         </a>
         <div />
