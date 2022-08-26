@@ -24,6 +24,7 @@ import { assertDrinkHeader } from "~/packages/notion-drinker/types";
 import { debounce, optimizedImageUrl } from "~/utils";
 
 export const loader = async ({ request }: LoaderArgs) => {
+  const startFetchTime = performance.now();
   const [drinkerDatabase, drinker] = await Promise.all([
     getDrinkerDatabase(),
     getDrinker().then((x) =>
@@ -34,6 +35,7 @@ export const loader = async ({ request }: LoaderArgs) => {
       }),
     ),
   ] as const);
+  const fetchTime = Math.round(performance.now() - startFetchTime);
 
   // Filtering
   const searchParams = new URL(request.url).searchParams;
@@ -86,9 +88,12 @@ export const loader = async ({ request }: LoaderArgs) => {
       filterAlcohols,
     },
     {
-      headers: config.cacheControlHeadersDynamic(
-        (drinkerDatabase as any).last_edited_time,
-      ),
+      headers: {
+        ...config.cacheControlHeadersDynamic(
+          (drinkerDatabase as any).last_edited_time,
+        ),
+        "Server-Timing": `fetch;dur=${fetchTime}`,
+      },
     },
   );
 };
