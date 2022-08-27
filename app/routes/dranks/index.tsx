@@ -22,6 +22,7 @@ import { prepareFromPage } from "~/packages/notion-drinker/prepare.server";
 import type { Alcohol, DrinkHeader } from "~/packages/notion-drinker/types";
 import { assertDrinkHeader } from "~/packages/notion-drinker/types";
 import { debounce, optimizedImageUrl } from "~/utils";
+import { dranksClasses } from "../dranks";
 
 export const loader = async ({ request }: LoaderArgs) => {
   const startFetchTime = performance.now();
@@ -121,33 +122,58 @@ export default function Dranks() {
   };
   return (
     <>
-      <div className="flex flex-col gap-10 p-6 bg-gray-50">
-        <span
-          className={`inline-block ${
-            isSubmitting
-              ? "transition-opacity duration-500 delay-700 opacity-75 animate-spin"
-              : "opacity-0"
-          }`}
-        >
-          🍹
-        </span>
+      <div
+        className={`py-16 flex flex-col gap-14 ${dranksClasses.layoutPadding} ${dranksClasses.layoutMaxWidth}`}
+      >
+        {false && (
+          <span
+            className={`inline-block ${
+              isSubmitting
+                ? "transition-opacity duration-500 delay-700 opacity-75 animate-spin"
+                : "opacity-0"
+            }`}
+          >
+            🍹
+          </span>
+        )}
         <Form
           method="get"
-          className="flex flex-col gap-3"
+          className="flex flex-col gap-7"
           action="/dranks"
           id="dranks-filter-form"
         >
-          <input
-            className="w-full bg-gray-100 rounded px-3 py-[10px]"
-            type="search"
-            placeholder="Søk etter dranks"
-            name="q"
-            autoFocus
-            defaultValue={data.filterQ ?? undefined}
-            onChange={(e) =>
-              submitDebounced(e.currentTarget.form, { replace: true })
-            }
-          />
+          <div className="relative">
+            <div className="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
+              <svg
+                aria-hidden="true"
+                className="w-5 h-5 text-gray-500 dark:text-gray-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                ></path>
+              </svg>
+            </div>
+
+            <input
+              className="block p-3 pl-10 w-full bg-gray-100 rounded-lg"
+              type="search"
+              placeholder="Søk etter dranks"
+              name="q"
+              autoFocus
+              defaultValue={data.filterQ ?? undefined}
+              onChange={(e) =>
+                submitDebounced(e.currentTarget.form, { replace: true })
+              }
+            />
+          </div>
+
           <div className="flex flex-row gap-3 gap-y-3 flex-wrap">
             {data.alcoholOrdered.map((alcohol) => (
               <Fragment key={alcohol.title}>
@@ -160,7 +186,7 @@ export default function Dranks() {
                     checked={isAlcoholChecked(alcohol)}
                     onChange={(e) => submit(e.currentTarget.form)}
                   />
-                  <span className="rounded-lg px-5 py-[10px] border-orange border peer-checked:bg-orange peer-checked:text-white peer-focus:ring">
+                  <span className="rounded-lg px-5 py-[10px] border-orange border peer-checked:bg-orange peer-checked:text-white peer-focus:ring transition">
                     {alcohol.title}
                   </span>
                 </label>
@@ -168,7 +194,12 @@ export default function Dranks() {
             ))}
           </div>
         </Form>
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-6 gap-5">
+        <div
+          className={`grid gap-5 grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-6 ${
+            isSubmitting &&
+            "transition-[filter] duration-500 delay-500 brightness-75"
+          }`}
+        >
           {data.drinkerByAlcoholOrder
             .flatMap(({ drinker }) => drinker)
             .map((drink) => (

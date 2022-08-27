@@ -20,6 +20,7 @@ import { assertDrink } from "~/packages/notion-drinker/types";
 import NotionRender from "~/packages/notion-render";
 import type { Components as NotionRenderComponents } from "~/packages/notion-render/components";
 import { assertItemFound, optimizedImageUrl } from "~/utils";
+import { dranksClasses } from "../dranks";
 
 export const notionRenderComponents: Partial<NotionRenderComponents> = {
   image: buildOptimizedNotionImage(),
@@ -65,7 +66,9 @@ export default function DrinkView() {
   ].filter(Boolean);
 
   return (
-    <div className="max-w-sm sm:max-w-xl md:max-w-3xl lg:max-w-4xl xl:max-w-6xl mx-auto flex flex-col gap-16 py-16">
+    <div
+      className={`flex flex-col gap-16 py-16 ${dranksClasses.layoutPadding} ${dranksClasses.layoutMaxWidth}`}
+    >
       <h1 className="text-5xl text-orange font-comico italic">
         {data.drink.Tittel}
       </h1>
@@ -80,7 +83,7 @@ export default function DrinkView() {
         )}
 
         <div className="flex justify-between">
-          <div className="flex flex-col gap-14 w-1/2 lg:w-1/3">
+          <div className="flex flex-col gap-14 w-1/2 lg:w-2/3">
             <div>
               <h2 className="text-2xl text-orange mb-5" id="Ingredienser">
                 Du trenger
@@ -123,10 +126,10 @@ export default function DrinkView() {
               />
             </div>
           )}
-          <div className="w-1/2 relative overflow-visible">
+          <div className="w-1/2 lg:w-1/3 relative overflow-visible">
             <OptimizedImage
               {...data.images.appelsiner}
-              className="-mt-12 w-full object-cover"
+              className="-mt-12 max-w-full object-cover"
             />
           </div>
         </div>

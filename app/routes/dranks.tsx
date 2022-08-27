@@ -53,41 +53,71 @@ export default function DranksLayout() {
   );
 }
 
+export const dranksClasses = /*tw*/ {
+  layoutPadding: "px-3 sm:px-6 md:px-12 lg:px-24 xl:px-36 2xl:px-48",
+  layoutMaxWidth: "", // "mx-auto md:max-w-5xl lg:max-w-7xl",
+} as const;
+
 export const Header = () => {
   const classes = /*tw*/ {
-    link: "",
+    link: "text-xl",
     linkActive: "underline underline-offset-4 text-orange",
     linkButton:
-      "uppercase rounded-xl w-40 h-12 text-center flex items-center justify-center transition hover:brightness-90",
+      "text-base uppercase rounded-xl w-40 h-12 text-center flex items-center justify-center transition hover:brightness-90",
   };
   return (
-    <header className="h-20 flex  items-center px-4 sm:px-10 md:px-20">
-      <nav className="">
-        <ul className="flex flex-wrap items-center gap-8">
+    <header>
+      <nav className={`${dranksClasses.layoutPadding} shadow`}>
+        <ul className="min-h-[5rem] py-4 flex flex-wrap items-center gap-y-4 gap-x-8">
           <NavLink
-            to="./"
+            to="/dranks"
+            end
             className={({ isActive }) =>
               `${classes.link} ${isActive && classes.linkActive}`
             }
           >
             Dranks
           </NavLink>
-          <NavLink to="./sirup">Sirup</NavLink>
-          <NavLink to="./super-juice">Super juice</NavLink>
-          <NavLink to="./utstyr">Utstyr</NavLink>
+          <NavLink
+            to="/dranks/sirup"
+            className={({ isActive }) =>
+              `${classes.link} ${isActive && classes.linkActive}`
+            }
+          >
+            Sirup
+          </NavLink>
+          <NavLink
+            to="/dranks/super-juice"
+            className={({ isActive }) =>
+              `${classes.link} ${isActive && classes.linkActive}`
+            }
+          >
+            Super juice
+          </NavLink>
+          <NavLink
+            to="/dranks/utstyr"
+            className={({ isActive }) =>
+              `${classes.link} ${isActive && classes.linkActive}`
+            }
+          >
+            Utstyr
+          </NavLink>
 
-          <Link
-            to="./quiz"
-            className={`${classes.linkButton} text-white bg-orange`}
-          >
-            Quiz
-          </Link>
-          <Link
-            to="./last-ned-app"
-            className={`${classes.linkButton} bg-light-orange`}
-          >
-            Last ned app
-          </Link>
+          <div className="flex-grow-0 md:flex-grow h-0 basis-full md:basis-auto" />
+          <div className="flex flex-col md:flex-row w-full md:w-auto gap-y-4 gap-x-8 ">
+            <Link
+              to="/dranks/quiz"
+              className={`${classes.linkButton} text-white bg-orange w-full md:w-40`}
+            >
+              Quiz
+            </Link>
+            <Link
+              to="/dranks/last-ned-app"
+              className={`${classes.linkButton} bg-light-orange w-full md:w-40`}
+            >
+              Last ned app
+            </Link>
+          </div>
         </ul>
       </nav>
     </header>
@@ -99,7 +129,9 @@ interface FooterProps {
 }
 export const Footer = ({ images }: FooterProps) => {
   return (
-    <footer className="bg-orange h-72 flex w-full px-6 sm:px-16 md:px-32 mt-14">
+    <footer
+      className={`bg-orange h-72 flex w-full mt-14 ${dranksClasses.layoutPadding}`}
+    >
       <div className="flex-grow" />
       <div className="flex flex-col justify-between">
         <div className="-mt-12">
