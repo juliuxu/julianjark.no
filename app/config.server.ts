@@ -3,6 +3,7 @@ if (process.env.NODE_ENV === "development") baseUrl = "http://localhost:3000";
 else if (process.env.BASE_URL !== undefined) baseUrl = process.env.BASE_URL;
 else baseUrl = "https://julianjark.no";
 
+const HOUR_IN_SECONDS = 60 * 60;
 const MONTH_IN_SECONDS = 60 * 60 * 24 * 30;
 const YEAR_IN_SECONDS = 60 * 60 * 24 * 365;
 const config = {
@@ -22,7 +23,10 @@ const config = {
 
   // Dynamic cache control headers based on the last updated time
   // The idea is that if the page was recently edited, chances are that it will be edited again soon
-  cacheControlHeadersDynamic: (lastUpdated: string) => {
+  cacheControlHeadersDynamic: (
+    lastUpdated: string,
+    staleWhileRevalidateInSeconds: number = YEAR_IN_SECONDS,
+  ) => {
     const diffInSeconds = Math.abs(
       Math.floor(new Date().getTime() - new Date(lastUpdated).getTime() / 1000),
     );
@@ -43,7 +47,7 @@ const config = {
       ([threshold]) => diffInSeconds < threshold,
     )![1];
     return {
-      "Cache-Control": `public, s-maxage=${serverCacheMaxAge}, stale-while-revalidate=${YEAR_IN_SECONDS}`,
+      "Cache-Control": `public, s-maxage=${serverCacheMaxAge}, stale-while-revalidate=${staleWhileRevalidateInSeconds}`,
     };
   },
 } as const;

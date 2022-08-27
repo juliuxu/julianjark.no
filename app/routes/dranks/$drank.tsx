@@ -44,7 +44,12 @@ export const loader = async ({ params }: LoaderArgs) => {
       drink,
       images,
     },
-    { headers: config.cacheControlHeadersDynamic(page.last_edited_time) },
+    {
+      headers: config.cacheControlHeadersDynamic(
+        page.last_edited_time,
+        60 * 60,
+      ),
+    },
   );
 };
 export let headers: HeadersFunction = ({ loaderHeaders }) => loaderHeaders;
