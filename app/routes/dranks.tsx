@@ -25,7 +25,7 @@ export const links: LinksFunction = () => [
 ];
 
 export const meta: MetaFunction = () => ({
-  "theme-color": "#F9A613",
+  // "theme-color": "#F9A613",
 });
 
 export const loader = async () => {
