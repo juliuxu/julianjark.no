@@ -83,7 +83,7 @@ export default function DrinkView() {
         )}
 
         <div className="flex justify-between">
-          <div className="flex flex-col gap-14 w-1/2 lg:w-2/3">
+          <div className="flex flex-col gap-14 w-2/3">
             <div>
               <h2 className="text-2xl text-orange mb-5" id="Ingredienser">
                 Du trenger
@@ -113,6 +113,13 @@ export default function DrinkView() {
             )}
           </div>
 
+          <div className="w-1/3 relative overflow-visible">
+            <OptimizedImage
+              {...data.images.appelsiner}
+              className="-mt-12 max-w-full object-cover"
+            />
+          </div>
+
           {false && data.drink.Illustrasjon && (
             <div className="w-1/2 lg:w-2/3 h-72 lg:h-96 relative">
               <img
@@ -126,12 +133,6 @@ export default function DrinkView() {
               />
             </div>
           )}
-          <div className="w-1/2 lg:w-1/3 relative overflow-visible">
-            <OptimizedImage
-              {...data.images.appelsiner}
-              className="-mt-12 max-w-full object-cover"
-            />
-          </div>
         </div>
 
         {data.drink.Referanser && (
