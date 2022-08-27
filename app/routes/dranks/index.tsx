@@ -113,6 +113,8 @@ export default function Dranks() {
   const submitDebounced = useMemo(() => debounce(submit, 200), []);
 
   const isSubmitting = transition.state === "submitting";
+  const isLoading = transition.state === "loading";
+
   const isAlcoholChecked = (alcohol: Alcohol) => {
     if (transition.submission?.formData)
       return transition.submission?.formData
@@ -129,7 +131,7 @@ export default function Dranks() {
         {false && (
           <span
             className={`inline-block ${
-              isSubmitting
+              isSubmitting || isLoading
                 ? "transition-opacity duration-500 delay-700 opacity-75 animate-spin"
                 : "opacity-0"
             }`}
@@ -197,7 +199,7 @@ export default function Dranks() {
         </Form>
         <div
           className={`grid gap-5 grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-6 ${
-            isSubmitting &&
+            (isSubmitting || isLoading) &&
             "transition-[filter] duration-500 delay-500 brightness-75"
           }`}
         >
@@ -219,6 +221,7 @@ interface DrankCardProps {
 const DrankCard = ({ drank }: DrankCardProps) => {
   return (
     <Link
+      prefetch="intent"
       to={`${slugify(drank.Tittel)}`}
       className="overflow-hidden rounded-md shadow"
     >
