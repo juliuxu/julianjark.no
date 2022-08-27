@@ -104,7 +104,7 @@ export const Header = () => {
           </NavLink>
 
           <div className="flex-grow-0 md:flex-grow h-0 basis-full md:basis-auto" />
-          <div className="flex flex-col md:flex-row w-full md:w-auto gap-y-4 gap-x-8 ">
+          <div className="flex flex-col md:flex-row w-full md:w-auto gap-y-4 gap-x-5 lg:gap-x-8">
             <Link
               to="/dranks/quiz"
               className={`${classes.linkButton} text-white bg-orange w-full md:w-40`}
