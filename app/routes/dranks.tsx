@@ -67,7 +67,7 @@ export const Header = () => {
   };
   return (
     <header>
-      <nav className={`${dranksClasses.layoutPadding} shadow`}>
+      <nav className={`${dranksClasses.layoutPadding}`}>
         <ul className="min-h-[5rem] py-4 flex flex-wrap items-center gap-y-4 gap-x-8">
           <NavLink
             to="/dranks"
