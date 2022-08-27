@@ -7,6 +7,7 @@ import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 
 import { buildOptimizedNotionImage } from "~/components/notion-components";
+import { notionRenderClasses } from "~/components/notion-render-config";
 import { OptimizedImage } from "~/components/optimized-image";
 import config from "~/config.server";
 import {
@@ -54,6 +55,10 @@ export const meta: MetaFunction = ({ data }) => {
   };
 };
 
+const notionRenderConfig = {
+  classes: notionRenderClasses,
+  components: notionRenderComponents,
+};
 export default function DrinkView() {
   const data = useLoaderData<typeof loader>();
 
@@ -78,7 +83,10 @@ export default function DrinkView() {
           <div>
             <div id="Forberedelser" className="absolute -top-10" />
             <h2 className="text-2xl text-orange mb-5">Forberedelser</h2>
-            <NotionRender blocks={data.drink.Forberedelser} />
+            <NotionRender
+              {...notionRenderConfig}
+              blocks={data.drink.Forberedelser}
+            />
           </div>
         )}
 
@@ -88,14 +96,20 @@ export default function DrinkView() {
               <h2 className="text-2xl text-orange mb-5" id="Ingredienser">
                 Du trenger
               </h2>
-              <NotionRender blocks={data.drink.Ingredienser} />
+              <NotionRender
+                {...notionRenderConfig}
+                blocks={data.drink.Ingredienser}
+              />
             </div>
 
             <div>
               <h2 className="text-2xl text-orange mb-5" id="Fremgangsmåte">
                 Fremgangsmåte
               </h2>
-              <NotionRender blocks={data.drink.Fremgangsmåte} />
+              <NotionRender
+                {...notionRenderConfig}
+                blocks={data.drink.Fremgangsmåte}
+              />
             </div>
 
             {data.drink.Notater && (
@@ -105,8 +119,8 @@ export default function DrinkView() {
                 </h2>
                 <div className="flex flex-wrap gap-10">
                   <NotionRender
+                    {...notionRenderConfig}
                     blocks={data.drink.Notater}
-                    components={notionRenderComponents}
                   />
                 </div>
               </div>
@@ -142,8 +156,8 @@ export default function DrinkView() {
             </h2>
             <div className="flex flex-wrap gap-10">
               <NotionRender
+                {...notionRenderConfig}
                 blocks={data.drink.Referanser}
-                components={notionRenderComponents}
               />
             </div>
           </div>
