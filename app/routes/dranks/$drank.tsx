@@ -1,5 +1,6 @@
 import type {
   HeadersFunction,
+  LinksFunction,
   LoaderArgs,
   MetaFunction,
 } from "@remix-run/node";
@@ -26,6 +27,14 @@ import { dranksClasses } from "../dranks";
 export const notionRenderComponents: Partial<NotionRenderComponents> = {
   image: buildOptimizedNotionImage(),
 };
+
+export const links: LinksFunction = () => [
+  {
+    rel: "preload",
+    href: "/fonts/Comico-Regular.woff2",
+    as: "woff2",
+  },
+];
 
 export const loader = async ({ params }: LoaderArgs) => {
   const page = (await getDrinker()).find(

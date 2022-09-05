@@ -24,6 +24,14 @@ import { assertDrinkHeader } from "~/packages/notion-drinker/types";
 import { debounce, optimizedImageUrl } from "~/utils";
 import { dranksClasses } from "../dranks";
 
+export const links: LinksFunction = () => [
+  {
+    rel: "preload",
+    href: "/fonts/Satoshi-Variable.woff2",
+    as: "woff2",
+  },
+];
+
 export const loader = async ({ request }: LoaderArgs) => {
   const startFetchTime = performance.now();
   const [drinkerDatabase, drinker] = await Promise.all([
