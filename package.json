@@ -10,7 +10,7 @@
     "build": "cp remix.config.default.js remix.config.js && run-s build:*",
     "build:css": "npm run generate:css -- --minify",
     "build:remix": "remix build",
-    "dev": "run-p dev:*",
+    "dev": "cp remix.config.default.js remix.config.js && run-p dev:*",
     "dev:css": "npm run generate:css -- --watch",
     "dev:remix": "remix dev",
     "generate:css": "npx tailwindcss -o ./app/tailwind.css",
