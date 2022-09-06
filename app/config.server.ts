@@ -47,7 +47,7 @@ const config = {
       ([threshold]) => diffInSeconds < threshold,
     )![1];
     return {
-      "Cache-Control": `public, max-age=10 s-maxage=${serverCacheMaxAge}, stale-while-revalidate=${staleWhileRevalidateInSeconds}`,
+      "Cache-Control": `public, max-age=10, s-maxage=${serverCacheMaxAge}, stale-while-revalidate=${staleWhileRevalidateInSeconds}`,
     };
   },
 } as const;
