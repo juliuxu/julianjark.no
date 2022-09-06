@@ -55,7 +55,7 @@ export let getBlocks = async (blockId: string) => {
 export let getBlocksWithChildren = async (
   blockId: string,
 ): Promise<BlockWithChildren[]> => {
-  const blocks = await getBlocks(blockId);
+  const blocks = await getBlocksNoCache(blockId);
   // Retrieve block children for nested blocks (one level deep), for example toggle blocks
   // https://developers.notion.com/docs/working-with-page-content#reading-nested-blocks
   const childBlocks = await Promise.all(
@@ -132,6 +132,13 @@ const assertDatabaseResponse = (page: MaybeDatabaseResponse) => {
   if ("properties" in page) return page;
   throw new Error("passed page is not a DatabaseResponse");
 };
+
+// Non-cached
+export const getPageNoCache = getPage;
+export const getDatabaseNoCache = getDatabase;
+export const getBlocksNoCache = getBlocks;
+export const getDatabasePagesNoCache = getDatabasePages;
+export const getBlocksWithChildrenNoCache = getBlocksWithChildren;
 
 // Cache to memory during production
 if (process.env.NODE_ENV === "production") {

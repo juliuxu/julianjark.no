@@ -26,7 +26,7 @@ import {
   getPresentasjoner,
   getTitle,
 } from "~/notion/notion";
-import { getBlocksWithChildren } from "~/notion/notion-api.server";
+import { getBlocksWithChildrenNoCache } from "~/notion/notion-api.server";
 import NotionReveal from "~/packages/notion-reveal";
 import {
   parsePresentationProperties,
@@ -80,7 +80,7 @@ export const loader = async ({ params: { presentasjon = "" } }: LoaderArgs) => {
   assertItemFound(page);
 
   const properties = parsePresentationProperties(page);
-  const blocks = await getBlocksWithChildren(page.id);
+  const blocks = await getBlocksWithChildrenNoCache(page.id);
   await prepareNotionBlocks(blocks, { theme: "dark-plus" });
   const slides = prepareSlides(blocks);
 
