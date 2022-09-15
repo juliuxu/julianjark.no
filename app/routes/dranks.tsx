@@ -61,7 +61,7 @@ export const dranksClasses = /*tw*/ {
 export const Header = () => {
   const classes = /*tw*/ {
     link: "text-xl",
-    linkActive: "underline underline-offset-4 text-orange",
+    linkActive: "underline underline-offset-4 text-dranks-orange",
     linkButton:
       "text-base uppercase rounded-xl w-40 h-12 text-center flex items-center justify-center transition hover:brightness-90",
   };

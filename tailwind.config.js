@@ -12,7 +12,7 @@ module.exports = {
 
         // Dranks site
         "leaf-green": "#4F6C45",
-        orange: "#F9A613",
+        "dranks-orange": "#F9A613",
         "light-orange": "#FFF7EA",
         "white-pink": "#FCF6F5",
       },
