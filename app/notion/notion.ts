@@ -32,7 +32,7 @@ export const getTitle = (fromPage: PageResponse | DatabasePage) => {
   );
   if (title?.type !== "title")
     throw new Error("Could not get title from passed notion page");
-  return title.title[0].plain_text;
+  return title.title[0].plain_text.trim();
 };
 export const getFileUrl = (name: string, fromPage: DatabasePage) => {
   const property = fromPage.properties[name];
