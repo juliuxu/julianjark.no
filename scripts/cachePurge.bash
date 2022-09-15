@@ -18,7 +18,7 @@ baseUrl=https://julianjark.no
 # echo "✅ Done"
 
 echo "Calling cache purge endpoint"
-response=$(curl -H 'Cache-Purge: 1' -X POST --fail $baseUrl/api/cache-purge)
+response=$(curl -H 'no-cache: 1' -X POST --fail $baseUrl/api/cache-purge)
 if [ $? -ne 0 ]; then
     echo "❌ Failed calling cache purge endpoint"
     exit 1

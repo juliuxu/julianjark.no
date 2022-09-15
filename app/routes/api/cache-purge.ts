@@ -33,7 +33,7 @@ export const purgePage = (page: Page) => {
   ];
   const requests = paths.map((path) =>
     fetch(`${config.baseUrl}${path}`, {
-      headers: { "Cache-Purge": "1" },
+      headers: { "no-cache": "1" },
     }),
   );
   return Promise.allSettled(requests);

@@ -4,95 +4,103 @@ import {
   getNotionDrivenPages,
   getPresentasjoner,
   getTitle,
+  getTodayILearnedEntries,
   slugify,
 } from "~/notion/notion";
 import type { DatabasePage } from "~/notion/notion-api.server";
 import { getPage } from "~/notion/notion-api.server";
-import { meta as indexMeta } from "~/routes/old-layout";
-// import * as Index from "~/routes/__layout";
-import { meta as drinkerMeta } from "~/routes/old-layout/old-drinker/index";
-// import * as PresentasjonerIndex from "~/routes/__layout/presentasjoner/index";
-import { meta as presentasjonerMeta } from "~/routes/old-layout/presentasjoner/index";
+import { meta as forsideMeta } from "~/routes/__layout/index";
+import { meta as dranksMeta } from "~/routes/dranks/index";
 import { flattenDepthFirst } from "./utils";
 
 export interface Page {
   title: string;
   path: string;
   codePath: string;
-  children: Page[];
   lastmod: string;
 }
+export type PageWithChildren = Page & { children: PageWithChildren[] };
 
-// const pages = [
-//   async () => ({
-//     title: Index.meta({} as any).title!,
-//     path: "/",
-//     codePath: "routes/__layout/index",
-//     children: [],
-//   }),
-//   async () => ({
-//     title: PresentasjonerIndex.meta({} as any),
-//     path: "/presentasjoner",
-//     codePath: "routes/__layout/presentasjoner/index",
-//     children: [],
-//   }),
-// ];
-
-export const getSitemapTree = async () => {
-  // Initiate async call at once, await them later
-  // This way they run in parallel, instead of sequentially
-  const forsidePage = getPage(config.forsidePageId);
-  const drinkerPages = getDrinker();
-  const presentasjonerPages = getPresentasjoner();
-  const notionDrivenPages = getNotionDrivenPages();
-
-  const resolvedDrinkerPages = await drinkerPages;
-  const resolvedPresentasjonerPages = await presentasjonerPages;
-
-  const forside: Page = {
-    title: indexMeta({} as any).title!,
-    path: "/",
-    codePath: "routes/__layout/index",
-    lastmod: (await forsidePage).last_edited_time,
-    children: [
-      {
-        title: drinkerMeta({} as any).title!,
-        path: "/drinker",
-        codePath: "routes/drinker/index",
-        lastmod: resolvedDrinkerPages
-          .map((page) => page.last_edited_time)
-          .sort()
-          .reverse()[0],
-        children: resolvedDrinkerPages.map(
-          databasePagesToPage("/drinker/", "routes/drinker/$drink"),
-        ),
-      },
-      {
-        title: presentasjonerMeta({} as any).title!,
-        path: "/presentasjoner",
-        codePath: "routes/__layout/presentasjoner/index",
-        lastmod: resolvedPresentasjonerPages
-          .map((page) => page.last_edited_time)
-          .sort()
-          .reverse()[0],
-        children: resolvedPresentasjonerPages.map(
-          databasePagesToPage(
-            "/presentasjoner/",
-            "routes/presentasjoner.$presentasjon",
-          ),
-        ),
-      },
-
-      ...(await notionDrivenPages).map(
-        databasePagesToPage("/", "routes/__layout/$notionDrivenPage"),
-      ),
-    ],
-  };
-
-  return forside;
+type PageStruct = {
+  page: Page | (() => Promise<Page>);
+  children?:
+    | Array<PageStruct | (() => Promise<PageStruct[]>)>
+    | (() => Promise<PageStruct[]>);
 };
 
-const databasePagesToPage =
+// TODO: Move to handle functions
+const siteTree: PageStruct = {
+  page: async () => ({
+    title: forsideMeta({} as any).title!,
+    path: "/",
+    lastmod: (await getPage(config.forsidePageId)).last_edited_time,
+    codePath: "routes/__layout/index",
+  }),
+  children: [
+    // Today I Learned
+    {
+      page: async () => ({
+        title: forsideMeta({} as any).title!,
+        path: "/today-i-learned",
+        lastmod: (await getTodayILearnedEntries())
+          .map((page) => page.last_edited_time)
+          .sort()
+          .reverse()[0],
+        codePath: "routes/__layout/today-i-learned",
+      }),
+    },
+
+    // Dranks
+    {
+      page: async () => ({
+        title: dranksMeta({} as any).title!,
+        path: "/dranks",
+        lastmod: (await getDrinker())
+          .map((page) => page.last_edited_time)
+          .sort()
+          .reverse()[0],
+        codePath: "routes/dranks/index",
+      }),
+      children: async () =>
+        (await getDrinker())
+          .map(databasePageToPage("/dranks/", "routes/dranks/$drank"))
+          .map((page) => ({ page })),
+    },
+
+    // Notion Driven Page
+    async () =>
+      (await getNotionDrivenPages())
+        .map(databasePageToPage("/", "routes/__layout/$notionDrivenPage"))
+        .map((page) => ({ page })),
+  ],
+};
+
+export const getSitemapTree = async (
+  it: PageStruct = siteTree,
+): Promise<PageWithChildren> => {
+  const page = typeof it.page === "function" ? it.page() : it.page;
+
+  let children: PageWithChildren[] | Promise<PageWithChildren[]> = [];
+  if (typeof it.children === "undefined") {
+    children = [];
+  } else if (typeof it.children === "function") {
+    children = it.children().then((l) => Promise.all(l.map(getSitemapTree)));
+  } else if (typeof it.children === "object") {
+    const promiseList = it.children.map((x) =>
+      typeof x === "function" ? x() : x,
+    );
+    children = Promise.all(promiseList)
+      .then((l) => l.flat())
+      .then((l) => Promise.all(l.map(getSitemapTree)));
+  }
+
+  return {
+    ...(await page),
+    children: await children,
+  };
+};
+
+const databasePageToPage =
   (parentPath: string, codePath: string) =>
   (page: DatabasePage): Page => {
     const title = getTitle(page);
@@ -100,10 +108,9 @@ const databasePagesToPage =
       title,
       path: `${parentPath}${slugify(title)}`,
       codePath,
-      children: [], // Fow now we don't allow child pages
       lastmod: page.last_edited_time,
     };
   };
 
-export const asUrlList = (rootPage: Page): string[] =>
+export const asUrlList = (rootPage: PageWithChildren): string[] =>
   flattenDepthFirst(rootPage).map((page) => `${config.baseUrl}${page.path}`);
