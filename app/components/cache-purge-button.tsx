@@ -3,23 +3,20 @@ import { useFetcher } from "@remix-run/react";
 
 export function CachePurgeCurrentPageButton() {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const onClick = async () => {
+  const reloadWithoutCache = async () => {
     setIsSubmitting(true);
-    await fetch(window.location.href, {
-      headers: { "Cache-Purge": "1" },
-    });
-    setIsSubmitting(false);
+    document.cookie = "no_cache=1;max-age=15";
     window.location.reload();
   };
   return (
     <button
       type="button"
-      onClick={onClick}
-      className="secondary outline"
+      onClick={reloadWithoutCache}
+      className="text-3xl"
       disabled={isSubmitting}
       aria-busy={isSubmitting}
     >
-      {!isSubmitting && "↻"}
+      <span>↻</span>
     </button>
   );
 }

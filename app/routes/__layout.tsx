@@ -1,6 +1,7 @@
 import type { LinksFunction, MetaFunction } from "@remix-run/node";
 import { NavLink, Outlet } from "@remix-run/react";
 
+import { CachePurgeCurrentPageButton } from "~/components/cache-purge-button";
 import { slugify } from "~/notion/notion";
 import designTokens from "~/styles/design-tokens.json";
 import globalCss from "~/styles/global.css";
@@ -61,6 +62,9 @@ const Header = () => {
             {x}
           </NavLink>
         ))}
+        <div className="opacity-0 hover:opacity-100 transition-opacity">
+          <CachePurgeCurrentPageButton />
+        </div>
       </div>
     </nav>
   );
