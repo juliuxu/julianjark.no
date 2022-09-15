@@ -1,13 +1,36 @@
-import { useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useFetcher } from "@remix-run/react";
+
+const useShortcut = (keys: string, onTrigger: () => unknown) => {
+  const pressedKeysRef = useRef("");
+  const handleKeyPress = useCallback((event: KeyboardEvent) => {
+    pressedKeysRef.current += event.key;
+    if (pressedKeysRef.current === keys) {
+      pressedKeysRef.current = "";
+      onTrigger();
+    } else if (!keys.startsWith(pressedKeysRef.current)) {
+      // Reset when the combination is no longer matching
+      pressedKeysRef.current = "";
+    }
+  }, []);
+
+  useEffect(() => {
+    document.addEventListener("keydown", handleKeyPress);
+    return () => {
+      document.removeEventListener("keydown", handleKeyPress);
+    };
+  }, [handleKeyPress]);
+};
 
 export function CachePurgeCurrentPageButton() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const reloadWithoutCache = async () => {
+    if (isSubmitting) return;
     setIsSubmitting(true);
     document.cookie = "no_cache=1;max-age=15";
     window.location.reload();
   };
+  useShortcut("rr", reloadWithoutCache);
   return (
     <button
       type="button"
