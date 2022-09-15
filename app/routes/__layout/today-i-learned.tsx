@@ -104,11 +104,11 @@ export default function TodayILearned() {
   return (
     <>
       <div lang="no" className="mx-[5vw] md:mx-[10vw]">
-        <div className="mx-auto max-w-4xl flex flex-col md:flex-row-reverse gap-6">
+        <div className="mx-auto max-w-6xl flex flex-col md:flex-row-reverse gap-6">
           <div className="w-full md:w-1/4">
             <TodayILearnedMenu entries={entries} />
           </div>
-          <div className="w-full md:w-3/4 flex flex-col gap-8">
+          <div className="w-full md:w-3/4 flex flex-col gap-20">
             {entries.map((entry) => (
               <InlineTodayILearnedEntry key={entry.title} entry={entry} />
             ))}
@@ -125,7 +125,7 @@ interface TodayILearnedMenuProps {
 }
 const TodayILearnedMenu = ({ entries }: TodayILearnedMenuProps) => {
   return (
-    <div className="flex gap-3 flex-col rounded ring-1 p-2">
+    <div className="flex gap-3 md:gap-5 flex-col rounded ring-1 p-2">
       {entries.map((entry) => (
         <a
           className="text-gray-300 focus:text-white hover:text-white transition"
@@ -186,16 +186,13 @@ const InlineTodayILearnedEntry = ({ entry }: InlineTodayILearnedEntryProps) => {
         />
 
         {entry.references.length > 0 && (
-          <details>
-            <summary className="cursor-pointer text-sm">Referanser</summary>
-            <ul className="my-0">
-              {entry.references.map((reference) => (
-                <li key={reference}>
-                  <a href={reference}>{reference}</a>
-                </li>
-              ))}
-            </ul>
-          </details>
+          <ul className="my-0">
+            {entry.references.map((reference) => (
+              <li key={reference}>
+                <a href={reference}>{reference}</a>
+              </li>
+            ))}
+          </ul>
         )}
       </div>
     </article>
