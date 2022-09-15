@@ -54,7 +54,7 @@ const Header = () => {
   return (
     <nav className="text-white font-mono flex flex-wrap items-center gap-8 h-full">
       <NavLink to="/" className="text-3xl" prefetch="intent">
-        Julian <span className="hidden sm:inline-block">Jark</span>
+        Julian Jark
       </NavLink>
       <div className="flex items-center gap-4">
         {menuItems.map((x) => (
@@ -62,7 +62,7 @@ const Header = () => {
             {x}
           </NavLink>
         ))}
-        <div className="opacity-0 hover:opacity-100 transition-opacity">
+        <div className="opacity-40 hover:opacity-100 transition-opacity -mt-[2px]">
           <CachePurgeCurrentPageButton />
         </div>
       </div>

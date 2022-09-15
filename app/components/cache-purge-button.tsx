@@ -16,7 +16,7 @@ export function CachePurgeCurrentPageButton() {
       disabled={isSubmitting}
       aria-busy={isSubmitting}
     >
-      <span>↻</span>
+      ↻
     </button>
   );
 }
