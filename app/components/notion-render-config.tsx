@@ -20,7 +20,7 @@ export const notionSelectClasses: Record<SelectColor, string> /*tw*/ = {
 
 export const notionRenderClasses: Partial<Classes> /*tw*/ = {
   column_list: {
-    root: "grid gap-8 sm:gap-10 lg:gap-10 grid-cols-1 sm:grid-flow-col sm:auto-cols-fr",
+    root: "grid gap-8 lg:gap-10 grid-cols-1 sm:grid-flow-col sm:auto-cols-fr",
   },
   column: { root: "[&>*]" },
   image: { root: "rounded-lg" },
