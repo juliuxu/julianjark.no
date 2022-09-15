@@ -204,7 +204,9 @@ export const getNotionDrivenPages = async () =>
   );
 
 export const getTodayILearnedEntries = async () =>
-  await getDatabasePages(config.todayILearnedDatabaseId);
+  (await getDatabasePages(config.todayILearnedDatabaseId)).filter(
+    filterPublishedPredicate,
+  );
 
 // ENV stuff
 type PublishedEnv = "PUBLISHED" | "DEV" | "UNPUBLISHED";
