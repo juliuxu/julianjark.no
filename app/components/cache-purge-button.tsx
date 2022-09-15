@@ -16,7 +16,7 @@ export function CachePurgeCurrentPageButton() {
       disabled={isSubmitting}
       aria-busy={isSubmitting}
     >
-      ↻
+      <div className="rotate-90">↻</div>
     </button>
   );
 }

@@ -62,7 +62,7 @@ const Header = () => {
             {x}
           </NavLink>
         ))}
-        <div className="opacity-40 hover:opacity-100 transition-opacity -mt-[2px]">
+        <div className="opacity-40 hover:opacity-100 transition-opacity -mt-[1px]">
           <CachePurgeCurrentPageButton />
         </div>
       </div>
