@@ -186,7 +186,7 @@ const InlineTodayILearnedEntry = ({ entry }: InlineTodayILearnedEntryProps) => {
         />
 
         {entry.references.length > 0 && (
-          <ul className="my-0">
+          <ul className="my-0 break-words">
             {entry.references.map((reference) => (
               <li key={reference}>
                 <a href={reference}>{reference}</a>
