@@ -107,7 +107,7 @@ export const Header = () => {
           <div className="flex flex-col md:flex-row w-full md:w-auto gap-y-4 gap-x-5 lg:gap-x-8">
             <Link
               to="/dranks/quiz"
-              className={`${classes.linkButton} text-white bg-orange w-full md:w-40`}
+              className={`${classes.linkButton} text-white bg-dranks-orange w-full md:w-40`}
             >
               Quiz
             </Link>

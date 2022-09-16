@@ -197,7 +197,7 @@ export default function Dranks() {
                     checked={isAlcoholChecked(alcohol)}
                     onChange={(e) => submit(e.currentTarget.form)}
                   />
-                  <span className="rounded-lg px-5 py-[10px] border-orange border peer-checked:bg-orange peer-checked:text-white peer-focus:ring transition">
+                  <span className="rounded-lg px-5 py-[10px] border-dranks-orange border peer-checked:bg-dranks-orange peer-checked:text-white peer-focus:ring transition">
                     {alcohol.title}
                   </span>
                 </label>
