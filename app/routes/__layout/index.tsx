@@ -18,7 +18,10 @@ import NotionRender from "~/packages/notion-render";
 import { prepareNotionBlocks } from "~/packages/notion-shiki-code/prepare.server";
 
 export const loader = async ({ request }: LoaderArgs) => {
+  const startFetchTime = performance.now();
   const blocks = await getBlocksWithChildren(config.forsidePageId);
+  const fetchTime = Math.round(performance.now() - startFetchTime);
+
   await prepareNotionBlocks(blocks, { theme: "dark-plus" });
 
   // Dynamic age
@@ -45,7 +48,12 @@ export const loader = async ({ request }: LoaderArgs) => {
       blocks,
       debugData: await maybePrepareDebugData(request, blocks),
     },
-    { headers: config.cacheControlHeaders },
+    {
+      headers: {
+        ...config.cacheControlHeaders,
+        "Server-Timing": `fetch;dur=${fetchTime}`,
+      },
+    },
   );
 };
 export const headers: HeadersFunction = ({ loaderHeaders }) => loaderHeaders;
