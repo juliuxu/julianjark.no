@@ -48,7 +48,7 @@ export default function NewLayout() {
   );
 }
 
-const menuItems = ["🚧 Prosjekter", "🚧 Blogg", "Today I Learned"];
+const menuItems = ["🚧 Prosjekter", "🚧 Blogg", "Dranks", "Today I Learned"];
 
 const Header = () => {
   return (
@@ -57,11 +57,24 @@ const Header = () => {
         Julian Jark
       </NavLink>
       <div className="flex items-center gap-4">
-        {menuItems.map((x) => (
-          <NavLink key={x} to={slugify(x)} prefetch="intent">
-            {x}
-          </NavLink>
-        ))}
+        {menuItems
+          .filter((x) => !x.includes("🚧"))
+          .map((x) => (
+            <NavLink
+              key={x}
+              to={slugify(x)}
+              prefetch="intent"
+              className={({ isActive }) =>
+                `rounded-2xl p-2 border-2 ${
+                  isActive
+                    ? "text-white border-white"
+                    : "text-gray-400 border-gray-400"
+                } focus:border-white hover:border-white focus:text-white hover:text-white transition`
+              }
+            >
+              {x}
+            </NavLink>
+          ))}
         <div className="opacity-40 hover:opacity-100 transition-opacity -mt-[1px]">
           <CachePurgeCurrentPageButton />
         </div>

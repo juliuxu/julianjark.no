@@ -158,7 +158,7 @@ const InlineTodayILearnedEntry = ({ entry }: InlineTodayILearnedEntryProps) => {
         {entry.title}
       </AnchorHeading>
 
-      <div className="text-sm text-gray-400 mt-1">
+      <div className="text-sm text-gray-400 mt-2">
         {new Date(entry.created).toLocaleDateString("no", {
           weekday: "short",
           year: "numeric",
@@ -167,7 +167,7 @@ const InlineTodayILearnedEntry = ({ entry }: InlineTodayILearnedEntryProps) => {
         })}
       </div>
 
-      <div className="flex mt-2">
+      <div className="flex mt-3">
         {entry.tags.map((x) => (
           <span
             key={x.title}
@@ -186,13 +186,16 @@ const InlineTodayILearnedEntry = ({ entry }: InlineTodayILearnedEntryProps) => {
         />
 
         {entry.references.length > 0 && (
-          <ul className="my-0 break-words">
-            {entry.references.map((reference) => (
-              <li key={reference}>
-                <a href={reference}>{reference}</a>
-              </li>
-            ))}
-          </ul>
+          <>
+            <p></p>
+            <ul className="my-0 break-words">
+              {entry.references.map((reference) => (
+                <li key={reference}>
+                  <a href={reference}>{reference}</a>
+                </li>
+              ))}
+            </ul>
+          </>
         )}
       </div>
     </article>

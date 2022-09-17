@@ -22,7 +22,7 @@ export const notionRenderClasses: Partial<Classes> /*tw*/ = {
   column_list: {
     root: "grid gap-8 lg:gap-10 grid-cols-1 sm:grid-flow-col sm:auto-cols-fr",
   },
-  column: { root: "[&>*]" },
+  column: { root: "[&>*:first-child]:mt-0 [&>*:last-child]:mb-0" },
   image: { root: "rounded-lg" },
 
   callout: {
