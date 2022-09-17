@@ -1,6 +1,6 @@
 let baseUrl: string;
 if (process.env.NODE_ENV === "development") baseUrl = "http://localhost:3000";
-else if (process.env.BASE_URL !== undefined) baseUrl = process.env.BASE_URL;
+// else if (process.env.BASE_URL !== undefined) baseUrl = process.env.BASE_URL;
 else baseUrl = "https://julianjark.no";
 
 const HOUR_IN_SECONDS = 60 * 60;
