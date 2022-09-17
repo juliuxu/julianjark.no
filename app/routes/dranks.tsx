@@ -130,7 +130,7 @@ interface FooterProps {
 export const Footer = ({ images }: FooterProps) => {
   return (
     <footer
-      className={`bg-orange h-72 flex w-full mt-14 ${dranksClasses.layoutPadding}`}
+      className={`bg-dranks-orange h-72 flex w-full mt-14 ${dranksClasses.layoutPadding}`}
     >
       <div className="flex-grow" />
       <div className="flex flex-col justify-between">
