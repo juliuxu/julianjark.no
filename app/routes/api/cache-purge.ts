@@ -1,6 +1,6 @@
 import type { ActionFunction } from "@remix-run/node";
 
-import config from "~/config.server";
+import config from "~/config";
 import type { Page } from "~/sitemap.server";
 import { getSitemapTree } from "~/sitemap.server";
 import {

@@ -2,7 +2,7 @@ import type { LinksFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { NavLink, Outlet, useLoaderData } from "@remix-run/react";
 
-import config from "~/config.server";
+import config from "~/config";
 import { getDrinker, getTitle, slugify } from "~/notion/notion";
 import tailwind from "~/tailwind.css";
 

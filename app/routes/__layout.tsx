@@ -1,7 +1,9 @@
 import type { LinksFunction, MetaFunction } from "@remix-run/node";
-import { NavLink, Outlet } from "@remix-run/react";
+import { NavLink, Outlet, useMatches } from "@remix-run/react";
 
 import { CachePurgeCurrentPageButton } from "~/components/cache-purge-button";
+import { NotionWatcherButton } from "~/components/notion-watcher-button";
+import config from "~/config";
 import { slugify } from "~/notion/notion";
 import designTokens from "~/styles/design-tokens.json";
 import globalCss from "~/styles/global.css";
@@ -51,6 +53,12 @@ export default function NewLayout() {
 const menuItems = ["🚧 Prosjekter", "🚧 Blogg", "Dranks", "Today I Learned"];
 
 const Header = () => {
+  const lastMatch = useMatches().reverse()[0];
+  const pageOrDatabaseId = {
+    "/": { pageId: config.forsidePageId },
+    "/today-i-learned": { databaseId: config.todayILearnedDatabaseId },
+  }[lastMatch.pathname];
+
   return (
     <nav className="text-white font-mono flex flex-wrap items-center gap-8 h-full">
       <NavLink to="/" className="text-3xl" prefetch="intent">
@@ -78,6 +86,11 @@ const Header = () => {
         <div className="opacity-40 hover:opacity-100 transition-opacity -mt-[1px]">
           <CachePurgeCurrentPageButton />
         </div>
+        {pageOrDatabaseId && (
+          <div className="opacity-40 hover:opacity-100 transition-opacity -ml-3 -mt-[3px]">
+            <NotionWatcherButton {...pageOrDatabaseId} />
+          </div>
+        )}
       </div>
     </nav>
   );

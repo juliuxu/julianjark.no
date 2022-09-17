@@ -1,7 +1,7 @@
 import type { LoaderArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
 
-import config from "~/config.server";
+import config from "~/config";
 import { getDrinker, getDrinkerDatabase } from "~/notion/notion";
 import { getTextFromRichText } from "~/notion/notion";
 import type { BlockWithChildren } from "~/notion/notion.types";

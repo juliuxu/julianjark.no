@@ -8,7 +8,7 @@ import { useLoaderData } from "@remix-run/react";
 
 import Debug from "~/components/debug";
 import { maybePrepareDebugData } from "~/components/debug.server";
-import config from "~/config.server";
+import config from "~/config";
 import { getBlocksWithChildren } from "~/notion/notion-api.server";
 import NotionRender from "~/packages/notion-render";
 import { prepareNotionBlocks } from "~/packages/notion-shiki-code/prepare.server";

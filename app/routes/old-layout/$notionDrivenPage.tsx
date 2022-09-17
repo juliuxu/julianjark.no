@@ -9,7 +9,7 @@ import { useLoaderData } from "@remix-run/react";
 import Debug from "~/components/debug";
 import { maybePrepareDebugData } from "~/components/debug.server";
 import { buildOptimizedNotionImage } from "~/components/notion-components";
-import config from "~/config.server";
+import config from "~/config";
 import {
   findPageBySlugPredicate,
   getNotionDrivenPages,

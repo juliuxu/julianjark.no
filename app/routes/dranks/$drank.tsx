@@ -10,7 +10,7 @@ import { useLoaderData } from "@remix-run/react";
 import { buildOptimizedNotionImage } from "~/components/notion-components";
 import { notionRenderClasses } from "~/components/notion-render-config";
 import { OptimizedImage } from "~/components/optimized-image";
-import config from "~/config.server";
+import config from "~/config";
 import {
   fetchDranksImageResources,
   findPageBySlugPredicate,

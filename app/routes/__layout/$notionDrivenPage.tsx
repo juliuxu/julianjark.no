@@ -12,7 +12,7 @@ import {
   notionRenderClasses,
   notionRenderComponents,
 } from "~/components/notion-render-config";
-import config from "~/config.server";
+import config from "~/config";
 import {
   findPageBySlugPredicate,
   getNotionDrivenPages,

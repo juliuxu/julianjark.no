@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useFetcher } from "@remix-run/react";
 
-const useShortcut = (keys: string, onTrigger: () => unknown) => {
+export const useShortcut = (keys: string, onTrigger: () => unknown) => {
   const pressedKeysRef = useRef("");
   const handleKeyPress = useCallback((event: KeyboardEvent) => {
     pressedKeysRef.current += event.key;

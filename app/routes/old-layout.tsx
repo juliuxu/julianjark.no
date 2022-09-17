@@ -11,7 +11,7 @@ import picoCss from "@picocss/pico/css/pico.min.css";
 import TopLevelMenu, {
   loader as topLevelMenuLoader,
 } from "~/components/top-level-menu";
-import config from "~/config.server";
+import config from "~/config";
 import commonStyles from "~/styles/common.css";
 import designTokens from "~/styles/design-tokens.json";
 import notionRenderStyles from "~/styles/notionRender.css";

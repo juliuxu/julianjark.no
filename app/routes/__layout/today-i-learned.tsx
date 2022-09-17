@@ -6,7 +6,7 @@ import type {
 import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 
-import { AnchorHeading } from "~/components/AnchorHeading";
+import { AnchorHeading } from "~/components/anchor-heading";
 import Debug from "~/components/debug";
 import { maybePrepareDebugData } from "~/components/debug.server";
 import {
@@ -14,7 +14,7 @@ import {
   notionRenderComponents,
   notionSelectClasses,
 } from "~/components/notion-render-config";
-import config from "~/config.server";
+import config from "~/config";
 import {
   getMultiSelectAndColor,
   getTitle,

@@ -20,7 +20,7 @@ import skyRevealTheme from "reveal.js/dist/theme/sky.css";
 import solarizedRevealTheme from "reveal.js/dist/theme/solarized.css";
 import whiteRevealTheme from "reveal.js/dist/theme/white.css";
 
-import config from "~/config.server";
+import config from "~/config";
 import {
   findPageBySlugPredicate,
   getPresentasjoner,

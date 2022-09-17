@@ -5,7 +5,7 @@ import type {
 } from "@remix-run/node";
 import { json } from "@remix-run/node";
 
-import config from "~/config.server";
+import config from "~/config";
 import { getDrinker } from "~/notion/notion";
 import tailwind from "~/tailwind.css";
 

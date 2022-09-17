@@ -8,7 +8,7 @@ import { Link, useLoaderData } from "@remix-run/react";
 
 import Debug from "~/components/debug";
 import { maybePrepareDebugData } from "~/components/debug.server";
-import config from "~/config.server";
+import config from "~/config";
 import { getPresentasjoner, getTitle, slugify } from "~/notion/notion";
 
 export const loader = async ({ request }: LoaderArgs) => {
