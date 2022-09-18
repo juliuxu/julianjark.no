@@ -28,7 +28,8 @@ export const meta: MetaFunction<
     .map((p) =>
       p.type === "paragraph" ? getTextFromRichText(p.paragraph.rich_text) : "",
     )
-    .join(". ");
+    .join(". ")
+    .replace(/([^.])\.\. /, "$1. ");
 
   return {
     title: entry.title,
