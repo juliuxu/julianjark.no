@@ -22,11 +22,13 @@ export const meta: MetaFunction<
 
   // Get first paragraph and use as description
   // TODO: Use multiple paragraphs as longs the count is less than a limit
-  let description = "";
-  const p = entry.notionBlocks.find((x) => x.type === "paragraph");
-  if (p?.type === "paragraph") {
-    description = getTextFromRichText(p.paragraph.rich_text);
-  }
+  const description = entry.notionBlocks
+    .filter((x) => x.type === "paragraph")
+    .slice(0, 2)
+    .map((p) =>
+      p.type === "paragraph" ? getTextFromRichText(p.paragraph.rich_text) : "",
+    )
+    .join(". ");
 
   return {
     title: entry.title,
