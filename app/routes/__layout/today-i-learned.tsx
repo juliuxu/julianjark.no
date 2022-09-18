@@ -185,9 +185,10 @@ const TodayILearnedMenu = ({ entries }: TodayILearnedMenuProps) => {
     <div className="flex gap-3 md:gap-5 flex-col rounded ring-1 p-2">
       {entries.map((entry) => (
         <NavLink
+          key={entry.title}
           className="text-gray-300 focus:text-white hover:text-white transition"
           to={slugify(entry.title)}
-          key={entry.title}
+          prefetch="intent"
         >
           {entry.title}{" "}
           <div className="text-gray-400 text-sm">
