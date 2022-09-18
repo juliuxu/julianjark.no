@@ -167,8 +167,9 @@ const FloatingNextButton = ({ articleIds }: NextButtonProps) => {
   return (
     <div className="fixed bottom-8 right-8">
       <button
+        aria-hidden
         onClick={onNext}
-        className="text-[8vw] sm:text-[6vw] md:text-[4vw] hover:scale-125 transition-all"
+        className="text-[8vw] sm:text-[6vw] md:text-[4vw] hover:scale-125 active:scale-150 transition-all"
       >
         ⬇️
       </button>
