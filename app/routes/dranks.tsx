@@ -70,6 +70,7 @@ export const Header = () => {
       <nav className={`${dranksClasses.layoutPadding}`}>
         <ul className="min-h-[5rem] py-4 flex flex-wrap items-center gap-y-4 gap-x-8">
           <NavLink
+            prefetch="intent"
             to="/dranks"
             end
             className={({ isActive }) =>
@@ -79,6 +80,7 @@ export const Header = () => {
             Dranks
           </NavLink>
           <NavLink
+            prefetch="intent"
             to="/dranks/sirup"
             className={({ isActive }) =>
               `${classes.link} ${isActive && classes.linkActive}`
@@ -87,6 +89,7 @@ export const Header = () => {
             Sirup
           </NavLink>
           <NavLink
+            prefetch="intent"
             to="/dranks/super-juice"
             className={({ isActive }) =>
               `${classes.link} ${isActive && classes.linkActive}`
@@ -95,6 +98,7 @@ export const Header = () => {
             Super juice
           </NavLink>
           <NavLink
+            prefetch="intent"
             to="/dranks/utstyr"
             className={({ isActive }) =>
               `${classes.link} ${isActive && classes.linkActive}`
@@ -106,12 +110,14 @@ export const Header = () => {
           <div className="flex-grow-0 md:flex-grow h-0 basis-full md:basis-auto" />
           <div className="flex flex-col md:flex-row w-full md:w-auto gap-y-4 gap-x-5 lg:gap-x-8">
             <Link
+              prefetch="intent"
               to="/dranks/quiz"
               className={`${classes.linkButton} text-white bg-dranks-orange w-full md:w-40`}
             >
               Quiz
             </Link>
             <Link
+              prefetch="intent"
               to="/dranks/last-ned-app"
               className={`${classes.linkButton} bg-light-orange w-full md:w-40`}
             >
