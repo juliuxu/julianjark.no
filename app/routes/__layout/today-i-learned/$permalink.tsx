@@ -1,13 +1,8 @@
 import { useEffect } from "react";
 import type { MetaFunction } from "@remix-run/node";
-import {
-  useLocation,
-  useMatches,
-  useNavigate,
-  useParams,
-} from "@remix-run/react";
+import { useLocation, useParams } from "@remix-run/react";
 
-import { slugify } from "~/notion/notion";
+import { getTextFromRichText, slugify } from "~/notion/notion";
 import type { Loader as TodayILearnedLoader } from "~/routes/__layout/today-i-learned";
 import { assertItemFound } from "~/utils";
 
@@ -25,10 +20,28 @@ export const meta: MetaFunction<
   );
   assertItemFound(entry);
 
+  // Get first paragraph and use as description
+  // TODO: Use multiple paragraphs as longs the count is less than a limit
+  let description = "";
+  const p = entry.notionBlocks.find((x) => x.type === "paragraph");
+  if (p?.type === "paragraph") {
+    description = getTextFromRichText(p.paragraph.rich_text);
+  }
+
   return {
     title: entry.title,
+    description: description,
+    keywords: entry.tags.map((x) => x.title).join(", "),
     "og:title": entry.title,
-    "twitter:title": entry.title,
+    "og:type": "article",
+    "og:description": description,
+
+    // According to twitter, there is no need to duplicate Open Grap
+    // attributes
+    // "twitter:title": entry.title,
+    // "twitter:description": description,
+
+    "twitter:card": "summary",
   };
 };
 
