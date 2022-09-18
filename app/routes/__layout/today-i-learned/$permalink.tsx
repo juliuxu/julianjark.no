@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import type { MetaFunction } from "@remix-run/node";
+import type { HeadersFunction, MetaFunction } from "@remix-run/node";
 import { useLocation, useParams } from "@remix-run/react";
 
 import { getTextFromRichText, slugify } from "~/notion/notion";
@@ -47,6 +47,8 @@ export const meta: MetaFunction<
     "twitter:card": "summary",
   };
 };
+
+export const headers: HeadersFunction = ({ parentHeaders }) => parentHeaders;
 
 /**
  * Make sure the linked Entry is selected when first loading the page
