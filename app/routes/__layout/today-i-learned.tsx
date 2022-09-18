@@ -15,6 +15,7 @@ import {
   notionSelectClasses,
 } from "~/components/notion-render-config";
 import { PermalinkHeading } from "~/components/permalink-heading";
+import { useShortcut } from "~/components/use-shortcut";
 import config from "~/config";
 import {
   getMultiSelectAndColor,
@@ -117,7 +118,9 @@ export default function TodayILearned() {
             ))}
           </div>
         </div>
-        <FloatingNextButton articleIds={entries.map((x) => slugify(x.title))} />
+        <FloatingNextPreviousButton
+          articleIds={entries.map((x) => slugify(x.title))}
+        />
       </div>
       <Debug debugData={data.debugData} />
     </>
@@ -127,16 +130,12 @@ export default function TodayILearned() {
 interface NextButtonProps {
   articleIds: string[];
 }
-const FloatingNextButton = ({ articleIds }: NextButtonProps) => {
-  const onNext = useCallback(() => {
+const FloatingNextPreviousButton = ({ articleIds }: NextButtonProps) => {
+  const onNext = () => {
     // https://awik.io/check-if-element-is-inside-viewport-with-javascript/
     // https://gomakethings.com/how-to-test-if-an-element-is-in-the-viewport-with-vanilla-javascript/
     function isArticleHighUpInViewport(element: HTMLElement) {
       const rect = element.getBoundingClientRect();
-      console.log({
-        top: rect.top,
-        bottom: rect.bottom,
-      });
       return rect.top <= 50 && rect.bottom > 0;
     }
 
@@ -163,9 +162,48 @@ const FloatingNextButton = ({ articleIds }: NextButtonProps) => {
       block: "start",
       behavior: "smooth",
     });
-  }, []);
+  };
+  const onPrevious = () => {
+    function isArticleHighUpInViewport(element: HTMLElement) {
+      const rect = element.getBoundingClientRect();
+      return rect.top <= 60 && rect.bottom >= -50;
+    }
+
+    let nextId = "";
+    for (const [i, id] of articleIds.entries()) {
+      const element = document.getElementById(id);
+      const parentArticle = element?.closest("article");
+      if (!parentArticle) continue;
+      if (isArticleHighUpInViewport(parentArticle)) {
+        if (i < articleIds.length) nextId = articleIds[i];
+        else nextId = "";
+        break;
+      }
+    }
+    if (!nextId) return;
+
+    // Scroll into view
+    const element = document.getElementById(nextId);
+    if (!element) return;
+
+    element.scrollIntoView({
+      block: "start",
+      behavior: "smooth",
+    });
+  };
+
+  useShortcut("j", onNext);
+  useShortcut("k", onPrevious);
+
   return (
-    <div className="fixed bottom-8 right-8">
+    <div className="fixed bottom-8 right-8 flex flex-col">
+      <button
+        aria-hidden
+        onClick={onPrevious}
+        className="text-[8vw] sm:text-[6vw] md:text-[4vw] hover:scale-125 active:scale-150 transition-all"
+      >
+        ⬆️
+      </button>
       <button
         aria-hidden
         onClick={onNext}
@@ -182,7 +220,7 @@ interface TodayILearnedMenuProps {
 }
 const TodayILearnedMenu = ({ entries }: TodayILearnedMenuProps) => {
   return (
-    <div className="flex gap-3 md:gap-5 flex-col rounded ring-1 p-2">
+    <div className="flex gap-3 md:gap-5 flex-col rounded ring-1 p-2 md:sticky md:top-6 md:max-h-screen">
       {entries.map((entry) => (
         <NavLink
           key={entry.title}
