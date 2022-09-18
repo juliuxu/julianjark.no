@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "@remix-run/react";
 
 import config from "~/config";
-import { useShortcut } from "./cache-purge-button";
+import { useShortcut } from "./use-shortcut";
 
 type Props = {
   watchInterval?: number;

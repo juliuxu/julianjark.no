@@ -2,6 +2,7 @@ import type { LinksFunction, MetaFunction } from "@remix-run/node";
 import { NavLink, Outlet, useMatches } from "@remix-run/react";
 
 import { CachePurgeCurrentPageButton } from "~/components/cache-purge-button";
+import { HiddenFeature } from "~/components/hidden-feature";
 import { NotionWatcherButton } from "~/components/notion-watcher-button";
 import config from "~/config";
 import { slugify } from "~/notion/notion";
@@ -83,14 +84,16 @@ const Header = () => {
               {x}
             </NavLink>
           ))}
-        <div className="opacity-40 hover:opacity-100 transition-opacity -mt-[1px]">
-          <CachePurgeCurrentPageButton />
-        </div>
-        {pageOrDatabaseId && (
-          <div className="opacity-40 hover:opacity-100 transition-opacity -ml-3 -mt-[3px]">
-            <NotionWatcherButton {...pageOrDatabaseId} />
+        <HiddenFeature shortcut="x">
+          <div className="opacity-40 focus-within:opacity-100 hover:opacity-100 transition-opacity -mt-[1px]">
+            <CachePurgeCurrentPageButton />
           </div>
-        )}
+          {pageOrDatabaseId && (
+            <div className="opacity-40 focus-within:opacity-100 hover:opacity-100 transition-opacity -ml-3 -mt-[3px]">
+              <NotionWatcherButton {...pageOrDatabaseId} />
+            </div>
+          )}
+        </HiddenFeature>
       </div>
     </nav>
   );
