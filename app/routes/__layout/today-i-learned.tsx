@@ -5,7 +5,7 @@ import type {
   MetaFunction,
 } from "@remix-run/node";
 import { json } from "@remix-run/node";
-import { Outlet, useLoaderData } from "@remix-run/react";
+import { NavLink, Outlet, useLoaderData } from "@remix-run/react";
 
 import Debug from "~/components/debug";
 import { maybePrepareDebugData } from "~/components/debug.server";
@@ -184,9 +184,9 @@ const TodayILearnedMenu = ({ entries }: TodayILearnedMenuProps) => {
   return (
     <div className="flex gap-3 md:gap-5 flex-col rounded ring-1 p-2">
       {entries.map((entry) => (
-        <a
+        <NavLink
           className="text-gray-300 focus:text-white hover:text-white transition"
-          href={`#${slugify(entry.title)}`}
+          to={slugify(entry.title)}
           key={entry.title}
         >
           {entry.title}{" "}
@@ -195,7 +195,7 @@ const TodayILearnedMenu = ({ entries }: TodayILearnedMenuProps) => {
               dateStyle: "short",
             })}
           </div>
-        </a>
+        </NavLink>
       ))}
     </div>
   );
