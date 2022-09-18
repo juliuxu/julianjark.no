@@ -8,6 +8,7 @@ export function CachePurgeCurrentPageButton() {
   const reloadWithoutCache = async () => {
     if (isSubmitting) return;
     setIsSubmitting(true);
+    await fetch(`/api/purge-notion-cache`, { method: "DELETE" });
     document.cookie = "no_cache=1;max-age=15";
     window.location.reload();
   };

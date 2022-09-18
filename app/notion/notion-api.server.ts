@@ -140,7 +140,14 @@ export const getBlocksNoCache = getBlocks;
 export const getDatabasePagesNoCache = getDatabasePages;
 export const getBlocksWithChildrenNoCache = getBlocksWithChildren;
 
-// Cache to memory during production
+/**
+ * Caching
+ *
+ * notion api is not super fast.
+ * by caching in memory during production we speed up requests using the same notion data
+ * by caching on file system during development we speed up page reloads during code changes
+ */
+export let notionCachePurgeEverything = async () => {};
 if (process.env.NODE_ENV === "production") {
   const inMemoryCache = new LRU({ max: 500, ttl: 1000 * 60 });
   const inMemoryMemo = (fn: (...args: any[]) => Promise<any>) => {
@@ -154,41 +161,22 @@ if (process.env.NODE_ENV === "production") {
       return fresh;
     };
   };
-
-  // const inMemoryMemo2 = (fn: (...args: any[]) => Promise<any>) => {
-  //   const inMemoryCache = new LRU({
-  //     max: 500,
-  //     ttl: 60,
-  //     allowStale: true,
-  //     fetchMethod: fn,
-  //   });
-  //   return async (...args: any) => {
-  //     const key = fn.name + JSON.stringify(args);
-  //     const cached = inMemoryCache.get(key);
-  //     if (cached) return cached;
-
-  //     const fresh = await fn(...args);
-  //     inMemoryCache.set(key, fresh);
-  //     return fresh;
-  //   };
-  // };
+  notionCachePurgeEverything = async () => inMemoryCache.clear();
 
   getPage = inMemoryMemo(getPage);
   getDatabase = inMemoryMemo(getDatabase);
   getBlocks = inMemoryMemo(getBlocks);
+  getBlocksWithChildren = inMemoryMemo(getBlocksWithChildren);
   getDatabasePages = inMemoryMemo(getDatabasePages);
 }
 
-// Cache to disk during development
-// Since the notion api is pretty slow,
-// this lets us speed up development significantly when doing rapid design changes
 if (process.env.NODE_ENV === "development") {
   const cachePath = pathJoin(".cache", "notion-api-cache");
   console.log("caching notion to", cachePath);
   const memoizer = memoizeFs({
     cachePath,
   });
-  const memoAsync = (
+  const memoFsAsync = (
     fn: memoizeFs.FnToMemoize,
     opts: memoizeFs.Options = {},
   ) => {
@@ -201,9 +189,11 @@ if (process.env.NODE_ENV === "development") {
       return await mfn(...args);
     };
   };
+  notionCachePurgeEverything = memoizer.invalidate;
 
-  getPage = memoAsync(getPage);
-  getDatabase = memoAsync(getDatabase);
-  getBlocks = memoAsync(getBlocks);
-  getDatabasePages = memoAsync(getDatabasePages);
+  getPage = memoFsAsync(getPage);
+  getDatabase = memoFsAsync(getDatabase);
+  getBlocks = memoFsAsync(getBlocks);
+  getBlocksWithChildren = memoFsAsync(getBlocksWithChildren);
+  getDatabasePages = memoFsAsync(getDatabasePages);
 }

@@ -58,9 +58,10 @@ function useRevalidate() {
   let navigate = useNavigate();
   // And return a function which will navigate to `.` (same URL) and replace it
   return useCallback(
-    function revalidate() {
+    async function revalidate() {
       const url = new URL(window.location.href);
       document.cookie = "no_cache=1;max-age=15";
+      await fetch(`/api/purge-notion-cache`, { method: "DELETE" });
       navigate(url.pathname + url.search, { replace: true });
     },
     [navigate],

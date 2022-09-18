@@ -1,6 +1,7 @@
 import type { ActionFunction } from "@remix-run/node";
 
 import config from "~/config";
+import { notionCachePurgeEverything } from "~/notion/notion-api.server";
 import type { Page } from "~/sitemap.server";
 import { getSitemapTree } from "~/sitemap.server";
 import {
@@ -104,6 +105,8 @@ export const action: ActionFunction = async ({ request }) => {
   const onlyEditedSinceDate = getDateOrUndefined(
     url.searchParams.get("onlyEditedSinceDate"),
   );
+
+  await notionCachePurgeEverything();
 
   const before = () => {
     if (onlyEditedSinceDate) {

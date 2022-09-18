@@ -4,7 +4,7 @@ import { getNumberOrUndefined, getOneOfOrUndefined } from "~/utils";
 import { createReadableStreamLogger, purgeUpdatedPages } from "./cache-purge";
 
 const DEFAULT_WATCH_INTERVAL = 20 * 1000;
-export const loader = ({ request }: LoaderArgs) => {
+export const loader = async ({ request }: LoaderArgs) => {
   const url = new URL(request.url);
   const currentLoglevel =
     getOneOfOrUndefined(
