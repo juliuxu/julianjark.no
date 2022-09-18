@@ -1,3 +1,4 @@
+import { useCallback } from "react";
 import type {
   HeadersFunction,
   LoaderArgs,
@@ -116,11 +117,64 @@ export default function TodayILearned() {
             ))}
           </div>
         </div>
+        <FloatingNextButton articleIds={entries.map((x) => slugify(x.title))} />
       </div>
       <Debug debugData={data.debugData} />
     </>
   );
 }
+
+interface NextButtonProps {
+  articleIds: string[];
+}
+const FloatingNextButton = ({ articleIds }: NextButtonProps) => {
+  const onNext = useCallback(() => {
+    // https://awik.io/check-if-element-is-inside-viewport-with-javascript/
+    // https://gomakethings.com/how-to-test-if-an-element-is-in-the-viewport-with-vanilla-javascript/
+    function isArticleHighUpInViewport(element: HTMLElement) {
+      const rect = element.getBoundingClientRect();
+      console.log({
+        top: rect.top,
+        bottom: rect.bottom,
+      });
+      return rect.top <= 50 && rect.bottom > 0;
+    }
+
+    // Get the active article
+    // and select the next one
+    let nextId = articleIds[0];
+    for (const [i, id] of articleIds.entries()) {
+      const element = document.getElementById(id);
+      const parentArticle = element?.closest("article");
+      if (!parentArticle) continue;
+      if (isArticleHighUpInViewport(parentArticle)) {
+        if (i + 1 < articleIds.length) nextId = articleIds[i + 1];
+        else nextId = "";
+        break;
+      }
+    }
+    if (!nextId) return;
+
+    // Scroll into view
+    const element = document.getElementById(nextId);
+    if (!element) return;
+
+    element.scrollIntoView({
+      block: "start",
+      behavior: "smooth",
+    });
+  }, []);
+  return (
+    <div className="fixed bottom-8 right-8">
+      <button
+        onClick={onNext}
+        className="text-[8vw] sm:text-[6vw] md:text-[4vw] hover:scale-125 transition-all"
+      >
+        ⬇️
+      </button>
+    </div>
+  );
+};
 
 interface TodayILearnedMenuProps {
   entries: TodayILearnedEntry[];
@@ -154,7 +208,7 @@ const InlineTodayILearnedEntry = ({ entry }: InlineTodayILearnedEntryProps) => {
     <article className="rounded ring-1 p-4">
       <PermalinkHeading
         as="h2"
-        className="text-gray-100 text-3xl scroll-mt-8"
+        className="text-gray-100 text-3xl scroll-mt-10"
         id={slugify(entry.title)}
       >
         {entry.title}
