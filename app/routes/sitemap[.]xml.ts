@@ -9,6 +9,7 @@ function pageToEntry(page: Page): string {
   return `
   <url>
     <loc>${`${config.baseUrl}${page.path}`}</loc>
+    <lastmod>${page.lastmod}</lastmod>
   </url>`;
   /*
       <lastmod>${today}</lastmod>

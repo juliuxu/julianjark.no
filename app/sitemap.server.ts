@@ -2,7 +2,6 @@ import config from "~/config";
 import {
   getDrinker,
   getNotionDrivenPages,
-  getPresentasjoner,
   getTitle,
   getTodayILearnedEntries,
   slugify,
@@ -10,6 +9,7 @@ import {
 import type { DatabasePage } from "~/notion/notion-api.server";
 import { getPage } from "~/notion/notion-api.server";
 import { meta as forsideMeta } from "~/routes/__layout/index";
+import { meta as todayILearnedMeta } from "~/routes/__layout/today-i-learned";
 import { meta as dranksMeta } from "~/routes/dranks/index";
 import { flattenDepthFirst } from "./utils";
 
@@ -38,16 +38,29 @@ const siteTree: PageStruct = {
   }),
   children: [
     // Today I Learned
-    {
-      page: async () => ({
-        title: forsideMeta({} as any).title!,
-        path: "/today-i-learned",
-        lastmod: (await getTodayILearnedEntries())
-          .map((page) => page.last_edited_time)
-          .sort()
-          .reverse()[0],
-        codePath: "routes/__layout/today-i-learned",
-      }),
+    async () => {
+      const todayILearnedEntries = await getTodayILearnedEntries();
+      return [
+        {
+          page: {
+            title: todayILearnedMeta({} as any).title!,
+            path: "/today-i-learned",
+            lastmod: todayILearnedEntries
+              .map((page) => page.last_edited_time)
+              .sort()
+              .reverse()[0],
+            codePath: "routes/__layout/today-i-learned",
+          },
+          children: todayILearnedEntries
+            .map(
+              databasePageToPage(
+                "/today-i-learned/",
+                "routes/__layout/today-i-learned",
+              ),
+            )
+            .map((page) => ({ page })),
+        },
+      ];
     },
 
     // Dranks
