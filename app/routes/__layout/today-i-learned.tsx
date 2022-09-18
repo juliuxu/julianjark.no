@@ -4,9 +4,8 @@ import type {
   MetaFunction,
 } from "@remix-run/node";
 import { json } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
+import { Outlet, useLoaderData } from "@remix-run/react";
 
-import { AnchorHeading } from "~/components/anchor-heading";
 import Debug from "~/components/debug";
 import { maybePrepareDebugData } from "~/components/debug.server";
 import {
@@ -14,6 +13,7 @@ import {
   notionRenderComponents,
   notionSelectClasses,
 } from "~/components/notion-render-config";
+import { PermalinkHeading } from "~/components/permalink-heading";
 import config from "~/config";
 import {
   getMultiSelectAndColor,
@@ -89,6 +89,7 @@ export const loader = async ({ request }: LoaderArgs) => {
     { headers: config.cacheControlHeaders },
   );
 };
+export type Loader = typeof loader;
 
 export const meta: MetaFunction = () => ({
   title: "I dag lærte jeg",
@@ -108,6 +109,7 @@ export default function TodayILearned() {
           <div className="w-full md:w-1/4">
             <TodayILearnedMenu entries={entries} />
           </div>
+          <Outlet />
           <div className="w-full md:w-3/4 flex flex-col gap-10">
             {entries.map((entry) => (
               <InlineTodayILearnedEntry key={entry.title} entry={entry} />
@@ -150,13 +152,13 @@ interface InlineTodayILearnedEntryProps {
 const InlineTodayILearnedEntry = ({ entry }: InlineTodayILearnedEntryProps) => {
   return (
     <article className="rounded ring-1 p-4">
-      <AnchorHeading
+      <PermalinkHeading
         as="h2"
         className="text-gray-100 text-3xl scroll-mt-8"
         id={slugify(entry.title)}
       >
         {entry.title}
-      </AnchorHeading>
+      </PermalinkHeading>
 
       <div className="text-sm text-gray-400 mt-2">
         {new Date(entry.created).toLocaleDateString("no", {
