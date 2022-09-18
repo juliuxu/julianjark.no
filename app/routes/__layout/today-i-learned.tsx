@@ -108,7 +108,7 @@ export default function TodayILearned() {
           <div className="w-full md:w-1/4">
             <TodayILearnedMenu entries={entries} />
           </div>
-          <div className="w-full md:w-3/4 flex flex-col gap-20">
+          <div className="w-full md:w-3/4 flex flex-col gap-10">
             {entries.map((entry) => (
               <InlineTodayILearnedEntry key={entry.title} entry={entry} />
             ))}
@@ -149,10 +149,10 @@ interface InlineTodayILearnedEntryProps {
 }
 const InlineTodayILearnedEntry = ({ entry }: InlineTodayILearnedEntryProps) => {
   return (
-    <article>
+    <article className="rounded ring-1 p-4">
       <AnchorHeading
         as="h2"
-        className="text-gray-100 text-3xl scroll-mt-4"
+        className="text-gray-100 text-3xl scroll-mt-8"
         id={slugify(entry.title)}
       >
         {entry.title}
