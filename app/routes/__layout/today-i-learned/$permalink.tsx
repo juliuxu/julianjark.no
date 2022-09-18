@@ -1,6 +1,11 @@
 import { useEffect } from "react";
 import type { MetaFunction } from "@remix-run/node";
-import { useMatches, useParams } from "@remix-run/react";
+import {
+  useLocation,
+  useMatches,
+  useNavigate,
+  useParams,
+} from "@remix-run/react";
 
 import { slugify } from "~/notion/notion";
 import type { Loader as TodayILearnedLoader } from "~/routes/__layout/today-i-learned";
@@ -32,6 +37,7 @@ export const meta: MetaFunction<
  */
 export default function TodayILearnedPermalink() {
   const { permalink } = useParams();
+  const { key } = useLocation();
 
   useEffect(() => {
     const element = document.getElementById(permalink ?? "");
@@ -40,6 +46,6 @@ export default function TodayILearnedPermalink() {
       block: "start",
       behavior: "auto",
     });
-  }, [permalink]);
+  }, [key, permalink]);
   return null;
 }
