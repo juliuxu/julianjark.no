@@ -263,7 +263,7 @@ const InlineTodayILearnedEntry = ({ entry }: InlineTodayILearnedEntryProps) => {
         })}
       </div>
 
-      <div className="flex mt-3">
+      <div className="flex gap-2 flex-wrap mt-3">
         {entry.tags.map((x) => (
           <span
             key={x.title}
