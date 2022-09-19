@@ -63,7 +63,7 @@ export const purgeUpdatedPages = async (
   const changedPages = pages.filter(isChangedPage(before));
 
   changedPages.length > 0 &&
-    logger(`🔄 ${changedPages.length} to update`, "info");
+    logger(`🔄 ${changedPages.length} pages to update`, "info");
 
   // Purge the pages
   for (let chunk of chunked(changedPages, 5)) {
