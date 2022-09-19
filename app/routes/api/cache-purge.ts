@@ -63,18 +63,16 @@ export const purgeUpdatedPages = async (
   // Get changed pages
   const changedPages = pages.filter(isChangedPage(before));
 
-  // Log which pages are updating
-  changedPages.forEach((page) => {
-    logger(`🔥 updating ${page.path} (${page.title})`, "info");
-  });
-  if (changedPages.length === 0) {
-    logger("🆗 no pages updated", "info");
-  }
-
   // Purge the pages
   for (let chunk of chunked(changedPages, 5)) {
+    // Log which pages are updating
+    chunk.forEach((page) => {
+      logger(`🔥 updating ${page.path} (${page.title})`, "info");
+    });
+
     await Promise.allSettled(chunk.flatMap(purgePage));
   }
+  changedPages.length === 0 && logger("🆗 no pages updated", "info");
   changedPages.length > 0 && logger("✅ done", "info");
 
   return changedPages;
