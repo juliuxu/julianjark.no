@@ -28,17 +28,16 @@ export const isChangedPage = (before: Date) => (page: Page) => {
   return new Date(page.lastmod) >= minuteDate;
 };
 
-export const purgePage = (page: Page) => {
+export const purgePage = async (page: Page) => {
   const paths = [
     page.path,
     `${page.path}?_data=${encodeURIComponent(page.codePath)}`,
   ];
-  const requests = paths.map((path) =>
-    fetch(`${config.baseUrl}${path}`, {
+  for (const path of paths) {
+    await fetch(`${config.baseUrl}${path}`, {
       headers: { "no-cache": "1" },
-    }),
-  );
-  return Promise.allSettled(requests);
+    });
+  }
 };
 
 export const purgeUpdatedPages = async (
@@ -62,6 +61,9 @@ export const purgeUpdatedPages = async (
 
   // Get changed pages
   const changedPages = pages.filter(isChangedPage(before));
+
+  changedPages.length > 0 &&
+    logger(`🔄 ${changedPages.length} to update`, "info");
 
   // Purge the pages
   for (let chunk of chunked(changedPages, 5)) {
