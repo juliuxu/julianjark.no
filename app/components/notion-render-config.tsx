@@ -57,5 +57,5 @@ export const notionRenderClasses: Partial<Classes> /*tw*/ = {
 };
 export const notionRenderComponents: Partial<Components> = {
   code: ShikiNotionCode,
-  image: buildOptimizedNotionImage(),
+  image: buildOptimizedNotionImage({ format: "webp" }),
 };
