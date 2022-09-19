@@ -20,7 +20,7 @@ export const meta: MetaFunction<
   );
   assertItemFound(entry);
 
-  // Get first paragraph and use as description
+  // Get firsßt paragraph and use as description
   // TODO: Use multiple paragraphs as longs the count is less than a limit
   const description = entry.notionBlocks
     .filter((x) => x.type === "paragraph")
@@ -31,13 +31,17 @@ export const meta: MetaFunction<
     .join(".\n")
     .replace(/([^.])\.\.\n/, "$1. ");
 
+  const tags = entry.tags.map((x) => x.title);
+
   return {
     title: entry.title,
     description: description,
-    keywords: entry.tags.map((x) => x.title).join(", "),
     "og:title": entry.title,
-    "og:type": "article",
     "og:description": description,
+
+    // TODO: Generate an image of the article 🤯
+    // use last updated time in url to ensure
+    // "og:image": "",
 
     // According to twitter, there is no need to duplicate Open Grap
     // attributes
@@ -45,6 +49,20 @@ export const meta: MetaFunction<
     // "twitter:description": description,
 
     "twitter:card": "summary",
+
+    "twitter:label1": "Publisert",
+    "twitter:data1": new Intl.DateTimeFormat("no-nb", {
+      dateStyle: "medium",
+    }).format(new Date(entry.created)),
+
+    "twitter:label2": "Tags",
+    "twitter:data2": tags.join(", "),
+
+    // Extra, unsure about the effect
+    "og:type": "article",
+    "article:tag": tags,
+
+    keywords: tags.join(", "),
   };
 };
 
