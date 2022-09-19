@@ -5,6 +5,7 @@ import { notionCachePurgeEverything } from "~/notion/notion-api.server";
 import type { Page } from "~/sitemap.server";
 import { getSitemapTree } from "~/sitemap.server";
 import {
+  chunked,
   flattenDepthFirst,
   getDateOrUndefined,
   getNumberOrUndefined,
@@ -64,14 +65,16 @@ export const purgeUpdatedPages = async (
 
   // Log which pages are updating
   changedPages.forEach((page) => {
-    logger(`🔥 updating ${page.path} (${page.title})`, "silent");
+    logger(`🔥 updating ${page.path} (${page.title})`, "info");
   });
   if (changedPages.length === 0) {
     logger("🆗 no pages updated", "info");
   }
 
   // Purge the pages
-  await Promise.allSettled(changedPages.flatMap(purgePage));
+  for (let chunk of chunked(changedPages, 5)) {
+    await Promise.allSettled(chunk.flatMap(purgePage));
+  }
   changedPages.length > 0 && logger("✅ done", "info");
 
   return changedPages;
