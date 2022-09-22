@@ -3,6 +3,7 @@ import { json } from "@remix-run/node";
 import { Link, NavLink, Outlet, useLoaderData } from "@remix-run/react";
 
 import { OptimizedImage } from "~/components/optimized-image";
+import config from "~/config";
 import type { ImageResource } from "~/notion/notion";
 import { fetchDranksImageResources } from "~/notion/notion";
 import fontComico from "~/styles/font-comico.css";
@@ -34,7 +35,7 @@ export const loader = async () => {
     "last-ned-fra-app-store",
   ]);
 
-  return json({ images });
+  return json({ images }, { headers: config.cacheControlHeaders });
 };
 
 // https://remix.run/docs/en/v1/api/conventions#never-reloading-the-root
