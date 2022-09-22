@@ -26,7 +26,7 @@ export const meta: MetaFunction<
   // TODO: Use multiple paragraphs as longs the count is less than a limit
   const description = entry.notionBlocks
     .filter((x) => x.type === "paragraph")
-    .slice(0, 2)
+    .slice(0, 1)
     .map((p) =>
       p.type === "paragraph" ? getTextFromRichText(p.paragraph.rich_text) : "",
     )
@@ -59,13 +59,15 @@ export const meta: MetaFunction<
     // "twitter:title": entry.title,
     // "twitter:description": description,
 
-    "twitter:label1": "Publisert",
-    "twitter:data1": new Intl.DateTimeFormat("no-nb", {
-      dateStyle: "medium",
-    }).format(new Date(entry.created)),
+    // Extra tags displayed in slack
+    // TODO: Add published date in og:image
+    // "twitter:label1": "Publisert",
+    // "twitter:data1": new Intl.DateTimeFormat("no-nb", {
+    //   dateStyle: "medium",
+    // }).format(new Date(entry.created)),
 
-    "twitter:label2": "Tags",
-    "twitter:data2": tags.join(", "),
+    // "twitter:label2": "Tags",
+    // "twitter:data2": tags.join(", "),
 
     // Extra, unsure about the effect
     "og:type": "article",
