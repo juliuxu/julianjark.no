@@ -1,5 +1,7 @@
 FROM node:18-bullseye-slim as base
 
+RUN apt-get update && apt-get install -y -q --no-install-recommends libfontconfig1 fontconfig
+
 # set for base and all layer that inherit from it
 ENV NODE_ENV production
 
