@@ -3,7 +3,9 @@ import type { HeadersFunction, MetaFunction } from "@remix-run/node";
 import { useLocation, useParams } from "@remix-run/react";
 
 import { getTextFromRichText, slugify } from "~/notion/notion";
+import type { SelectColor } from "~/notion/notion.types";
 import type { Loader as TodayILearnedLoader } from "~/routes/__layout/today-i-learned";
+import { socialImageUrlBuilder } from "~/routes/api/social-image";
 import { assertItemFound } from "~/utils";
 
 /**
@@ -33,22 +35,29 @@ export const meta: MetaFunction<
 
   const tags = entry.tags.map((x) => x.title);
 
+  const image = socialImageUrlBuilder({
+    headline: "I dag lærte jeg",
+    title: entry.title,
+    tags: entry.tags.map((x) => ({
+      title: x.title,
+      color: notionSelectColors[x.color],
+    })),
+    author: "Julian Jark",
+  }).toString();
+
   return {
     title: entry.title,
     description: description,
     "og:title": entry.title,
     "og:description": description,
 
-    // TODO: Generate an image of the article 🤯
-    // use last updated time in url to ensure
-    // "og:image": "",
+    "og:image": image,
+    "twitter:card": image ? "summary_large_image" : "summary",
 
     // According to twitter, there is no need to duplicate Open Grap
     // attributes
     // "twitter:title": entry.title,
     // "twitter:description": description,
-
-    "twitter:card": "summary",
 
     "twitter:label1": "Publisert",
     "twitter:data1": new Intl.DateTimeFormat("no-nb", {
@@ -84,6 +93,10 @@ export default function TodayILearnedPermalink() {
   const { key } = useLocation();
 
   useEffect(() => {
+    console.log(
+      "og:image",
+      (document.querySelector(`meta[property="og:image"]`) as any)?.content,
+    );
     const element = document.getElementById(permalink ?? "");
     if (!element) return;
     element.scrollIntoView({
@@ -93,3 +106,16 @@ export default function TodayILearnedPermalink() {
   }, [key, permalink]);
   return null;
 }
+
+const notionSelectColors: Record<SelectColor, string> /*tw*/ = {
+  default: `rgb(243 244 246)`,
+  gray: `rgb(209 213 219)`,
+  brown: `rgb(253 230 138)`,
+  orange: `rgb(254 215 170)`,
+  yellow: `rgb(254 240 138)`,
+  green: `rgb(187 247 208)`,
+  blue: `rgb(191 219 254)`,
+  purple: `rgb(88 28 135)`,
+  pink: `rgb(131 24 67)`,
+  red: `rgb(127 29 29)`,
+};

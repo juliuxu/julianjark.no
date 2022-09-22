@@ -16,7 +16,6 @@ import {
 } from "~/components/notion-render-config";
 import { PermalinkHeading } from "~/components/permalink-heading";
 import { FloatingScrollNextPreviousButtons } from "~/components/scroll-next-previous";
-import { useShortcut } from "~/components/use-shortcut";
 import config from "~/config";
 import {
   getMultiSelectAndColor,
