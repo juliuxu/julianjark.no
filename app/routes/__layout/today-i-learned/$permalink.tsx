@@ -61,8 +61,16 @@ export const meta: MetaFunction<
     // Extra, unsure about the effect
     "og:type": "article",
     "article:tag": tags,
-
     keywords: tags.join(", "),
+
+    // Linkedin complained about this
+    author: "Julian Jark",
+    "article:byline": "Julian Jark",
+
+    // Published date
+    publish_date: entry.created,
+    "og:publish_date": entry.created,
+    "article:published_time": entry.created,
   };
 };
 
