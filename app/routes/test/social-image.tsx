@@ -1,7 +1,7 @@
-import type { LoaderFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 
+import { getTextFromRichText } from "~/notion/notion";
 import { getTodayILearnedEntries } from "~/notion/notion";
 import { getBlocksWithChildren } from "~/notion/notion-api.server";
 import { prepareTodayILearendEntry } from "../__layout/today-i-learned";
@@ -24,6 +24,15 @@ export default function SocialImageTest() {
     socialImageUrlBuilder({
       headline: "I dag lærte jeg",
       title: entry.title,
+      ingress: entry.notionBlocks
+        .filter((x) => x.type === "paragraph")
+        .slice(0, 1)
+        .map((p) =>
+          p.type === "paragraph"
+            ? getTextFromRichText(p.paragraph.rich_text)
+            : "",
+        )
+        .join(""),
       tags: entry.tags.map((x) => ({
         title: x.title,
         color: notionSelectColors[x.color],

@@ -22,7 +22,7 @@ export const meta: MetaFunction<
   );
   assertItemFound(entry);
 
-  // Get firsßt paragraph and use as description
+  // Get first paragraph and use as description/ingress
   // TODO: Use multiple paragraphs as longs the count is less than a limit
   const description = entry.notionBlocks
     .filter((x) => x.type === "paragraph")
@@ -42,6 +42,7 @@ export const meta: MetaFunction<
       title: x.title,
       color: notionSelectColors[x.color],
     })),
+    ingress: description,
     author: "Julian Jark",
   });
 

@@ -45,6 +45,11 @@ const generateSocialImage = async (
   const width = 1200;
   const height = 630;
 
+  const paddingX = 50;
+  const paddingY = 100;
+
+  const innerMaxWidth = width - paddingX * 2;
+
   const canvas = new Canvas(width, height);
   const context = canvas.getContext("2d");
   context.textWrap = true;
@@ -57,50 +62,73 @@ const generateSocialImage = async (
   context.font = "bold 2.5rem Menlo";
   context.textAlign = "left";
   context.fillStyle = "rgb(209 213 219)";
-  context.fillText(input.headline, 50, 100);
+  context.fillText(input.headline, paddingX, paddingY);
 
   // Title
   context.font = "bold 5rem Menlo";
   context.textAlign = "left";
   context.textWrap = true;
   context.fillStyle = "#fff";
-  context.fillText(input.title, 50, 225, 1200);
+  context.fillText(input.title, paddingX, 225, innerMaxWidth);
 
   // Author
-  context.font = "2rem Menlo";
+  context.font = "2.5rem Menlo";
   context.textAlign = "right";
   context.textWrap = true;
   context.fillStyle = "#fff";
-  context.fillText(input.author, canvas.width - 50, canvas.height - 100);
+  context.fillText(
+    input.author,
+    canvas.width - paddingX,
+    canvas.height - paddingY,
+  );
 
   // Tags
-  if (input.tags.length > 0) {
-    const tag = input.tags[0];
-    context.font = "2rem Menlo";
+  let tagOffset = 0;
+  for (const [i, tag] of input.tags.entries()) {
+    // Text
+    context.font = "bold 3rem Menlo";
     context.textAlign = "left";
     context.textWrap = true;
     context.fillStyle = tag.color;
 
-    const lineWidth = 4;
-    const padding = 16;
-    const tagX = 50 + padding + lineWidth;
-    const tagY = canvas.height - 100;
+    const tagTextMetrics = context.measureText(tag.title);
+    const tagTextHeight =
+      tagTextMetrics.actualBoundingBoxAscent -
+      tagTextMetrics.actualBoundingBoxDescent;
+
+    const lineWidth = 8;
+    const tagPadding = 24;
+    const tagX = tagOffset + paddingX + tagPadding + lineWidth;
+    const tagY = canvas.height - paddingY;
 
     context.fillText(tag.title.toUpperCase(), tagX, tagY);
 
+    // Box around
     context.strokeStyle = tag.color;
     context.lineWidth = lineWidth;
-    const tagTextMetrics = context.measureText(tag.title);
-    const tagHeight =
-      tagTextMetrics.actualBoundingBoxAscent -
-      tagTextMetrics.actualBoundingBoxDescent;
     roundRect(context as any as CanvasRenderingContext2D)({
-      x: tagX - padding,
-      y: tagY - tagHeight - padding,
-      w: tagTextMetrics.width + padding * 2,
-      h: tagHeight + padding * 2,
+      x: tagX - tagPadding,
+      y: tagY - tagTextHeight - tagPadding,
+      w: tagTextMetrics.width + tagPadding * 2,
+      h: tagTextHeight + tagPadding * 2,
       radius: 15,
     });
+
+    tagOffset += tagTextMetrics.width + tagPadding * 2 + lineWidth + tagPadding;
+  }
+
+  // Ingress
+  if (input.title.length < 20 && input.ingress.length < 110) {
+    context.font = "2.5rem Menlo";
+    context.textAlign = "left";
+    context.textWrap = true;
+    context.fillStyle = "#fff";
+    context.fillText(
+      input.ingress,
+      paddingX,
+      canvas.height / 2,
+      innerMaxWidth / 1.1,
+    );
   }
 
   const buffer = await canvas.toBuffer(options.format);
@@ -121,16 +149,14 @@ const formatToMimeType: Record<ExportFormat, string> = {
 interface SocialImageInput {
   headline: string;
   title: string;
+  ingress: string;
   tags: { title: string; color: string }[];
   author: string;
 }
 
 export const socialImageParamsBuilder = (input: SocialImageInput) => {
-  const params = new URLSearchParams();
-  params.append("headline", input.headline);
-  params.append("title", input.title);
-  params.append("author", input.author);
-  params.append("tags", encodeURIComponent(JSON.stringify(input.tags)));
+  const params = new URLSearchParams(Object.entries(input));
+  params.set("tags", encodeURIComponent(JSON.stringify(input.tags)));
   return params;
 };
 export const socialImageUrlBuilder = (input: SocialImageInput) => {
@@ -162,7 +188,11 @@ export const loader: LoaderFunction = async ({ request }) => {
     headers: {
       "Content-Type": contentType,
       "Content-Length": String(optimizedBuffer.byteLength),
-      "Cache-Control": `public, max-age=${60 * 60}`,
+      "Cache-Control": `public, ${
+        process.env.NODE_ENV === "development"
+          ? "no-store"
+          : `max-age=${60 * 60}`
+      }`,
     },
   });
 };
