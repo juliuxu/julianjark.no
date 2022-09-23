@@ -119,6 +119,6 @@ export const notionSelectColors: Record<SelectColor, string> = {
   green: `rgb(187 247 208)`,
   blue: `rgb(191 219 254)`,
   purple: `rgb(88 28 135)`,
-  pink: `rgb(131 24 67)`,
-  red: `rgb(127 29 29)`,
+  pink: `rgb(231 44 127)`,
+  red: `rgb(227 49 49)`,
 };
