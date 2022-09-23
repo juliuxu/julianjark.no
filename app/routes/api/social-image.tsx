@@ -2,10 +2,8 @@ import type { LoaderFunction } from "@remix-run/node";
 
 import { join as pathJoin } from "path";
 import type { ExportFormat } from "skia-canvas";
-import { FontLibrary } from "skia-canvas";
-import { Canvas } from "skia-canvas";
+import { Canvas, FontLibrary } from "skia-canvas";
 
-import config from "~/config";
 import designTokens from "~/styles/design-tokens.json";
 import { processImage } from "./image";
 
@@ -167,24 +165,13 @@ const formatToMimeType: Record<ExportFormat, string> = {
   svg: "image/svg+xml",
 };
 
-interface SocialImageInput {
+export interface SocialImageInput {
   headline: string;
   title: string;
   ingress: string;
   tags: { title: string; color: string }[];
   author: string;
 }
-
-export const socialImageParamsBuilder = (input: SocialImageInput) => {
-  const params = new URLSearchParams(Object.entries(input));
-  params.set("tags", encodeURIComponent(JSON.stringify(input.tags)));
-  return params;
-};
-export const socialImageUrlBuilder = (input: SocialImageInput) => {
-  const url = new URL("/api/social-image", config.baseUrl);
-  url.search = socialImageParamsBuilder(input).toString();
-  return url.toString();
-};
 
 export const loader: LoaderFunction = async ({ request }) => {
   const url = new URL(request.url);

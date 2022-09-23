@@ -4,9 +4,9 @@ import { useLoaderData } from "@remix-run/react";
 import { getTextFromRichText } from "~/notion/notion";
 import { getTodayILearnedEntries } from "~/notion/notion";
 import { getBlocksWithChildren } from "~/notion/notion-api.server";
+import { socialImageUrlBuilder } from "~/utils";
 import { prepareTodayILearendEntry } from "../__layout/today-i-learned";
 import { notionSelectColors } from "../__layout/today-i-learned/$permalink";
-import { socialImageUrlBuilder } from "../api/social-image";
 
 export const loader = async () => {
   const entryPages = await getTodayILearnedEntries();

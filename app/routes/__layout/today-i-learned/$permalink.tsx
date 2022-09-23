@@ -5,8 +5,7 @@ import { useLocation, useParams } from "@remix-run/react";
 import { getTextFromRichText, slugify } from "~/notion/notion";
 import type { SelectColor } from "~/notion/notion.types";
 import type { Loader as TodayILearnedLoader } from "~/routes/__layout/today-i-learned";
-import { socialImageUrlBuilder } from "~/routes/api/social-image";
-import { assertItemFound } from "~/utils";
+import { assertItemFound, socialImageUrlBuilder } from "~/utils";
 
 /**
  * Display nice OG and twitter meta tags

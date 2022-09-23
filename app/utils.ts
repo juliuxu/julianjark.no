@@ -1,4 +1,6 @@
+import config from "./config";
 import type { ProccessingOptions } from "./routes/api/image";
+import type { SocialImageInput } from "./routes/api/social-image";
 
 export function assertItemFound<T>(item: T | undefined): asserts item is T {
   if (item === undefined)
@@ -18,6 +20,18 @@ export function assertContainsItems<K extends string, V, T extends K>(
     }
   });
 }
+
+// Social Image
+export const socialImageParamsBuilder = (input: SocialImageInput) => {
+  const params = new URLSearchParams(Object.entries(input));
+  params.set("tags", encodeURIComponent(JSON.stringify(input.tags)));
+  return params;
+};
+export const socialImageUrlBuilder = (input: SocialImageInput) => {
+  const url = new URL("/api/social-image", config.baseUrl);
+  url.search = socialImageParamsBuilder(input).toString();
+  return url.toString();
+};
 
 // Rewrite secure notion image urls
 // The downside of this is that the page/block needs to be public
