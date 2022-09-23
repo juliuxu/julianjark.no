@@ -33,9 +33,14 @@ export default function SocialImageTest() {
   );
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+    <div style={{ display: "inline-flex", flexDirection: "column", gap: 8 }}>
       {imageUrls.map((x) => (
-        <img key={x} style={{ maxWidth: "100%" }} alt="" src={x.toString()} />
+        <img
+          key={x}
+          style={{ objectFit: "scale-down", maxWidth: "100%" }}
+          alt=""
+          src={x.toString()}
+        />
       ))}
     </div>
   );
