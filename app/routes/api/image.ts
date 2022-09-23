@@ -3,8 +3,6 @@
 import type { LoaderArgs } from "@remix-run/node";
 import { Response } from "@remix-run/node";
 
-import memoizeFs from "memoize-fs";
-import { join as pathJoin } from "path";
 import type { FitEnum } from "sharp";
 import sharp from "sharp";
 
@@ -143,34 +141,6 @@ export let processImage = async (
     contentType: outputContentType,
   };
 };
-
-if (process.env.NODE_ENV === "development") {
-  const cachePath = pathJoin(".cache", "notion-image-cache");
-  console.log("caching images to", cachePath);
-  const memoizer = memoizeFs({
-    cachePath,
-    deserialize: (json) => {
-      return JSON.parse(json!, (_key, value) => {
-        return value && value.type === "Buffer" ? Buffer.from(value) : value;
-      }).data;
-    },
-  });
-  const memoAsync = (
-    fn: memoizeFs.FnToMemoize,
-    opts: memoizeFs.Options = {},
-  ) => {
-    const p = memoizer.fn(fn, opts);
-    let mfn: memoizeFs.FnToMemoize | undefined = undefined;
-    return async (...args: any) => {
-      if (!mfn) {
-        mfn = await p;
-      }
-      return await mfn(...args);
-    };
-  };
-
-  // fetchImage = memoAsync(fetchImage);
-}
 
 export const loader = async ({ request }: LoaderArgs) => {
   // Parse request
