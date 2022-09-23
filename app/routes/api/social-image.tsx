@@ -5,6 +5,7 @@ import { Canvas } from "skia-canvas";
 
 import config from "~/config";
 import designTokens from "~/styles/design-tokens.json";
+import { processImage } from "./image";
 
 // https://www.scriptol.com/html5/canvas/rounded-rectangle.php
 const roundRect =
@@ -135,7 +136,7 @@ export const socialImageParamsBuilder = (input: SocialImageInput) => {
 export const socialImageUrlBuilder = (input: SocialImageInput) => {
   const url = new URL("/api/social-image", config.baseUrl);
   url.search = socialImageParamsBuilder(input).toString();
-  return url;
+  return url.toString();
 };
 
 export const loader: LoaderFunction = async ({ request }) => {
@@ -147,12 +148,21 @@ export const loader: LoaderFunction = async ({ request }) => {
   const options: CanvasOptions = {
     format: "png",
   };
-  const buffer = await generateSocialImage(input, {
-    format: "png",
-  });
-  return new Response(buffer, {
+  const buffer = await generateSocialImage(input, options);
+
+  const { buffer: optimizedBuffer, contentType } = await processImage(
+    buffer,
+    formatToMimeType[options.format],
+    {
+      format: "webp",
+    },
+  );
+
+  return new Response(optimizedBuffer, {
     headers: {
-      "Content-Type": formatToMimeType[options.format],
+      "Content-Type": contentType,
+      "Content-Length": String(optimizedBuffer.byteLength),
+      "Cache-Control": `public, max-age=${60 * 60}`,
     },
   });
 };

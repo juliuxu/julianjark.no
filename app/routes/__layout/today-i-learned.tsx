@@ -24,7 +24,12 @@ import {
   slugify,
   takeBlocksAfterHeader,
 } from "~/notion/notion";
-import type { Block, SelectColor } from "~/notion/notion.types";
+import type {
+  Block,
+  BlockWithChildren,
+  SelectColor,
+} from "~/notion/notion.types";
+import type { DatabasePage } from "~/notion/notion-api.server";
 import { getBlocksWithChildren } from "~/notion/notion-api.server";
 import NotionRender from "~/packages/notion-render";
 import { prepareNotionBlocks } from "~/packages/notion-shiki-code/prepare.server";
@@ -37,6 +42,41 @@ interface TodayILearnedEntry {
   notionBlocks: Block[];
   references: string[];
 }
+export const prepareTodayILearendEntry = (
+  page: DatabasePage,
+  blocks: BlockWithChildren[],
+) => {
+  const [referenceBlocks, notionBlocks] = takeBlocksAfterHeader(
+    "Referanser",
+    blocks,
+  );
+  const references = referenceBlocks
+    .map((x) => {
+      if (x.type === "bookmark") {
+        return x.bookmark.url;
+      }
+      if (x.type === "paragraph") {
+        const firstLink = x.paragraph.rich_text.find((r) => r.href !== null);
+        if (firstLink && firstLink.href !== null) {
+          return firstLink.href;
+        }
+      }
+
+      return undefined;
+    })
+    .filter(function <T>(x: T | undefined): x is T {
+      return x !== undefined;
+    });
+
+  const result: TodayILearnedEntry = {
+    title: getTitle(page),
+    created: new Date(page.created_time),
+    tags: getMultiSelectAndColor("Tags", page) ?? [],
+    notionBlocks,
+    references,
+  };
+  return result;
+};
 
 export const headers: HeadersFunction = ({ loaderHeaders }) => loaderHeaders;
 export const loader = async ({ request }: LoaderArgs) => {
@@ -45,39 +85,7 @@ export const loader = async ({ request }: LoaderArgs) => {
     entryPages.map(async (page) => {
       const blocks = await getBlocksWithChildren(page.id);
       await prepareNotionBlocks(blocks, { theme: "dark-plus" });
-
-      const [referenceBlocks, notionBlocks] = takeBlocksAfterHeader(
-        "Referanser",
-        blocks,
-      );
-      const references = referenceBlocks
-        .map((x) => {
-          if (x.type === "bookmark") {
-            return x.bookmark.url;
-          }
-          if (x.type === "paragraph") {
-            const firstLink = x.paragraph.rich_text.find(
-              (r) => r.href !== null,
-            );
-            if (firstLink && firstLink.href !== null) {
-              return firstLink.href;
-            }
-          }
-
-          return undefined;
-        })
-        .filter(function <T>(x: T | undefined): x is T {
-          return x !== undefined;
-        });
-
-      const result: TodayILearnedEntry = {
-        title: getTitle(page),
-        created: new Date(page.created_time),
-        tags: getMultiSelectAndColor("Tags", page) ?? [],
-        notionBlocks,
-        references,
-      };
-      return result;
+      return prepareTodayILearendEntry(page, blocks);
     }),
   );
 

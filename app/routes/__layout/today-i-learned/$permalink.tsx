@@ -43,7 +43,7 @@ export const meta: MetaFunction<
       color: notionSelectColors[x.color],
     })),
     author: "Julian Jark",
-  }).toString();
+  });
 
   return {
     title: entry.title,
@@ -109,7 +109,7 @@ export default function TodayILearnedPermalink() {
   return null;
 }
 
-const notionSelectColors: Record<SelectColor, string> /*tw*/ = {
+export const notionSelectColors: Record<SelectColor, string> = {
   default: `rgb(243 244 246)`,
   gray: `rgb(209 213 219)`,
   brown: `rgb(253 230 138)`,
