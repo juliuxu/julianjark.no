@@ -56,7 +56,19 @@ const generateSocialImage = async (
 
   // Background
   context.fillStyle = designTokens.colors.dark;
-  context.fillRect(0, 0, width, height);
+  context.fillRect(0, 0, canvas.width, canvas.height);
+
+  // Graphics
+  const tagColor = input.tags.map((x) => x.color)[0];
+  context.fillStyle = tagColor;
+  context.globalAlpha = 0.4;
+  context.beginPath();
+  context.moveTo(canvas.width, 0);
+  context.lineTo(canvas.width / 2 - 100, canvas.height);
+  context.lineTo(canvas.width - 230, canvas.height - 230);
+  context.fill();
+  context.save();
+  context.globalAlpha = 1;
 
   // Headline
   context.font = "bold 2.5rem Menlo";
