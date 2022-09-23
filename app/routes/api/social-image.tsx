@@ -1,6 +1,8 @@
 import type { LoaderFunction } from "@remix-run/node";
 
+import { join as pathJoin } from "path";
 import type { ExportFormat } from "skia-canvas";
+import { FontLibrary } from "skia-canvas";
 import { Canvas } from "skia-canvas";
 
 import config from "~/config";
@@ -37,6 +39,13 @@ const roundRect =
     context.quadraticCurveTo(x, y, x + radius, y);
     context.stroke();
   };
+
+FontLibrary.use("Menlo", [
+  pathJoin(process.cwd(), "public", "fonts", "Menlo-Regular.ttf"),
+]);
+FontLibrary.use("Menlo", [
+  pathJoin(process.cwd(), "public", "fonts", "Menlo-Bold.ttf"),
+]);
 
 const generateSocialImage = async (
   input: SocialImageInput,
