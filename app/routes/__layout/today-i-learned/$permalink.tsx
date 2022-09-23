@@ -34,7 +34,7 @@ export const meta: MetaFunction<
 
   const tags = entry.tags.map((x) => x.title);
 
-  const image = socialImageUrlBuilder({
+  let image = socialImageUrlBuilder({
     headline: "I dag lærte jeg",
     title: entry.title,
     tags: entry.tags.map((x) => ({
@@ -44,6 +44,8 @@ export const meta: MetaFunction<
     ingress: description,
     author: "Julian Jark",
   });
+  // Version hack
+  image += "&v=2";
 
   return {
     title: entry.title,
