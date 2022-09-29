@@ -38,17 +38,23 @@ const roundRect =
     context.stroke();
   };
 
-FontLibrary.use("Menlo", [
-  pathJoin(process.cwd(), "public", "fonts", "Menlo-Regular.ttf"),
-]);
-FontLibrary.use("Menlo", [
-  pathJoin(process.cwd(), "public", "fonts", "Menlo-Bold.ttf"),
-]);
+let fontsLoaded = false;
+const loadFonts = () => {
+  if (fontsLoaded) return;
+  FontLibrary.use("Menlo", [
+    pathJoin(process.cwd(), "public", "fonts", "Menlo-Regular.ttf"),
+  ]);
+  FontLibrary.use("Menlo", [
+    pathJoin(process.cwd(), "public", "fonts", "Menlo-Bold.ttf"),
+  ]);
+  fontsLoaded = true;
+};
 
 const generateSocialImage = async (
   input: SocialImageInput,
   options: CanvasOptions,
 ) => {
+  loadFonts();
   const width = 1200;
   const height = 630;
 
