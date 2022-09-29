@@ -18,7 +18,7 @@ const config = {
   resurserDatabaseId: "12b68d0b65834a4b8419287f83dcd874",
 
   cacheControlHeaders: {
-    "Cache-Control": `public, max-age=10, s-maxage=${60}, stale-while-revalidate=${YEAR_IN_SECONDS}`,
+    "Cache-Control": `public, max-age=${60}, must-revalidate, s-maxage=${60}, stale-while-revalidate=${YEAR_IN_SECONDS}`,
   },
 
   // Dynamic cache control headers based on the last updated time
@@ -47,7 +47,10 @@ const config = {
       ([threshold]) => diffInSeconds < threshold,
     )![1];
     return {
-      "Cache-Control": `public, max-age=10, s-maxage=${serverCacheMaxAge}, stale-while-revalidate=${staleWhileRevalidateInSeconds}`,
+      "Cache-Control": `public, max-age=${Math.min(
+        60,
+        serverCacheMaxAge,
+      )}, must-revalidate, s-maxage=${serverCacheMaxAge}, stale-while-revalidate=${staleWhileRevalidateInSeconds}`,
     };
   },
 } as const;
