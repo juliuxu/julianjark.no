@@ -31,7 +31,9 @@ export const isChangedPage = (before: Date) => (page: Page) => {
 export const purgePage = async (page: Page) => {
   const paths = [
     page.path,
-    `${page.path}?_data=${encodeURIComponent(page.codePath)}`,
+    (typeof page.codePath === "string" ? [page.codePath] : page.codePath).map(
+      (codePath) => `${page.path}?_data=${encodeURIComponent(codePath)}`,
+    ),
   ];
   for (const path of paths) {
     await fetch(`${config.baseUrl}${path}`, {

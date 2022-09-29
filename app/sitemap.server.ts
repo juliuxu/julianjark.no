@@ -16,7 +16,7 @@ import { flattenDepthFirst } from "./utils";
 export interface Page {
   title: string;
   path: string;
-  codePath: string;
+  codePath: string | string[];
   lastmod: string;
 }
 export type PageWithChildren = Page & { children: PageWithChildren[] };
@@ -72,7 +72,7 @@ const siteTree: PageStruct = {
           .map((page) => page.last_edited_time)
           .sort()
           .reverse()[0],
-        codePath: "routes/dranks/index",
+        codePath: ["routes/dranks", "routes/dranks/index"],
       }),
       children: async () =>
         (await getDrinker())
@@ -114,7 +114,7 @@ export const getSitemapTree = async (
 };
 
 const databasePageToPage =
-  (parentPath: string, codePath: string) =>
+  (parentPath: string, codePath: string | string[]) =>
   (page: DatabasePage): Page => {
     const title = getTitle(page);
     return {
