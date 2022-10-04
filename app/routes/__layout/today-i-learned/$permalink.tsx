@@ -108,7 +108,24 @@ export default function TodayILearnedPermalink() {
       behavior: "auto",
     });
   }, [key, permalink]);
-  return null;
+
+  return (
+    <script
+      // Add an inline script to make sure the scroll happens immediately
+      // on slow networks, before hydration.
+      dangerouslySetInnerHTML={{
+        __html: `
+        document.addEventListener('DOMContentLoaded', () => {
+          const element = document.getElementById("${permalink}");
+          element && element.scrollIntoView({
+            block: "start",
+            behavior: "auto",
+          });
+        });
+    `,
+      }}
+    />
+  );
 }
 
 export const notionSelectColors: Record<SelectColor, string> = {
