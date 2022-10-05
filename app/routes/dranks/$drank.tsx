@@ -21,16 +21,16 @@ import { prepare } from "~/packages/notion-drinker/prepare.server";
 import { assertDrink } from "~/packages/notion-drinker/types";
 import NotionRender from "~/packages/notion-render";
 import type { Components as NotionRenderComponents } from "~/packages/notion-render/components";
+import type { SitemapHandle } from "~/packages/remix-sitemap/sitemap.server";
 import { databaseEntryToSitemapEntry } from "~/sitemap.server";
 import { assertItemFound, optimizedImageUrl } from "~/utils";
 import { dranksClasses } from "../dranks";
-import type { JulianHandle } from "../test/auto-sitemap";
 
 export const notionRenderComponents: Partial<NotionRenderComponents> = {
   image: buildOptimizedNotionImage(),
 };
 
-export const handle: JulianHandle = {
+export const handle: SitemapHandle = {
   getSitemapEntries: async () =>
     (await getDrinker()).map(databaseEntryToSitemapEntry),
 };

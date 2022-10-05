@@ -1,29 +1,24 @@
-import type { LoaderFunction } from "@remix-run/node";
+import type { LoaderArgs } from "@remix-run/node";
 
 import config from "~/config";
-import type { Page } from "~/sitemap.server";
-import { getSitemapTree } from "~/sitemap.server";
-import { flattenDepthFirst } from "~/utils";
+import type { SitemapEntry } from "~/packages/remix-sitemap/sitemap.server";
+import { getJulianSitemapEntries } from "~/sitemap.server";
 
-function pageToEntry(page: Page): string {
+function toXmlEntry({ path, lastmod, changefreq, priority }: SitemapEntry) {
   return `
   <url>
-    <loc>${`${config.baseUrl}${page.path}`}</loc>
-    <lastmod>${page.lastmod}</lastmod>
-  </url>`;
-  /*
-      <lastmod>${today}</lastmod>
-      <changefreq>daily</changefreq>
-      <priority>0.7</priority>
-*/
+    <loc>${config.baseUrl}${path}</loc>
+    ${lastmod ? `<lastmod>${lastmod}</lastmod>` : ""}
+    ${changefreq ? `<changefreq>${changefreq}</changefreq>` : ""}
+    ${priority ? `<priority>${priority}</priority>` : ""}
+  </url>
+    `.trim();
 }
 
-export const loader: LoaderFunction = async () => {
-  const sitemapTree = await getSitemapTree();
-  const sitemapContent = flattenDepthFirst(sitemapTree)
-    .map(pageToEntry)
-    .join("\n");
+export const loader = async ({ request }: LoaderArgs) => {
+  const sitemapEntries = await getJulianSitemapEntries(request);
 
+  const sitemapXmlContent = sitemapEntries.map(toXmlEntry);
   return new Response(
     `<?xml version="1.0" encoding="UTF-8"?>
 <urlset
@@ -31,7 +26,7 @@ export const loader: LoaderFunction = async () => {
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd"
 >
-    ${sitemapContent}
+    ${sitemapXmlContent}
 </urlset>
 `,
     {

@@ -8,9 +8,6 @@ import { Outlet, useLoaderData } from "@remix-run/react";
 
 import picoCss from "@picocss/pico/css/pico.min.css";
 
-import TopLevelMenu, {
-  loader as topLevelMenuLoader,
-} from "~/components/top-level-menu";
 import config from "~/config";
 import commonStyles from "~/styles/common.css";
 import designTokens from "~/styles/design-tokens.json";
@@ -36,15 +33,6 @@ export const links: LinksFunction = () => [
   },
 ];
 
-export const loader = async () => {
-  return json(
-    {
-      ...(await topLevelMenuLoader()),
-    },
-    { headers: config.cacheControlHeaders },
-  );
-};
-
 export const meta: MetaFunction = () => ({
   title: "Julian Jark",
   "theme-color": designTokens.colors.dark,
@@ -57,11 +45,10 @@ export const headers: HeadersFunction = () => {
 };
 
 export default function Layout() {
-  const data = useLoaderData<typeof loader>();
   return (
     <>
       <header className="container">
-        <TopLevelMenu sitemapTree={data.sitemapTree} />
+        {/* <TopLevelMenu sitemapTree={data.sitemapTree} /> */}
       </header>
       <main className="container">
         <Outlet />

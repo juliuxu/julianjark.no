@@ -8,12 +8,12 @@ import {
   slugify,
 } from "~/notion/notion";
 import type { SelectColor } from "~/notion/notion.types";
+import type { SitemapHandle } from "~/packages/remix-sitemap/sitemap.server";
 import type { Loader as TodayILearnedLoader } from "~/routes/__layout/today-i-learned";
-import type { JulianHandle } from "~/routes/test/auto-sitemap";
 import { databaseEntryToSitemapEntry } from "~/sitemap.server";
 import { assertItemFound, socialImageUrlBuilder } from "~/utils";
 
-export const handle: JulianHandle = {
+export const handle: SitemapHandle = {
   getSitemapEntries: async () =>
     (await getTodayILearnedEntries()).map(databaseEntryToSitemapEntry),
 };

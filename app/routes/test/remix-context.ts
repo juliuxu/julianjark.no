@@ -1,7 +1,7 @@
 import type { LoaderArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
 
-import { createRemixContext } from "~/remix-context.server";
+import { createRemixContext } from "~/packages/remix-sitemap/remix-context.server";
 
 export const handle = {
   hello: "👋",

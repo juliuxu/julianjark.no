@@ -1,11 +1,11 @@
-import type { LoaderFunction } from "@remix-run/node";
+import type { LoaderArgs } from "@remix-run/node";
 
-import { asUrlList, getSitemapTree } from "~/sitemap.server";
+import config from "~/config";
+import { getJulianSitemapEntries } from "~/sitemap.server";
 
-export const loader: LoaderFunction = async () => {
-  const sitemapTree = await getSitemapTree();
-  const urlList = asUrlList(sitemapTree);
-
+export const loader = async ({ request }: LoaderArgs) => {
+  const sitemapEntries = await getJulianSitemapEntries(request);
+  const urlList = sitemapEntries.map((x) => `${config.baseUrl}${x.path}`);
   return new Response(urlList.join("\n"), {
     status: 200,
     headers: {

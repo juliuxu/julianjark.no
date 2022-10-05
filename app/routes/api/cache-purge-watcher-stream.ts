@@ -25,7 +25,7 @@ export const loader = async ({ request }: LoaderArgs) => {
       before.setMilliseconds(before.getMilliseconds() - watchInterval);
       while (!request.signal.aborted) {
         const now = new Date();
-        const purgedPages = await purgeUpdatedPages(before, logger);
+        const purgedPages = await purgeUpdatedPages(request, before, logger);
         before = now;
         await new Promise((r) => setTimeout(r, watchInterval));
         (currentLoglevel || purgedPages.length > 0) && controller.enqueue("\n");

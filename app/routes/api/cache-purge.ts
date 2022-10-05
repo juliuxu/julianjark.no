@@ -2,16 +2,13 @@ import type { ActionFunction } from "@remix-run/node";
 
 import config from "~/config";
 import { notionCachePurgeEverything } from "~/notion/notion-api.server";
-import type { Page } from "~/sitemap.server";
-import { getSitemapTree } from "~/sitemap.server";
-import {
-  chunked,
-  flattenDepthFirst,
-  getDateOrUndefined,
-  getNumberOrUndefined,
-} from "~/utils";
+import type { SitemapEntry } from "~/packages/remix-sitemap/sitemap.server";
+import { getJulianSitemapEntries } from "~/sitemap.server";
+import { chunked, getDateOrUndefined, getNumberOrUndefined } from "~/utils";
 
-export const isChangedPage = (before: Date) => (page: Page) => {
+export const isChangedPage = (before: Date) => (page: SitemapEntry) => {
+  if (!page.lastmod) return false;
+
   // Notion timestamps are stored only to minute precision
   // This means that if a before timestamp is recorded at 14:25:30
   // and a changed happens 10 seconds later, at 14:25:40
@@ -28,13 +25,12 @@ export const isChangedPage = (before: Date) => (page: Page) => {
   return new Date(page.lastmod) >= minuteDate;
 };
 
-export const purgePage = async (page: Page) => {
+export const purgePage = async (page: SitemapEntry) => {
   const paths = [
-    page.path,
-    ...(typeof page.codePath === "string"
-      ? [page.codePath]
-      : page.codePath
-    ).map((codePath) => `${page.path}?_data=${encodeURIComponent(codePath)}`),
+    page.path!,
+    ...(page.loaderPaths?.map(
+      (loaderPath) => `${page.path}?_data=${encodeURIComponent(loaderPath)}`,
+    ) ?? []),
   ];
   for (const path of paths) {
     await fetch(`${config.baseUrl}${path}`, {
@@ -44,26 +40,27 @@ export const purgePage = async (page: Page) => {
 };
 
 export const purgeUpdatedPages = async (
+  request: Request,
   before: Date,
   logger: (message: string, level: "silent" | "info" | "verbose") => void,
 ) => {
   // Fetch sitemap
   logger("🌍 fetching sitemap", "info");
-  const pages = flattenDepthFirst(await getSitemapTree());
+  const sitemapEntries = await getJulianSitemapEntries(request);
 
   // Verbose log sorted timestamps
   logger(`b ${before.toISOString()}`, "verbose");
-  pages
+  sitemapEntries
     .slice()
     .sort(
-      (a, b) => new Date(b.lastmod).valueOf() - new Date(a.lastmod).valueOf(),
+      (a, b) => new Date(b.lastmod!).valueOf() - new Date(a.lastmod!).valueOf(),
     )
     .forEach((page) => {
       logger(`: ${page.lastmod} ${page.path}`, "verbose");
     });
 
   // Get changed pages
-  const changedPages = pages.filter(isChangedPage(before));
+  const changedPages = sitemapEntries.filter(isChangedPage(before));
 
   changedPages.length > 0 &&
     logger(`🔄 ${changedPages.length} pages to update`, "info");
@@ -131,6 +128,7 @@ export const action: ActionFunction = async ({ request }) => {
   const stream = new ReadableStream({
     async start(controller) {
       await purgeUpdatedPages(
+        request,
         before(),
         createReadableStreamLogger(controller, "info"),
       );
