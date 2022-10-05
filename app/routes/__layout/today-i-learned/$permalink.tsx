@@ -2,10 +2,21 @@ import { useEffect } from "react";
 import type { HeadersFunction, MetaFunction } from "@remix-run/node";
 import { useLocation, useParams } from "@remix-run/react";
 
-import { getTextFromRichText, slugify } from "~/notion/notion";
+import {
+  getTextFromRichText,
+  getTodayILearnedEntries,
+  slugify,
+} from "~/notion/notion";
 import type { SelectColor } from "~/notion/notion.types";
 import type { Loader as TodayILearnedLoader } from "~/routes/__layout/today-i-learned";
+import type { JulianHandle } from "~/routes/test/auto-sitemap";
+import { databaseEntryToSitemapEntry } from "~/sitemap.server";
 import { assertItemFound, socialImageUrlBuilder } from "~/utils";
+
+export const handle: JulianHandle = {
+  getSitemapEntries: async () =>
+    (await getTodayILearnedEntries()).map(databaseEntryToSitemapEntry),
+};
 
 /**
  * Display nice OG and twitter meta tags

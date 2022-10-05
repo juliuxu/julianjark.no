@@ -197,3 +197,9 @@ export function flattenDepthFirst<T extends { children?: T[] }>(root: T) {
 export function flattenListDepthFirst<T extends { children?: T[] }>(list: T[]) {
   return list.flatMap(flattenDepthFirst);
 }
+
+export function typedBoolean<T>(
+  value: T,
+): value is Exclude<T, "" | 0 | false | null | undefined> {
+  return Boolean(value);
+}

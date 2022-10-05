@@ -11,6 +11,7 @@ import { getPage } from "~/notion/notion-api.server";
 import { meta as forsideMeta } from "~/routes/__layout/index";
 import { meta as todayILearnedMeta } from "~/routes/__layout/today-i-learned";
 import { meta as dranksMeta } from "~/routes/dranks/index";
+import type { SitemapEntry } from "./routes/test/auto-sitemap";
 import { flattenDepthFirst } from "./utils";
 
 export interface Page {
@@ -127,3 +128,11 @@ const databasePageToPage =
 
 export const asUrlList = (rootPage: PageWithChildren): string[] =>
   flattenDepthFirst(rootPage).map((page) => `${config.baseUrl}${page.path}`);
+
+export const databaseEntryToSitemapEntry = (
+  entry: DatabasePage,
+): Required<Pick<SitemapEntry, "path" | "lastmod" | "title">> => ({
+  path: slugify(getTitle(entry)),
+  lastmod: entry.last_edited_time,
+  title: getTitle(entry),
+});

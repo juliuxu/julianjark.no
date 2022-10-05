@@ -15,14 +15,22 @@ import type { DatabasePage, PageResponse } from "./notion-api.server";
 import { getDatabase, getDatabasePages } from "./notion-api.server";
 
 export function slugify(text: string) {
-  return text
-    .trim()
-    .toLowerCase()
-    .replace(/\s+/g, "-")
-    .replace(/[^\w-]+/g, "")
-    .replace(/--+/g, "-")
-    .replace(/^-+/, "")
-    .replace(/-+$/, "");
+  return (
+    text
+      .trim()
+      .toLowerCase()
+      .replace(/\s+/g, "-")
+
+      // Norwegian æøå
+      .replace("æ¨", "ae")
+      .replace("ø", "o")
+      .replace("å", "a")
+
+      .replace(/[^\w-]+/g, "")
+      .replace(/--+/g, "-")
+      .replace(/^-+/, "")
+      .replace(/-+$/, "")
+  );
 }
 
 // Notion/Domain helpers
