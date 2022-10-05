@@ -4,10 +4,15 @@ import config from "~/config";
 import { notionCachePurgeEverything } from "~/notion/notion-api.server";
 import type { SitemapEntry } from "~/packages/remix-sitemap/sitemap.server";
 import { getJulianSitemapEntries } from "~/sitemap.server";
-import { chunked, getDateOrUndefined, getNumberOrUndefined } from "~/utils";
+import {
+  chunked,
+  getDateOrUndefined,
+  getNumberOrUndefined,
+  getOneOfOrUndefined,
+} from "~/utils";
 
 export const isChangedPage = (before: Date) => (page: SitemapEntry) => {
-  if (!page.lastmod) return false;
+  if (!page.lastmod) return before < new Date(1);
 
   // Notion timestamps are stored only to minute precision
   // This means that if a before timestamp is recorded at 14:25:30
@@ -25,13 +30,16 @@ export const isChangedPage = (before: Date) => (page: SitemapEntry) => {
   return new Date(page.lastmod) >= minuteDate;
 };
 
-export const purgePage = async (page: SitemapEntry) => {
+export const purgePage = async (page: SitemapEntry, logger: Logger) => {
   const paths = [
     page.path!,
     ...(page.loaderPaths?.map(
       (loaderPath) => `${page.path}?_data=${encodeURIComponent(loaderPath)}`,
     ) ?? []),
   ];
+  if (paths.length > 0) {
+    paths.forEach((path) => logger(`  ℹ️  ${path}`, "verbose"));
+  }
   for (const path of paths) {
     await fetch(`${config.baseUrl}${path}`, {
       headers: { "no-cache": "1" },
@@ -39,10 +47,12 @@ export const purgePage = async (page: SitemapEntry) => {
   }
 };
 
+type Logger = (message: string, level: "silent" | "info" | "verbose") => void;
+
 export const purgeUpdatedPages = async (
   request: Request,
   before: Date,
-  logger: (message: string, level: "silent" | "info" | "verbose") => void,
+  logger: Logger,
 ) => {
   // Fetch sitemap
   logger("🌍 fetching sitemap", "info");
@@ -72,7 +82,7 @@ export const purgeUpdatedPages = async (
       logger(`🔥 updating ${page.path} (${page.title})`, "info");
     });
 
-    await Promise.allSettled(chunk.flatMap(purgePage));
+    await Promise.allSettled(chunk.flatMap((x) => purgePage(x, logger)));
   }
   changedPages.length === 0 && logger("🆗 no pages updated", "info");
   changedPages.length > 0 && logger("✅ done", "info");
@@ -108,6 +118,11 @@ export const action: ActionFunction = async ({ request }) => {
   const onlyEditedSinceDate = getDateOrUndefined(
     url.searchParams.get("onlyEditedSinceDate"),
   );
+  const logLevel =
+    getOneOfOrUndefined(
+      ["silent", "info", "verbose"],
+      url.searchParams.get("logLevel"),
+    ) ?? "info";
 
   await notionCachePurgeEverything();
 
@@ -130,7 +145,7 @@ export const action: ActionFunction = async ({ request }) => {
       await purgeUpdatedPages(
         request,
         before(),
-        createReadableStreamLogger(controller, "info"),
+        createReadableStreamLogger(controller, logLevel),
       );
       controller.close();
     },
