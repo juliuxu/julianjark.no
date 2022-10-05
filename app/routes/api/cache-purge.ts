@@ -110,6 +110,7 @@ export const createReadableStreamLogger = (
   };
 };
 
+// TODO: Rename rebuild
 export const action: ActionFunction = async ({ request }) => {
   const url = new URL(request.url);
   const onlyEditedLastNSeconds = getNumberOrUndefined(
