@@ -5,14 +5,13 @@ import type { SitemapEntry } from "~/packages/remix-sitemap/sitemap.server";
 import { getJulianSitemapEntries } from "~/sitemap.server";
 
 function toXmlEntry({ path, lastmod, changefreq, priority }: SitemapEntry) {
-  return `
-  <url>
-    <loc>${config.baseUrl}${path}</loc>
-    ${lastmod ? `<lastmod>${lastmod}</lastmod>` : ""}
-    ${changefreq ? `<changefreq>${changefreq}</changefreq>` : ""}
-    ${priority ? `<priority>${priority}</priority>` : ""}
-  </url>
-    `.trim();
+  let result = "\n<url>";
+  result += `\n  <loc>${config.baseUrl}${path}</loc>`;
+  if (lastmod) result += `\n  <lastmod>${lastmod}</lastmod>`;
+  if (changefreq) result += `\n  <changefreq>${changefreq}</changefreq>`;
+  if (priority) result += `\n  <priority>${priority}</priority>`;
+  result += "\n</url>";
+  return result;
 }
 
 export const loader = async ({ request }: LoaderArgs) => {
@@ -25,9 +24,7 @@ export const loader = async ({ request }: LoaderArgs) => {
   xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd"
->
-    ${sitemapXmlContent}
-</urlset>
+>${sitemapXmlContent.join("")}</urlset>
 `,
     {
       status: 200,
