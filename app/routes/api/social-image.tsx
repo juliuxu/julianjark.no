@@ -1,8 +1,7 @@
 import type { LoaderFunction } from "@remix-run/server-runtime";
 
 import { join as pathJoin } from "path";
-import type { ExportFormat } from "skia-canvas";
-import { Canvas, FontLibrary } from "skia-canvas";
+import type { ExportFormat, FontLibrary } from "skia-canvas";
 
 import designTokens from "~/styles/design-tokens.json";
 import { processImage } from "./image";
@@ -39,22 +38,24 @@ const roundRect =
   };
 
 let fontsLoaded = false;
-const loadFonts = () => {
+const loadFonts = (fontLibrary: FontLibrary) => {
   if (fontsLoaded) return;
-  FontLibrary.use("Menlo", [
+  fontLibrary.use("Menlo", [
     pathJoin(process.cwd(), "public", "fonts", "Menlo-Regular.ttf"),
   ]);
-  FontLibrary.use("Menlo", [
+  fontLibrary.use("Menlo", [
     pathJoin(process.cwd(), "public", "fonts", "Menlo-Bold.ttf"),
   ]);
-  fontsLoaded = true;
+  // fontsLoaded = true;
 };
 
 const generateSocialImage = async (
   input: SocialImageInput,
   options: CanvasOptions,
 ) => {
-  loadFonts();
+  const { Canvas, FontLibrary } = require("skia-canvas");
+  loadFonts(FontLibrary);
+
   const width = 1200;
   const height = 630;
 
