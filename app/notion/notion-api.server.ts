@@ -5,7 +5,7 @@ import memoizeFs from "memoize-fs";
 import { join as pathJoin } from "path";
 
 let notionToken = "";
-if (typeof process !== undefined) {
+if (typeof process !== "undefined") {
   notionToken = process.env.NOTION_TOKEN ?? "";
 }
 
