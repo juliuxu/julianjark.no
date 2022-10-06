@@ -4,8 +4,13 @@ import LRU from "lru-cache";
 import memoizeFs from "memoize-fs";
 import { join as pathJoin } from "path";
 
+let notionToken = "";
+if (typeof process !== undefined) {
+  notionToken = process.env.NOTION_TOKEN ?? "";
+}
+
 const notion = new Client({
-  auth: process.env.NOTION_TOKEN,
+  auth: notionToken,
 });
 
 type Sorts = Parameters<typeof notion.databases.query>[0]["sorts"];
