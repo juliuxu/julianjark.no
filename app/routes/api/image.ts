@@ -1,7 +1,6 @@
 // https://gist.github.com/jacob-ebey/3a37a86307de9ef22f47aae2e593b56f
 // https://github.com/vercel/next.js/blob/canary/packages/next/server/image-optimizer.ts
 import type { LoaderArgs } from "@remix-run/server-runtime";
-import { Response } from "@remix-run/server-runtime";
 
 import type { FitEnum } from "sharp";
 import sharp from "sharp";
