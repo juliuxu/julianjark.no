@@ -1,17 +1,19 @@
 import { Client } from "@notionhq/client";
 import type { ListBlockChildrenResponse } from "@notionhq/client/build/src/api-endpoints";
 import LRU from "lru-cache";
-import memoizeFs from "memoize-fs";
+import type MemoizeFs from "memoize-fs";
 import { join as pathJoin } from "path";
 
-let notionToken = "";
-if (typeof process !== "undefined") {
-  notionToken = process.env.NOTION_TOKEN ?? "";
-}
+let notion = new Client({});
+export const initNotion = (notionToken: string) => {
+  notion = new Client({
+    auth: notionToken,
+  });
+};
 
-const notion = new Client({
-  auth: notionToken,
-});
+if (typeof process !== "undefined") {
+  initNotion(process.env.NOTION_TOKEN ?? "");
+}
 
 type Sorts = Parameters<typeof notion.databases.query>[0]["sorts"];
 type Filter = Parameters<typeof notion.databases.query>[0]["filter"];
@@ -175,18 +177,20 @@ if (process.env.NODE_ENV === "production") {
   getDatabasePages = inMemoryMemo(getDatabasePages);
 }
 
-if (process.env.NODE_ENV === "development") {
+if (process.env.NODE_ENV === "development" && Math.random() === -1) {
+  const memoizeFs = require("memoize-fs");
+
   const cachePath = pathJoin(".cache", "notion-api-cache");
   console.log("caching notion to", cachePath);
   const memoizer = memoizeFs({
     cachePath,
-  });
+  }) as MemoizeFs.Memoizer;
   const memoFsAsync = (
-    fn: memoizeFs.FnToMemoize,
-    opts: memoizeFs.Options = {},
+    fn: MemoizeFs.FnToMemoize,
+    opts: MemoizeFs.Options = {},
   ) => {
     const p = memoizer.fn(fn, opts);
-    let mfn: memoizeFs.FnToMemoize | undefined = undefined;
+    let mfn: MemoizeFs.FnToMemoize | undefined = undefined;
     return async (...args: any) => {
       if (!mfn) {
         mfn = await p;

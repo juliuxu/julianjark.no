@@ -16,11 +16,12 @@ import config from "~/config";
 import { getBlocksWithChildren } from "~/notion/notion-api.server";
 import NotionRender from "~/packages/notion-render";
 import { prepareNotionBlocks } from "~/packages/notion-shiki-code/prepare.server";
+import { clock } from "~/utils";
 
 export const loader = async ({ request }: LoaderArgs) => {
-  const startFetchTime = performance.now();
+  const startFetchTime = clock();
   const blocks = await getBlocksWithChildren(config.forsidePageId);
-  const fetchTime = Math.round(performance.now() - startFetchTime);
+  const fetchTime = Math.round(clock() - startFetchTime);
 
   await prepareNotionBlocks(blocks, { theme: "dark-plus" });
 

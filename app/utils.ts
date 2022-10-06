@@ -203,3 +203,6 @@ export function typedBoolean<T>(
 ): value is Exclude<T, "" | 0 | false | null | undefined> {
   return Boolean(value);
 }
+
+export const clock =
+  typeof performance === "undefined" ? Date.now : performance.now;

@@ -14,6 +14,9 @@
     "build": "npm-run-all set-default-config build:*",
     "build:css": "npm run generate:css -- --minify",
     "build:remix": "remix build",
+    "dev-cloudflare": "npm run build-cloudflare && run-p dev:css dev-cloudflare:*",
+    "dev-cloudflare:remix": "remix watch",
+    "dev-cloudflare:wrangler": "NODE_ENV=development wrangler pages dev ./public",
     "dev": "run-p dev:*",
     "dev:css": "npm run generate:css -- --watch",
     "dev:remix": "remix dev",
@@ -59,7 +62,8 @@
     "npm-run-all": "4.1.5",
     "patch-package": "6.4.7",
     "tailwindcss": "3.1.8",
-    "typescript": "4.8.4"
+    "typescript": "4.8.4",
+    "wrangler": "2.1.10"
   },
   "engines": {
     "node": ">=16"

@@ -3,9 +3,8 @@
 import type { LoaderArgs } from "@remix-run/server-runtime";
 
 import type { FitEnum } from "sharp";
-import sharp from "sharp";
 
-import { parseImageProccessingOptions } from "~/utils";
+import { clock, parseImageProccessingOptions } from "~/utils";
 
 const badImageBase64 =
   "R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7";
@@ -81,6 +80,8 @@ export let processImage = async (
     };
   }
 
+  const sharp = require("sharp");
+
   // Begin sharp transformation logic
   const transformer = sharp(upstreamBuffer);
   // transformer.rotate();
@@ -154,17 +155,17 @@ export const loader = async ({ request }: LoaderArgs) => {
   );
 
   try {
-    const startFetchTime = performance.now();
+    const startFetchTime = clock();
     const { upstreamBuffer, upstreamContentType } = await fetchImage(href);
-    const fetchTime = Math.round(performance.now() - startFetchTime);
+    const fetchTime = Math.round(clock() - startFetchTime);
 
-    const startProcessTime = performance.now();
+    const startProcessTime = clock();
     const { buffer, contentType } = await processImage(
       upstreamBuffer,
       upstreamContentType,
       options,
     );
-    const processTime = Math.round(performance.now() - startProcessTime);
+    const processTime = Math.round(clock() - startProcessTime);
 
     // Return the new image
     return new Response(buffer, {

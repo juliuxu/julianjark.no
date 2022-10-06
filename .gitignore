@@ -1,5 +1,10 @@
 node_modules
 
+.dev.vars
+/functions/\[\[path\]\].js
+/functions/\[\[path\]\].js.map
+/functions/
+
 .cache
 .env
 .vercel

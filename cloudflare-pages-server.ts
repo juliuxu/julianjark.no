@@ -1,5 +1,6 @@
 import * as build from "@remix-run/dev/server-build";
 
+import { initNotion } from "~/notion/notion-api.server";
 import { createPagesFunctionHandler } from "./cloudflare-pages-worker";
 
 const handleRequest = createPagesFunctionHandler({
@@ -9,5 +10,6 @@ const handleRequest = createPagesFunctionHandler({
 });
 
 export function onRequest(context: any) {
+  initNotion(context.env.NOTION_TOKEN);
   return handleRequest(context);
 }
