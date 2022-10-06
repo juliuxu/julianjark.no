@@ -120,7 +120,10 @@ export const prepareNotionBlocks = async (
 };
 
 // Hack to make sure the required files are bundled
-if (process.env.TZ === "THIS_IS_JUST_TO_MAKE_SURE_THE_CODE_BELOW_IS_INCLUDED") {
+if (
+  Math.random() + "" ===
+  "THIS_IS_JUST_TO_MAKE_SURE_THE_CODE_BELOW_IS_INCLUDED"
+) {
   console.log(hack());
 }
 export function hack() {

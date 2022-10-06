@@ -23,7 +23,7 @@ const getAllFiles = function (dirPath: string, arrayOfFiles: string[] = []) {
 export const loader: LoaderFunction = async () => {
   return json({
     __dirname,
-    cwd: process.cwd(),
+    // cwd: process.cwd(),
     ls: getAllFiles(path.resolve(__dirname, "..")),
   });
 };
