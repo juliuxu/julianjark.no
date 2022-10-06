@@ -1,5 +1,5 @@
-import type { LoaderArgs } from "@remix-run/node";
-import { json } from "@remix-run/node";
+import type { LoaderArgs } from "@remix-run/server-runtime";
+import { json } from "@remix-run/server-runtime";
 
 import config from "~/config";
 import { getDrinker, getDrinkerDatabase } from "~/notion/notion";

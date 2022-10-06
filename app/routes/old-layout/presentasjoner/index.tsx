@@ -1,10 +1,10 @@
+import { Link, useLoaderData } from "@remix-run/react";
 import type {
   HeadersFunction,
   LoaderArgs,
   MetaFunction,
-} from "@remix-run/node";
-import { json } from "@remix-run/node";
-import { Link, useLoaderData } from "@remix-run/react";
+} from "@remix-run/server-runtime";
+import { json } from "@remix-run/server-runtime";
 
 import Debug from "~/components/debug";
 import { maybePrepareDebugData } from "~/components/debug.server";

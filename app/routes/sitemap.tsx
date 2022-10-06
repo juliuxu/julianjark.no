@@ -1,6 +1,6 @@
-import type { LoaderArgs } from "@remix-run/node";
-import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
+import type { LoaderArgs } from "@remix-run/server-runtime";
+import { json } from "@remix-run/server-runtime";
 
 import Code from "~/components/prism-code";
 import { getJulianSitemapEntries } from "~/sitemap.server";

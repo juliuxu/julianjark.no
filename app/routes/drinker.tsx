@@ -1,6 +1,6 @@
-import type { LinksFunction } from "@remix-run/node";
-import { json } from "@remix-run/node";
 import { NavLink, Outlet, useLoaderData } from "@remix-run/react";
+import type { LinksFunction } from "@remix-run/server-runtime";
+import { json } from "@remix-run/server-runtime";
 
 import config from "~/config";
 import { getDrinker, getTitle, slugify } from "~/notion/notion";

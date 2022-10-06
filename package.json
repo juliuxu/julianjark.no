@@ -7,7 +7,9 @@
   "scripts": {
     "postinstall": "patch-package",
     "set-vercel-config": "cp remix.config.vercel.js remix.config.js",
+    "set-cloudflare-config": "cp remix.config.cloudflare.js remix.config.js",
     "set-default-config": "cp remix.config.default.js remix.config.js",
+    "build-cloudflare": "npm-run-all set-cloudflare-config build:*",
     "build-vercel": "npm-run-all set-vercel-config build:*",
     "build": "npm-run-all set-default-config build:*",
     "build:css": "npm run generate:css -- --minify",
@@ -22,6 +24,8 @@
     "@fontsource/source-sans-pro": "4.5.11",
     "@notionhq/client": "2.2.0",
     "@picocss/pico": "1.5.5",
+    "@remix-run/cloudflare": "1.7.2",
+    "@remix-run/cloudflare-pages": "1.7.2",
     "@remix-run/node": "1.7.2",
     "@remix-run/react": "1.7.2",
     "@remix-run/serve": "1.7.2",
@@ -40,6 +44,7 @@
     "skia-canvas": "1.0.0"
   },
   "devDependencies": {
+    "@cloudflare/workers-types": "3.16.0",
     "@remix-run/dev": "1.7.2",
     "@remix-run/eslint-config": "1.7.2",
     "@types/react": "18.0.21",

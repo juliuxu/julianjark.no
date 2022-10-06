@@ -1,4 +1,4 @@
-import type { ActionFunction } from "@remix-run/node";
+import type { ActionFunction } from "@remix-run/server-runtime";
 
 import { notionCachePurgeEverything } from "~/notion/notion-api.server";
 

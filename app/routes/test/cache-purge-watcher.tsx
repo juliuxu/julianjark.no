@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import type { LinksFunction } from "@remix-run/node";
+import type { LinksFunction } from "@remix-run/server-runtime";
 
 import picoCss from "@picocss/pico/css/pico.min.css";
 

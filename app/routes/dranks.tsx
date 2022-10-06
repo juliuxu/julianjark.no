@@ -1,6 +1,6 @@
-import type { LinksFunction, MetaFunction } from "@remix-run/node";
-import { json } from "@remix-run/node";
 import { Link, NavLink, Outlet, useLoaderData } from "@remix-run/react";
+import type { LinksFunction, MetaFunction } from "@remix-run/server-runtime";
+import { json } from "@remix-run/server-runtime";
 
 import { OptimizedImage } from "~/components/optimized-image";
 import config from "~/config";

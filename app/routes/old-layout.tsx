@@ -1,10 +1,10 @@
+import { Outlet, useLoaderData } from "@remix-run/react";
 import type {
   HeadersFunction,
   LinksFunction,
   MetaFunction,
-} from "@remix-run/node";
-import { json } from "@remix-run/node";
-import { Outlet, useLoaderData } from "@remix-run/react";
+} from "@remix-run/server-runtime";
+import { json } from "@remix-run/server-runtime";
 
 import picoCss from "@picocss/pico/css/pico.min.css";
 

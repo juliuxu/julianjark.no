@@ -1,5 +1,5 @@
-import type { LinksFunction, MetaFunction } from "@remix-run/node";
 import { NavLink, Outlet, useMatches } from "@remix-run/react";
+import type { LinksFunction, MetaFunction } from "@remix-run/server-runtime";
 
 import { CachePurgeCurrentPageButton } from "~/components/cache-purge-button";
 import { HiddenFeature } from "~/components/hidden-feature";

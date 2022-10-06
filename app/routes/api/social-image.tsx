@@ -1,4 +1,4 @@
-import type { LoaderFunction } from "@remix-run/node";
+import type { LoaderFunction } from "@remix-run/server-runtime";
 
 import { join as pathJoin } from "path";
 import type { ExportFormat } from "skia-canvas";

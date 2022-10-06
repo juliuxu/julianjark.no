@@ -1,4 +1,4 @@
-import type { LoaderArgs } from "@remix-run/node";
+import type { LoaderArgs } from "@remix-run/server-runtime";
 
 import { getNumberOrUndefined, getOneOfOrUndefined } from "~/utils";
 import { createReadableStreamLogger, purgeUpdatedPages } from "./cache-purge";

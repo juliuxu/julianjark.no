@@ -1,6 +1,6 @@
 import { useEffect } from "react";
-import type { HeadersFunction, MetaFunction } from "@remix-run/node";
 import { useLocation, useParams } from "@remix-run/react";
+import type { HeadersFunction, MetaFunction } from "@remix-run/server-runtime";
 
 import {
   getTextFromRichText,

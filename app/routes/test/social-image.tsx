@@ -1,5 +1,5 @@
-import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
+import { json } from "@remix-run/server-runtime";
 
 import { getTextFromRichText } from "~/notion/notion";
 import { getTodayILearnedEntries } from "~/notion/notion";

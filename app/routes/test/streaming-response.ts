@@ -1,4 +1,4 @@
-import type { LoaderFunction } from "@remix-run/node";
+import type { LoaderFunction } from "@remix-run/server-runtime";
 
 import Stream from "stream";
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));

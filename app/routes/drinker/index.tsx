@@ -2,8 +2,8 @@ import type {
   LinksFunction,
   LoaderFunction,
   MetaFunction,
-} from "@remix-run/node";
-import { json } from "@remix-run/node";
+} from "@remix-run/server-runtime";
+import { json } from "@remix-run/server-runtime";
 
 import config from "~/config";
 import { getDrinker } from "~/notion/notion";

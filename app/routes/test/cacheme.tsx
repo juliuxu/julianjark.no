@@ -1,6 +1,6 @@
-import type { LinksFunction } from "@remix-run/node";
-import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
+import type { LinksFunction } from "@remix-run/server-runtime";
+import { json } from "@remix-run/server-runtime";
 
 import picoCss from "@picocss/pico/css/pico.min.css";
 
