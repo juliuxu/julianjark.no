@@ -98,10 +98,12 @@ export const loader = async ({ request }: LoaderArgs) => {
     },
     {
       headers: {
-        ...config.cacheControlHeadersDynamic(
-          (drinkerDatabase as any).last_edited_time,
-          60 * 60,
-        ),
+        ...(filterQ || filterAlcohols.length > 0
+          ? config.cacheControlHeadersDynamic(
+              (drinkerDatabase as any).last_edited_time,
+              60 * 60,
+            )
+          : config.cacheControlHeaders),
         "Server-Timing": `fetch;dur=${fetchTime}`,
       },
     },
