@@ -98,7 +98,7 @@ export const loader = async ({ request }: LoaderArgs) => {
     },
     {
       headers: {
-        ...(filterQ || filterAlcohols.length > 0
+        ...(filterQ !== null || filterAlcohols.length > 0
           ? config.cacheControlHeadersDynamic(
               (drinkerDatabase as any).last_edited_time,
               60 * 60,
