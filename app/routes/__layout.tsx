@@ -69,6 +69,9 @@ const Header = () => {
       <div className="flex items-center gap-4">
         {menuItems
           .filter((x) => !x.includes("🚧"))
+          .filter(
+            (x) => x !== "Blogg" || process.env.NODE_ENV === "development",
+          )
           .map((x) => (
             <NavLink
               key={x}
