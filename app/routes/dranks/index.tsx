@@ -136,13 +136,13 @@ export default function Dranks() {
   return (
     <>
       <div
-        className={`py-16 flex flex-col gap-14 ${dranksClasses.layoutPadding} ${dranksClasses.layoutMaxWidth}`}
+        className={`flex flex-col gap-14 py-16 ${dranksClasses.layoutPadding} ${dranksClasses.layoutMaxWidth}`}
       >
         {false && (
           <span
             className={`inline-block ${
               isSubmitting || isLoading
-                ? "transition-opacity duration-500 delay-700 opacity-75 animate-spin"
+                ? "animate-spin opacity-75 transition-opacity delay-700 duration-500"
                 : "opacity-0"
             }`}
           >
@@ -156,10 +156,10 @@ export default function Dranks() {
           id="dranks-filter-form"
         >
           <div className="relative">
-            <div className="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none">
+            <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
               <svg
                 aria-hidden="true"
-                className="w-5 h-5 text-gray-500 dark:text-gray-400"
+                className="h-5 w-5 text-gray-500 dark:text-gray-400"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -175,7 +175,7 @@ export default function Dranks() {
             </div>
 
             <input
-              className="block p-3 pl-10 w-full bg-gray-100 rounded-lg"
+              className="block w-full rounded-lg bg-gray-100 p-3 pl-10"
               type="search"
               placeholder="Søk etter dranks"
               name="q"
@@ -187,19 +187,19 @@ export default function Dranks() {
             />
           </div>
 
-          <div className="flex flex-row gap-3 gap-y-3 flex-wrap">
+          <div className="flex flex-row flex-wrap gap-3 gap-y-3">
             {data.alcoholOrdered.map((alcohol) => (
               <Fragment key={alcohol.title}>
-                <label className="cursor-pointer contents">
+                <label className="contents cursor-pointer">
                   <input
                     type="checkbox"
                     name="alcohols"
-                    className="sr-only peer"
+                    className="peer sr-only"
                     value={alcohol.title}
                     checked={isAlcoholChecked(alcohol)}
                     onChange={(e) => submit(e.currentTarget.form)}
                   />
-                  <span className="rounded-lg px-5 py-[10px] border-dranks-orange border peer-checked:bg-dranks-orange peer-checked:text-white peer-focus:ring transition">
+                  <span className="rounded-lg border border-dranks-orange px-5 py-[10px] transition peer-checked:bg-dranks-orange peer-checked:text-white peer-focus:ring">
                     {alcohol.title}
                   </span>
                 </label>
@@ -208,9 +208,9 @@ export default function Dranks() {
           </div>
         </Form>
         <div
-          className={`grid gap-5 grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-6 ${
+          className={`grid grid-cols-2 gap-5 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-6 ${
             (isSubmitting || isLoading) &&
-            "transition-[filter] duration-500 delay-500 brightness-75"
+            "brightness-75 transition-[filter] delay-500 duration-500"
           }`}
         >
           {data.drinkerByAlcoholOrder
@@ -235,7 +235,7 @@ const DrankCard = ({ drank }: DrankCardProps) => {
       to={`${slugify(drank.Tittel)}`}
       className="overflow-hidden rounded-md shadow"
     >
-      <div className="relative pb-[120%] group bg-gradient-to-b from-cyan-400 via-green-200 to-yellow-200">
+      <div className="group relative bg-gradient-to-b from-cyan-400 via-green-200 to-yellow-200 pb-[120%]">
         {/* <img
           className="absolute w-full h-full object-cover blur-xl"
           src={optimizedImageUrl(drank.Illustrasjon, {
@@ -245,12 +245,12 @@ const DrankCard = ({ drank }: DrankCardProps) => {
           alt=""
         /> */}
         <img
-          className="absolute w-full h-full object-cover group-hover:scale-[1.1] transition-all ease-in-out duration-500"
+          className="absolute h-full w-full object-cover transition-all duration-500 ease-in-out group-hover:scale-[1.1]"
           src={optimizedImageUrl(drank.Illustrasjon, { height: 400 })}
           alt=""
         />
         <span
-          className="absolute bottom-0 p-4 text-2xl text-white font-semibold drop-shadow-lg"
+          className="absolute bottom-0 p-4 text-2xl font-semibold text-white drop-shadow-lg"
           style={{ textShadow: "0 0 10px rgb(0 0 0 / 33%)" }}
         >
           {drank.Tittel}

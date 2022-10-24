@@ -24,16 +24,16 @@ export default function Drinker() {
   return (
     <div>
       <div className="min-h-72 w-full bg-green-100">
-        <div className="max-w-lg lg:max-w-4xl mx-auto pt-10 pb-16">
+        <div className="mx-auto max-w-lg pt-10 pb-16 lg:max-w-4xl">
           <h1 className="text-6xl font-semibold">Drinker</h1>
-          <nav className="flex flex-wrap gap-x-10 gap-y-7 mt-8">
+          <nav className="mt-8 flex flex-wrap gap-x-10 gap-y-7">
             {data.drinker.map((drink) => (
               <NavLink
                 key={drink.id}
                 to={slugify(getTitle(drink))}
                 prefetch="intent"
                 className={({ isActive }) =>
-                  `p-2 border border-gray-500 bg-white hover:bg-green-600 hover:text-white ${
+                  `border border-gray-500 bg-white p-2 hover:bg-green-600 hover:text-white ${
                     isActive ? "bg-green-600 text-white" : ""
                   }`
                 }

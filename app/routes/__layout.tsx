@@ -38,7 +38,7 @@ export const meta: MetaFunction = () => ({
 export default function NewLayout() {
   return (
     <>
-      <header className="h-20 mx-[5vw]">
+      <header className="mx-[5vw] h-20">
         <div className="mx-auto h-full">
           <Header />
         </div>
@@ -62,7 +62,7 @@ const Header = () => {
   }[lastMatch.pathname];
 
   return (
-    <nav className="text-white font-mono flex flex-wrap items-center gap-8 h-full">
+    <nav className="flex h-full flex-wrap items-center gap-8 font-mono text-white">
       <NavLink to="/" className="text-3xl" prefetch="intent">
         Julian Jark
       </NavLink>
@@ -75,22 +75,22 @@ const Header = () => {
               to={slugify(x)}
               prefetch="intent"
               className={({ isActive }) =>
-                `rounded-2xl p-2 border-2 ${
+                `rounded-2xl border-2 p-2 ${
                   isActive
-                    ? "text-white border-white"
-                    : "text-gray-400 border-gray-400"
-                } focus:border-white hover:border-white focus:text-white hover:text-white transition`
+                    ? "border-white text-white"
+                    : "border-gray-400 text-gray-400"
+                } transition hover:border-white hover:text-white focus:border-white focus:text-white`
               }
             >
               {x}
             </NavLink>
           ))}
         <HiddenFeature shortcut="x">
-          <div className="opacity-40 focus-within:opacity-100 hover:opacity-100 transition-opacity -mt-[1px]">
+          <div className="-mt-[1px] opacity-40 transition-opacity focus-within:opacity-100 hover:opacity-100">
             <CachePurgeCurrentPageButton />
           </div>
           {pageOrDatabaseId && (
-            <div className="opacity-40 focus-within:opacity-100 hover:opacity-100 transition-opacity -ml-3 -mt-[3px]">
+            <div className="-ml-3 -mt-[3px] opacity-40 transition-opacity focus-within:opacity-100 hover:opacity-100">
               <NotionWatcherButton {...pageOrDatabaseId} />
             </div>
           )}

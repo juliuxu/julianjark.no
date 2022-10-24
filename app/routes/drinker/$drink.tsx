@@ -60,16 +60,16 @@ export default function DrinkView() {
   ].filter(Boolean);
 
   return (
-    <div className="max-w-lg lg:max-w-6xl mx-auto pt-10 lg:flex lg:gap-x-16">
+    <div className="mx-auto max-w-lg pt-10 lg:flex lg:max-w-6xl lg:gap-x-16">
       {/* <h1 className="text-xl italic">{data.drink.Tittel}</h1> */}
 
-      <aside className="hidden self-start sticky top-10 lg:block lg:w-1/4 py-7 px-12 border">
+      <aside className="sticky top-10 hidden self-start border py-7 px-12 lg:block lg:w-1/4">
         <div className="text-lg font-semibold">Innhold</div>
         <ul className="mt-8 space-y-4">
           {menuItems.map((item) => (
             <li key={item}>
               <a
-                className="block p-4 hover:bg-gray-50 before:content-['▪'] before:left-0 before:absolute relative"
+                className="relative block p-4 before:absolute before:left-0 before:content-['▪'] hover:bg-gray-50"
                 href={`#${item}`}
               >
                 {item}
@@ -83,19 +83,19 @@ export default function DrinkView() {
         {data.drink.Forberedelser && (
           <div className="relative">
             <div id="Forberedelser" className="absolute -top-10" />
-            <h2 className="text-4xl mb-8 font-semibold">Forberedelser</h2>
+            <h2 className="mb-8 text-4xl font-semibold">Forberedelser</h2>
             <NotionRender blocks={data.drink.Forberedelser} />
           </div>
         )}
 
-        <div className="flex relative">
+        <div className="relative flex">
           <div className="w-1/2 lg:w-1/3">
             <div id="Ingredienser" className="absolute -top-10" />
-            <h2 className="text-4xl mb-8 font-semibold">Ingredienser</h2>
+            <h2 className="mb-8 text-4xl font-semibold">Ingredienser</h2>
             <NotionRender blocks={data.drink.Ingredienser} />
           </div>
           {data.drink.Illustrasjon && (
-            <div className="w-1/2 lg:w-2/3 h-72 lg:h-96 relative">
+            <div className="relative h-72 w-1/2 lg:h-96 lg:w-2/3">
               <img
                 className={`absolute inset-0 h-full w-full object-cover ${
                   data.drink.IllustrasjonPosisjon === "top"
@@ -111,14 +111,14 @@ export default function DrinkView() {
 
         <div className="relative">
           <div id="Fremgangsmåte" className="absolute -top-10" />
-          <h2 className="text-4xl mb-8 font-semibold">Fremgangsmåte</h2>
+          <h2 className="mb-8 text-4xl font-semibold">Fremgangsmåte</h2>
           <NotionRender blocks={data.drink.Fremgangsmåte} />
         </div>
 
         {data.drink.Notater && (
           <div className="relative">
             <div id="Notater" className="absolute -top-10" />
-            <h2 className="text-4xl mb-8 font-semibold">Notater</h2>
+            <h2 className="mb-8 text-4xl font-semibold">Notater</h2>
             <div className="flex flex-wrap gap-10">
               <NotionRender
                 blocks={data.drink.Notater}
@@ -131,7 +131,7 @@ export default function DrinkView() {
         {data.drink.Referanser && (
           <div className="relative">
             <div id="Referanser" className="absolute -top-10" />
-            <h2 className="text-4xl mb-8 font-semibold">Referanser</h2>
+            <h2 className="mb-8 text-4xl font-semibold">Referanser</h2>
             <div className="flex flex-wrap gap-10">
               <NotionRender
                 blocks={data.drink.Referanser}

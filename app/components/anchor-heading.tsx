@@ -16,10 +16,10 @@ export const AnchorHeading1 = ({
   ...rest
 }: AnchorHeadingProps) => {
   return (
-    <Component className={`relative group ${className}`} id={id} {...rest}>
+    <Component className={`group relative ${className}`} id={id} {...rest}>
       <a
         href={`#${id}`}
-        className={`absolute -left-6 w-6 hover:underline opacity-0 group-hover:opacity-100 transition-opacity ${linkColor}`}
+        className={`absolute -left-6 w-6 opacity-0 transition-opacity hover:underline group-hover:opacity-100 ${linkColor}`}
       >
         #
       </a>
@@ -41,7 +41,7 @@ export const AnchorHeading2 = ({
       {children}
       <a
         href={`#${id}`}
-        className={`pl-2 hover:underline opacity-0 group-hover:opacity-100 transition-opacity ${linkColor}`}
+        className={`pl-2 opacity-0 transition-opacity hover:underline group-hover:opacity-100 ${linkColor}`}
       >
         #
       </a>

@@ -75,7 +75,7 @@ export default function Index() {
     <>
       <div className="mx-[5vw]">
         <div
-          className={`max-w-full mx-auto mt-4 ${commonTailwindStyles.prose}`}
+          className={`mx-auto mt-4 max-w-full ${commonTailwindStyles.prose}`}
         >
           <NotionRender
             components={notionRenderComponents}

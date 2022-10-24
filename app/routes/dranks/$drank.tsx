@@ -95,7 +95,7 @@ export default function DrinkView() {
     <div
       className={`flex flex-col gap-16 py-16 ${dranksClasses.layoutPadding} ${dranksClasses.layoutMaxWidth}`}
     >
-      <h1 className="text-5xl text-orange font-comico italic">
+      <h1 className="text-orange font-comico text-5xl italic">
         {data.drink.Tittel}
       </h1>
 
@@ -103,7 +103,7 @@ export default function DrinkView() {
         {data.drink.Forberedelser && (
           <div>
             <div id="Forberedelser" className="absolute -top-10" />
-            <h2 className="text-2xl text-orange mb-5">Forberedelser</h2>
+            <h2 className="text-orange mb-5 text-2xl">Forberedelser</h2>
             <NotionRender
               {...notionRenderConfig}
               blocks={data.drink.Forberedelser}
@@ -112,9 +112,9 @@ export default function DrinkView() {
         )}
 
         <div className="flex justify-between">
-          <div className="flex flex-col gap-14 w-2/3">
+          <div className="flex w-2/3 flex-col gap-14">
             <div>
-              <h2 className="text-2xl text-orange mb-5" id="Ingredienser">
+              <h2 className="text-orange mb-5 text-2xl" id="Ingredienser">
                 Du trenger
               </h2>
               <NotionRender
@@ -124,7 +124,7 @@ export default function DrinkView() {
             </div>
 
             <div>
-              <h2 className="text-2xl text-orange mb-5" id="Fremgangsmåte">
+              <h2 className="text-orange mb-5 text-2xl" id="Fremgangsmåte">
                 Fremgangsmåte
               </h2>
               <NotionRender
@@ -135,7 +135,7 @@ export default function DrinkView() {
 
             {data.drink.Notater && (
               <div>
-                <h2 className="text-2xl text-orange mb-5" id="Notater">
+                <h2 className="text-orange mb-5 text-2xl" id="Notater">
                   Notater
                 </h2>
                 <div className="flex flex-wrap gap-10">
@@ -148,7 +148,7 @@ export default function DrinkView() {
             )}
           </div>
 
-          <div className="w-1/3 relative overflow-visible">
+          <div className="relative w-1/3 overflow-visible">
             <OptimizedImage
               {...data.images.appelsiner}
               className="-mt-12 max-w-full object-cover"
@@ -156,7 +156,7 @@ export default function DrinkView() {
           </div>
 
           {false && data.drink.Illustrasjon && (
-            <div className="w-1/2 lg:w-2/3 h-72 lg:h-96 relative">
+            <div className="relative h-72 w-1/2 lg:h-96 lg:w-2/3">
               <img
                 className={`absolute inset-0 h-full w-full object-cover ${
                   data.drink.IllustrasjonPosisjon === "top"
@@ -172,7 +172,7 @@ export default function DrinkView() {
 
         {data.drink.Referanser && (
           <div>
-            <h2 className="text-2xl text-orange mb-5" id="Referanser">
+            <h2 className="text-orange mb-5 text-2xl" id="Referanser">
               Referanser
             </h2>
             <div className="flex flex-wrap gap-10">

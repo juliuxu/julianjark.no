@@ -75,14 +75,14 @@ export const FloatingScrollNextPreviousButtons = ({
       <button
         aria-hidden
         onClick={onPrevious}
-        className="text-[8vw] sm:text-[6vw] md:text-[4vw] hover:scale-125 active:scale-150 transition-all"
+        className="text-[8vw] transition-all hover:scale-125 active:scale-150 sm:text-[6vw] md:text-[4vw]"
       >
         ⬆️
       </button>
       <button
         aria-hidden
         onClick={onNext}
-        className="text-[8vw] sm:text-[6vw] md:text-[4vw] hover:scale-125 active:scale-150 transition-all"
+        className="text-[8vw] transition-all hover:scale-125 active:scale-150 sm:text-[6vw] md:text-[4vw]"
       >
         ⬇️
       </button>

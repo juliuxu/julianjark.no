@@ -119,12 +119,12 @@ const DranksAndAlcohol = ({
       }`}
     >
       <div
-        className={`w-1/3 flex flex-col justify-center font-avenuex ${
+        className={`flex w-1/3 flex-col justify-center font-avenuex ${
           alignment === "left" ? "text-left" : "text-right"
         }`}
       >
         <span
-          className={`text-4xl uppercase font-medium ${
+          className={`text-4xl font-medium uppercase ${
             colorMap[alcohol.color]
           }`}
         >
@@ -133,7 +133,7 @@ const DranksAndAlcohol = ({
       </div>
 
       <div
-        className={`w-2/3 flex flex-col justify-center font-chillax ${
+        className={`flex w-2/3 flex-col justify-center font-chillax ${
           alignment === "left" ? "text-right" : "text-left"
         }`}
       >

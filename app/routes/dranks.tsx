@@ -44,7 +44,7 @@ export const unstable_shouldReload = () => false;
 export default function DranksLayout() {
   const data = useLoaderData<typeof loader>();
   return (
-    <div className="flex flex-col min-h-screen font-satoshi">
+    <div className="flex min-h-screen flex-col font-satoshi">
       <Header />
       <main className="flex-grow">
         <Outlet />
@@ -69,7 +69,7 @@ export const Header = () => {
   return (
     <header>
       <nav className={`${dranksClasses.layoutPadding}`}>
-        <ul className="min-h-[5rem] py-4 flex flex-wrap items-center gap-y-4 gap-x-8">
+        <ul className="flex min-h-[5rem] flex-wrap items-center gap-y-4 gap-x-8 py-4">
           <NavLink
             prefetch="intent"
             to="/dranks"
@@ -108,19 +108,19 @@ export const Header = () => {
             Utstyr
           </NavLink>
 
-          <div className="flex-grow-0 md:flex-grow h-0 basis-full md:basis-auto" />
-          <div className="flex flex-col md:flex-row w-full md:w-auto gap-y-4 gap-x-5 lg:gap-x-8">
+          <div className="h-0 flex-grow-0 basis-full md:flex-grow md:basis-auto" />
+          <div className="flex w-full flex-col gap-y-4 gap-x-5 md:w-auto md:flex-row lg:gap-x-8">
             <Link
               prefetch="intent"
               to="/dranks/quiz"
-              className={`${classes.linkButton} text-white bg-dranks-orange w-full md:w-40`}
+              className={`${classes.linkButton} w-full bg-dranks-orange text-white md:w-40`}
             >
               Quiz
             </Link>
             <Link
               prefetch="intent"
               to="/dranks/last-ned-app"
-              className={`${classes.linkButton} bg-light-orange w-full md:w-40`}
+              className={`${classes.linkButton} w-full bg-light-orange md:w-40`}
             >
               Last ned app
             </Link>
@@ -137,14 +137,14 @@ interface FooterProps {
 export const Footer = ({ images }: FooterProps) => {
   return (
     <footer
-      className={`bg-dranks-orange h-72 flex w-full mt-14 ${dranksClasses.layoutPadding}`}
+      className={`mt-14 flex h-72 w-full bg-dranks-orange ${dranksClasses.layoutPadding}`}
     >
       <div className="flex-grow" />
       <div className="flex flex-col justify-between">
         <div className="-mt-12">
           <OptimizedImage
             {...images["sitroner"]}
-            className="w-36 rotate-6 -top-12"
+            className="-top-12 w-36 rotate-6"
           />
         </div>
         <a href="#" className="flex justify-center">

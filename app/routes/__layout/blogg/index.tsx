@@ -92,10 +92,10 @@ interface BloggEntryCardProps {
 }
 const BloggEntryCard = ({ entry }: BloggEntryCardProps) => {
   return (
-    <Link className="rounded overflow-hidden" to="/">
-      <img src={entry.cover} alt="" className="w-full aspect-video" />
+    <Link className="overflow-hidden rounded" to="/">
+      <img src={entry.cover} alt="" className="aspect-video w-full" />
       <div className="p-4">
-        <h2 className="text-white font-semibold text-4xl">{entry.title}</h2>
+        <h2 className="text-4xl font-semibold text-white">{entry.title}</h2>
         <p className="text-gray-200">
           {new Date(entry.created).toLocaleDateString("no", {
             weekday: "short",

@@ -115,12 +115,12 @@ export default function TodayILearned() {
   return (
     <>
       <div lang="no" className="mx-[5vw] md:mx-[10vw]">
-        <div className="mx-auto max-w-6xl flex flex-col md:flex-row-reverse gap-6">
+        <div className="mx-auto flex max-w-6xl flex-col gap-6 md:flex-row-reverse">
           <div className="w-full md:w-1/4">
             <TodayILearnedMenu entries={entries} />
           </div>
           <Outlet />
-          <div className="w-full md:w-3/4 flex flex-col gap-10">
+          <div className="flex w-full flex-col gap-10 md:w-3/4">
             {entries.map((entry) => (
               <InlineTodayILearnedEntry key={entry.title} entry={entry} />
             ))}
@@ -140,16 +140,16 @@ interface TodayILearnedMenuProps {
 }
 const TodayILearnedMenu = ({ entries }: TodayILearnedMenuProps) => {
   return (
-    <div className="flex gap-3 md:gap-5 flex-col rounded ring-1 p-2 md:sticky md:top-6 md:max-h-screen">
+    <div className="flex flex-col gap-3 rounded p-2 ring-1 md:sticky md:top-6 md:max-h-screen md:gap-5">
       {entries.map((entry) => (
         <NavLink
           key={entry.title}
-          className="text-gray-300 focus:text-white hover:text-white transition"
+          className="text-gray-300 transition hover:text-white focus:text-white"
           to={slugify(entry.title)}
           prefetch="intent"
         >
           {entry.title}{" "}
-          <div className="text-gray-400 text-sm">
+          <div className="text-sm text-gray-400">
             {new Date(entry.created).toLocaleDateString("no", {
               dateStyle: "long",
             })}
@@ -165,16 +165,16 @@ interface InlineTodayILearnedEntryProps {
 }
 const InlineTodayILearnedEntry = ({ entry }: InlineTodayILearnedEntryProps) => {
   return (
-    <article className="rounded ring-1 p-4">
+    <article className="rounded p-4 ring-1">
       <PermalinkHeading
         as="h2"
-        className="text-gray-100 text-3xl scroll-mt-10"
+        className="scroll-mt-10 text-3xl text-gray-100"
         id={slugify(entry.title)}
       >
         {entry.title}
       </PermalinkHeading>
 
-      <div className="text-sm text-gray-400 mt-2">
+      <div className="mt-2 text-sm text-gray-400">
         {new Date(entry.created).toLocaleDateString("no", {
           weekday: "short",
           year: "numeric",
@@ -183,7 +183,7 @@ const InlineTodayILearnedEntry = ({ entry }: InlineTodayILearnedEntryProps) => {
         })}
       </div>
 
-      <div className="flex gap-2 flex-wrap mt-3">
+      <div className="mt-3 flex flex-wrap gap-2">
         {entry.tags.map((x) => (
           <span
             key={x.title}
@@ -194,7 +194,7 @@ const InlineTodayILearnedEntry = ({ entry }: InlineTodayILearnedEntryProps) => {
         ))}
       </div>
 
-      <div className={`max-w-full mx-auto mt-4 ${commonTailwindStyles.prose}`}>
+      <div className={`mx-auto mt-4 max-w-full ${commonTailwindStyles.prose}`}>
         <NotionRender
           components={notionRenderComponents}
           classes={notionRenderClasses}
