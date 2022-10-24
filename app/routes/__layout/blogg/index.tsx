@@ -11,6 +11,7 @@ import {
   getSelect,
   getText,
   getTitle,
+  slugify,
 } from "~/notion/notion";
 import type {
   Block,
@@ -18,9 +19,13 @@ import type {
   SelectColor,
 } from "~/notion/notion.types";
 import type { DatabasePage } from "~/notion/notion-api.server";
-import { getOneOfOrUndefined, rewriteNotionImageUrl } from "~/utils";
+import {
+  formatDate,
+  getOneOfOrUndefined,
+  rewriteNotionImageUrl,
+} from "~/utils";
 
-interface BloggEntry {
+export interface BloggEntry {
   title: string;
   created: string;
   tags: { title: string; color: SelectColor }[];
@@ -28,7 +33,7 @@ interface BloggEntry {
   language: "Norsk" | "Engelsk";
   cover: string;
 }
-type BloggEntryWithContent = BloggEntry & { notionBlocks: Block[] };
+export type BloggEntryWithContent = BloggEntry & { notionBlocks: Block[] };
 
 export const prepareBloggEntry = (page: DatabasePage): BloggEntry => {
   let cover = "";
@@ -92,19 +97,14 @@ interface BloggEntryCardProps {
 }
 const BloggEntryCard = ({ entry }: BloggEntryCardProps) => {
   return (
-    <Link className="overflow-hidden rounded" to="/">
-      <img src={entry.cover} alt="" className="aspect-video w-full" />
-      <div className="p-4">
-        <h2 className="text-4xl font-semibold text-white">{entry.title}</h2>
-        <p className="text-gray-200">
-          {new Date(entry.created).toLocaleDateString("no", {
-            weekday: "short",
-            year: "numeric",
-            month: "long",
-            day: "2-digit",
-          })}
-        </p>
-        <p className="text-gray-100">{entry.ingress}</p>
+    <Link to={slugify(entry.title)}>
+      <div className="overflow-hidden rounded-lg ring-pink-500 ring-offset-4 ring-offset-[#11191f] transition-all duration-300 hover:ring focus:ring">
+        <img src={entry.cover} alt="" className="aspect-video w-full" />
+        <div className="p-4">
+          <h2 className="text-4xl font-semibold text-white">{entry.title}</h2>
+          <p className="mt-1 text-gray-300">{formatDate(entry.created)}</p>
+          <p className="mt-2 text-gray-200">{entry.ingress}</p>
+        </div>
       </div>
     </Link>
   );

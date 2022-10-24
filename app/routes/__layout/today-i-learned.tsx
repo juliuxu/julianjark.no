@@ -33,6 +33,7 @@ import type { DatabasePage } from "~/notion/notion-api.server";
 import { getBlocksWithChildren } from "~/notion/notion-api.server";
 import NotionRender from "~/packages/notion-render";
 import { prepareNotionBlocks } from "~/packages/notion-shiki-code/prepare.server";
+import { formatDate } from "~/utils";
 import { commonTailwindStyles } from "./index";
 
 interface TodayILearnedEntry {
@@ -150,9 +151,7 @@ const TodayILearnedMenu = ({ entries }: TodayILearnedMenuProps) => {
         >
           {entry.title}{" "}
           <div className="text-sm text-gray-400">
-            {new Date(entry.created).toLocaleDateString("no", {
-              dateStyle: "long",
-            })}
+            {formatDate(entry.created)}
           </div>
         </NavLink>
       ))}
@@ -175,12 +174,7 @@ const InlineTodayILearnedEntry = ({ entry }: InlineTodayILearnedEntryProps) => {
       </PermalinkHeading>
 
       <div className="mt-2 text-sm text-gray-400">
-        {new Date(entry.created).toLocaleDateString("no", {
-          weekday: "short",
-          year: "numeric",
-          month: "long",
-          day: "2-digit",
-        })}
+        {formatDate(entry.created)}
       </div>
 
       <div className="mt-3 flex flex-wrap gap-2">

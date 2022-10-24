@@ -203,3 +203,13 @@ export function typedBoolean<T>(
 ): value is Exclude<T, "" | 0 | false | null | undefined> {
   return Boolean(value);
 }
+
+// dateStyle: "long",
+export const formatDate = (d: string | Date, language: "no" | "en" = "no") =>
+  new Date(d).toLocaleDateString(language, {
+    // weekday: "short",
+    // year: "numeric",
+    // month: "long",
+    // day: "2-digit",
+    dateStyle: "long",
+  });
