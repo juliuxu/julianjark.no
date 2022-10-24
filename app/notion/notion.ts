@@ -56,13 +56,16 @@ export const getFileUrl = (name: string, fromPage: DatabasePage) => {
   }
   return undefined;
 };
-export const getText = (name: string, fromPage: DatabasePage) => {
+export const getRichText = (name: string, fromPage: DatabasePage) => {
   const property = fromPage.properties[name];
   if (property?.type === "rich_text") {
-    return getTextFromRichText(property.rich_text);
+    return property.rich_text;
   }
   return undefined;
 };
+export const getText = (name: string, fromPage: DatabasePage) =>
+  getTextFromRichText(getRichText(name, fromPage) ?? []);
+
 export const getCheckbox = (name: string, fromPage: DatabasePage) => {
   const property = fromPage.properties[name];
   if (property?.type === "checkbox") {
@@ -216,6 +219,11 @@ export const getTodayILearnedEntries = async () =>
     filterPublishedPredicate,
   );
 
+export const getBloggEntries = async () =>
+  (await getDatabasePages(config.bloggDatabaseId)).filter(
+    filterPublishedPredicate,
+  );
+
 // ENV stuff
 type PublishedEnv = "PUBLISHED" | "DEV" | "UNPUBLISHED";
 const getPublisedProperty = (fromPage: DatabasePage): PublishedEnv => {
@@ -235,8 +243,7 @@ const getEnv = () => {
 export const filterPublishedPredicate = (page: DatabasePage) => {
   const published = getPublisedProperty(page);
   if (getEnv() === "PROD") return published === "PUBLISHED";
-  if (getEnv() === "DEV")
-    return published === "PUBLISHED" || published === "DEV";
+  if (getEnv() === "DEV") return ["PUBLISHED", "DEV"].includes(published);
   return false;
 };
 

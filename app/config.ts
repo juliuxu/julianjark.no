@@ -13,6 +13,7 @@ const config = {
   presentasjonerDatabaseId: "3017a0bad8744638b380b3a7aed7dd5e",
   notionDrivenPagesDatabaseId: "f61d11c80e4b40e2a4329cde350bb31a",
   todayILearnedDatabaseId: "2114376d77f34c0390d81fa606a43fbb",
+  bloggDatabaseId: "7244e3985d9b4d7c87afef0287d34154",
 
   // Dranks
   resurserDatabaseId: "12b68d0b65834a4b8419287f83dcd874",

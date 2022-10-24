@@ -51,12 +51,13 @@ export default function NewLayout() {
   );
 }
 
-const menuItems = ["🚧 Prosjekter", "🚧 Blogg", "Dranks", "Today I Learned"];
+const menuItems = ["🚧 Prosjekter", "Dranks", "Blogg", "Today I Learned"];
 
 const Header = () => {
   const lastMatch = useMatches().reverse()[0];
   const pageOrDatabaseId = {
     "/": { pageId: config.forsidePageId },
+    "/blogg": { databaseId: config.bloggDatabaseId },
     "/today-i-learned": { databaseId: config.todayILearnedDatabaseId },
   }[lastMatch.pathname];
 
