@@ -23,8 +23,13 @@ import { assertItemFound } from "~/utils";
 import type { BloggEntryWithContent } from ".";
 import { prepareBloggEntry } from ".";
 
-export const loader = async ({ params: { slug = "" } }: LoaderArgs) => {
-  const page = (await getBloggEntries()).find(findPageBySlugPredicate(slug));
+export const loader = async ({
+  request,
+  params: { slug = "" },
+}: LoaderArgs) => {
+  const page = (await getBloggEntries(request)).find(
+    findPageBySlugPredicate(slug),
+  );
   assertItemFound(page);
 
   const blocks = await getBlocksWithChildren(page.id);

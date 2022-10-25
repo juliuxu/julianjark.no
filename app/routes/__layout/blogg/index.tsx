@@ -64,7 +64,7 @@ export const prepareBloggEntryWithContent = (
 };
 
 export const loader = async ({ request }: LoaderArgs) => {
-  const entryPages = await getBloggEntries();
+  const entryPages = await getBloggEntries(request);
   const entries = entryPages.map(prepareBloggEntry);
 
   return json(
