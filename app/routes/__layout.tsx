@@ -48,7 +48,7 @@ export const loader = async ({ request }: LoaderArgs) => {
     (x): MenuItem => ({ title: getTitle(x), to: slugify(getTitle(x)) }),
   );
 
-  const menuItems = [...staticMenuItems, ...dynamicMenuItems];
+  const menuItems = [...dynamicMenuItems, ...staticMenuItems];
 
   return json({ menuItems });
 };
