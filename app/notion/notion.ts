@@ -202,26 +202,26 @@ export const getDrinker = async () =>
     },
   );
 
-export const getPresentasjoner = async () =>
+export const getPresentasjoner = async (request?: Request) =>
   (
     await getDatabasePages(config.presentasjonerDatabaseId, [
       { timestamp: "created_time", direction: "ascending" },
     ])
-  ).filter(filterPublishedPredicate);
+  ).filter(filterPublishedPredicate(request));
 
-export const getNotionDrivenPages = async () =>
+export const getNotionDrivenPages = async (request?: Request) =>
   (await getDatabasePages(config.notionDrivenPagesDatabaseId)).filter(
-    filterPublishedPredicate,
+    filterPublishedPredicate(request),
   );
 
-export const getTodayILearnedEntries = async () =>
+export const getTodayILearnedEntries = async (request?: Request) =>
   (await getDatabasePages(config.todayILearnedDatabaseId)).filter(
-    filterPublishedPredicate,
+    filterPublishedPredicate(request),
   );
 
-export const getBloggEntries = async () =>
+export const getBloggEntries = async (request?: Request) =>
   (await getDatabasePages(config.bloggDatabaseId)).filter(
-    filterPublishedPredicate,
+    filterPublishedPredicate(request),
   );
 
 // ENV stuff
@@ -240,12 +240,16 @@ const getEnv = () => {
   else if (process.env.NODE_ENV === "development") return "DEV";
 };
 
-export const filterPublishedPredicate = (page: DatabasePage) => {
-  const published = getPublisedProperty(page);
-  if (getEnv() === "PROD") return published === "PUBLISHED";
-  if (getEnv() === "DEV") return ["PUBLISHED", "DEV"].includes(published);
-  return false;
-};
+export const filterPublishedPredicate =
+  (request?: Request) => (page: DatabasePage) => {
+    const dev =
+      request && new URL(request?.url).searchParams.get("dev") !== null;
+    const published = getPublisedProperty(page);
+    if (dev || getEnv() === "DEV")
+      return ["PUBLISHED", "DEV"].includes(published);
+    if (getEnv() === "PROD") return published === "PUBLISHED";
+    return false;
+  };
 
 export interface ImageResource {
   src: string;

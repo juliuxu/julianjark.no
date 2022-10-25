@@ -27,7 +27,7 @@ export const loader = async ({
   request,
   params: { notionDrivenPage: requestedNotionDrivenPageSlug = "" },
 }: LoaderArgs) => {
-  const page = (await getNotionDrivenPages()).find(
+  const page = (await getNotionDrivenPages(request)).find(
     findPageBySlugPredicate(requestedNotionDrivenPageSlug),
   );
   assertItemFound(page);
