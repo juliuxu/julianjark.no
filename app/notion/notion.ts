@@ -2,6 +2,7 @@ import config from "~/config";
 import {
   assertContainsItems,
   flattenListDepthFirst,
+  isDevMode,
   rewriteNotionImageUrl,
   takeWhileM,
 } from "~/utils";
@@ -235,20 +236,12 @@ const getPublisedProperty = (fromPage: DatabasePage): PublishedEnv => {
   // Default
   return "PUBLISHED";
 };
-const getEnv = () => {
-  if (process.env.NODE_ENV === "production") return "PROD";
-  else if (process.env.NODE_ENV === "development") return "DEV";
-};
 
 export const filterPublishedPredicate =
   (request?: Request) => (page: DatabasePage) => {
-    const dev =
-      request && new URL(request?.url).searchParams.get("dev") !== null;
     const published = getPublisedProperty(page);
-    if (dev || getEnv() === "DEV")
-      return ["PUBLISHED", "DEV"].includes(published);
-    if (getEnv() === "PROD") return published === "PUBLISHED";
-    return false;
+    if (isDevMode(request)) return ["PUBLISHED", "DEV"].includes(published);
+    return published === "PUBLISHED";
   };
 
 export interface ImageResource {

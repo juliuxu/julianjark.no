@@ -1,16 +1,18 @@
-import type { LinksFunction, MetaFunction } from "@remix-run/node";
-import { NavLink, Outlet, useMatches } from "@remix-run/react";
+import type { LinksFunction, LoaderArgs, MetaFunction } from "@remix-run/node";
+import { json } from "@remix-run/node";
+import { NavLink, Outlet, useLoaderData, useMatches } from "@remix-run/react";
 
 import { CachePurgeCurrentPageButton } from "~/components/cache-purge-button";
 import { HiddenFeature } from "~/components/hidden-feature";
 import { NotionWatcherButton } from "~/components/notion-watcher-button";
 import config from "~/config";
-import { slugify } from "~/notion/notion";
+import { getNotionDrivenPages, getTitle, slugify } from "~/notion/notion";
 import designTokens from "~/styles/design-tokens.json";
 import globalCss from "~/styles/global.css";
-import newLayoutCss from "~/styles/new-layout.css";
+import layoutCss from "~/styles/layout.css";
 import shikiCodeCss from "~/styles/shiki-code.css";
 import tailwind from "~/tailwind.css";
+import { isDevMode } from "~/utils";
 
 export const links: LinksFunction = () => [
   {
@@ -27,7 +29,7 @@ export const links: LinksFunction = () => [
   },
   {
     rel: "stylesheet",
-    href: newLayoutCss,
+    href: layoutCss,
   },
 ];
 
@@ -35,12 +37,32 @@ export const meta: MetaFunction = () => ({
   "theme-color": designTokens.colors.dark,
 });
 
-export default function NewLayout() {
+const staticMenuItemStrings = ["Dranks", "🚧 Blogg", "Today I Learned"];
+export const loader = async ({ request }: LoaderArgs) => {
+  const staticMenuItems = staticMenuItemStrings
+    .filter((x) => isDevMode(request) || !x.includes("🚧"))
+    .map((x) => x.replace("🚧", "").trim())
+    .map((x): MenuItem => ({ title: x, to: slugify(x) }));
+
+  const dynamicMenuItems = (await getNotionDrivenPages(request)).map(
+    (x): MenuItem => ({ title: getTitle(x), to: slugify(getTitle(x)) }),
+  );
+
+  const menuItems = [...staticMenuItems, ...dynamicMenuItems];
+
+  return json({ menuItems });
+};
+
+// https://remix.run/docs/en/v1/api/conventions#never-reloading-the-root
+export const unstable_shouldReload = () => false;
+
+export default function Layout() {
+  const data = useLoaderData<typeof loader>();
   return (
     <>
       <header className="mx-[5vw] h-20">
         <div className="mx-auto h-full">
-          <Header />
+          <Header menuItems={data.menuItems} />
         </div>
       </header>
       <main className="pt-10">
@@ -51,9 +73,16 @@ export default function NewLayout() {
   );
 }
 
-const menuItems = ["🚧 Prosjekter", "Dranks", "Blogg", "Today I Learned"];
-
-const Header = () => {
+interface MenuItem {
+  title: string;
+  to: string;
+  // icon?: string;
+  // color?: string;
+}
+interface HeaderProps {
+  menuItems: MenuItem[];
+}
+const Header = ({ menuItems }: HeaderProps) => {
   const lastMatch = useMatches().reverse()[0];
   const pageOrDatabaseId = {
     "/": { pageId: config.forsidePageId },
@@ -67,27 +96,24 @@ const Header = () => {
         Julian Jark
       </NavLink>
       <div className="flex items-center gap-4">
-        {menuItems
-          .filter((x) => !x.includes("🚧"))
-          .filter(
-            (x) => x !== "Blogg" || process.env.NODE_ENV === "development",
-          )
-          .map((x) => (
-            <NavLink
-              key={x}
-              to={slugify(x)}
-              prefetch="intent"
-              className={({ isActive }) =>
-                `rounded-2xl border-2 p-2 ${
-                  isActive
-                    ? "border-white text-white"
-                    : "border-gray-400 text-gray-400"
-                } transition hover:border-white hover:text-white focus:border-white focus:text-white`
-              }
-            >
-              {x}
-            </NavLink>
-          ))}
+        {menuItems.map(({ to, title }) => (
+          <NavLink
+            key={to}
+            to={to}
+            prefetch="intent"
+            className={({ isActive }) =>
+              `rounded-2xl border-2 p-2 ${
+                isActive
+                  ? "border-white text-white"
+                  : "border-gray-400 text-gray-400"
+              } transition hover:border-white hover:text-white focus:border-white focus:text-white`
+            }
+          >
+            {title}
+          </NavLink>
+        ))}
+
+        {/* DEV */}
         <HiddenFeature shortcut="x">
           <div className="-mt-[1px] opacity-40 transition-opacity focus-within:opacity-100 hover:opacity-100">
             <CachePurgeCurrentPageButton />

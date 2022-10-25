@@ -2,6 +2,10 @@ import { useEffect, useState } from "react";
 
 import { CollapsedShikiCode } from "~/packages/notion-shiki-code";
 
+export const isDebugMode = (request: Request) =>
+  isDebugModeFromCookie(request.headers.get("cookie") ?? "") ||
+  new URL(request.url).searchParams.get("debug") !== null;
+
 export const isDebugModeFromCookie = (cookieString: string) => {
   const debugMode = cookieString
     .split("; ")
@@ -18,7 +22,7 @@ const setDebugMode = (value: boolean) => {
   // sessionStorage.setItem("debugMode", String(value));
 };
 
-const isDebugMode = () => {
+const isDebugModeFromDocument = () => {
   if (typeof document !== "undefined") {
     return isDebugModeFromCookie(document.cookie);
   }
@@ -56,7 +60,7 @@ export const DebugToggle = () => {
 export const useIsDebugMode = () => {
   const [debugMode, setDebugModeState] = useState(false);
   useEffect(() => {
-    setDebugModeState(isDebugMode());
+    setDebugModeState(isDebugModeFromDocument());
   }, []);
   return debugMode;
 };
