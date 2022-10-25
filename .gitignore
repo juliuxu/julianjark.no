@@ -11,6 +11,4 @@ node_modules
 /api/index.js
 /api/index.js.map
 
-remix.config.js
-
 /app/tailwind.css

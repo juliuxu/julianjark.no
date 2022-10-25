@@ -6,10 +6,7 @@
   "sideEffects": false,
   "scripts": {
     "postinstall": "patch-package",
-    "set-vercel-config": "cp remix.config.vercel.js remix.config.js",
-    "set-default-config": "cp remix.config.default.js remix.config.js",
-    "build-vercel": "npm-run-all set-vercel-config build:*",
-    "build": "npm-run-all set-default-config build:*",
+    "build": "npm-run-all build:*",
     "build:css": "npm run generate:css -- --minify",
     "build:remix": "remix build",
     "dev": "run-p dev:*",
