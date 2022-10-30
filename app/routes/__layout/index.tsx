@@ -62,7 +62,7 @@ export const meta: MetaFunction = () => {
   const [age] = getAgeFromBirthDate(new Date("1992-11-02"));
   return {
     title: "Julian Jark",
-    description: `${age} år gammel hundeelsker, drinkmaker, turgåer, musikkavspiller, og kodeskriver`,
+    description: `${age} år gammel hundevenn, drinkmaker, turgåer, kodeskriver, musikkavspiller`,
   };
 };
 
