@@ -1,14 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import type { LinksFunction } from "@remix-run/node";
-
-import picoCss from "@picocss/pico/css/pico.min.css";
-
-export const links: LinksFunction = () => [
-  {
-    rel: "stylesheet",
-    href: picoCss,
-  },
-];
 
 export default function CachePurgeWatcher() {
   const [buffer, setBuffer] = useState("");
