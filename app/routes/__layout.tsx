@@ -60,15 +60,17 @@ export default function Layout() {
   const data = useLoaderData<typeof loader>();
   return (
     <>
-      <header className="mx-[5vw] h-20">
-        <div className="mx-auto h-full">
-          <Header menuItems={data.menuItems} />
-        </div>
-      </header>
-      <main className="pt-10">
-        <Outlet />
-      </main>
-      <footer className="h-10"></footer>
+      <div className="h-full bg-[#11191f]">
+        <header className="mx-[5vw] h-20">
+          <div className="mx-auto h-full">
+            <Header menuItems={data.menuItems} />
+          </div>
+        </header>
+        <main className="pt-10">
+          <Outlet />
+        </main>
+        <footer className="h-10"></footer>
+      </div>
     </>
   );
 }
