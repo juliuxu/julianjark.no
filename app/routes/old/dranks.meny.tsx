@@ -15,7 +15,8 @@ import type { SelectColor } from "~/notion/notion.types";
 import { prepareFromPage } from "~/packages/notion-drinker/prepare.server";
 import type { Alcohol, DrinkHeader } from "~/packages/notion-drinker/types";
 import { assertDrinkHeader } from "~/packages/notion-drinker/types";
-import globalCss from "~/styles/global.css";
+import fontAvenueX from "~/styles/font-avenue-x.css";
+import fontChillax from "~/styles/font-chillax.css";
 import tailwind from "~/tailwind.css";
 
 export const links: LinksFunction = () => [
@@ -25,7 +26,11 @@ export const links: LinksFunction = () => [
   },
   {
     rel: "stylesheet",
-    href: globalCss,
+    href: fontAvenueX,
+  },
+  {
+    rel: "stylesheet",
+    href: fontChillax,
   },
 ];
 

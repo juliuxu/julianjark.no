@@ -16,7 +16,6 @@
     "start": "remix-serve build"
   },
   "dependencies": {
-    "@fontsource/source-sans-pro": "4.5.11",
     "@notionhq/client": "2.2.2",
     "@picocss/pico": "1.5.6",
     "@remix-run/node": "1.7.6",

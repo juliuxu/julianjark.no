@@ -35,6 +35,7 @@ import {
 import notionRevealStyles from "~/packages/notion-reveal/styles.css";
 import { prepareNotionBlocks } from "~/packages/notion-shiki-code/prepare.server";
 import capraRevealTheme from "~/styles/capraRevealTheme.css";
+import fontSourceSansPro from "~/styles/font-source-sans-pro.css";
 import codeStyles from "~/styles/shiki-code.css";
 import { assertItemFound } from "~/utils";
 
@@ -64,13 +65,7 @@ export const links: LinksFunction = () => [
   { rel: "stylesheet", href: revealCss },
   { rel: "stylesheet", href: codeStyles },
   { rel: "stylesheet", href: notionRevealStyles },
-
-  // Source sans is used a lot in the the themes
-  // As well as the capra theme
-  // Remix doesn't work well with fontsource, so have to inline it
-  { rel: "stylesheet", href: "/fontsource/source-sans-pro/index.css" },
-  { rel: "stylesheet", href: "/fontsource/source-sans-pro/400.css" },
-  { rel: "stylesheet", href: "/fontsource/source-sans-pro/700.css" },
+  { rel: "stylesheet", href: fontSourceSansPro },
 ];
 
 export const loader = async ({ params: { presentasjon = "" } }: LoaderArgs) => {

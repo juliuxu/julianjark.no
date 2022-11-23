@@ -8,7 +8,6 @@ import { NotionWatcherButton } from "~/components/notion-watcher-button";
 import config from "~/config";
 import { getNotionDrivenPages, getTitle, slugify } from "~/notion/notion";
 import designTokens from "~/styles/design-tokens.json";
-import globalCss from "~/styles/global.css";
 import layoutCss from "~/styles/layout.css";
 import shikiCodeCss from "~/styles/shiki-code.css";
 import tailwind from "~/tailwind.css";
@@ -18,10 +17,6 @@ export const links: LinksFunction = () => [
   {
     rel: "stylesheet",
     href: tailwind,
-  },
-  {
-    rel: "stylesheet",
-    href: globalCss,
   },
   {
     rel: "stylesheet",
