@@ -8,7 +8,7 @@ import type { ImageResource } from "~/notion/notion";
 import { fetchDranksImageResources } from "~/notion/notion";
 import fontComico from "~/styles/font-comico.css";
 import fontSatoshi from "~/styles/font-satoshi.css";
-import tailwind from "~/tailwind.css";
+import tailwind from "~/styles/tailwind.css";
 
 export const links: LinksFunction = () => [
   {

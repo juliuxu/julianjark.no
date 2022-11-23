@@ -17,7 +17,7 @@ import type { Alcohol, DrinkHeader } from "~/packages/notion-drinker/types";
 import { assertDrinkHeader } from "~/packages/notion-drinker/types";
 import fontAvenueX from "~/styles/font-avenue-x.css";
 import fontChillax from "~/styles/font-chillax.css";
-import tailwind from "~/tailwind.css";
+import tailwind from "~/styles/tailwind.css";
 
 export const links: LinksFunction = () => [
   {

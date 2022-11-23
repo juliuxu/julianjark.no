@@ -4,7 +4,7 @@ import { NavLink, Outlet, useLoaderData } from "@remix-run/react";
 
 import config from "~/config";
 import { getDrinker, getTitle, slugify } from "~/notion/notion";
-import tailwind from "~/tailwind.css";
+import tailwind from "~/styles/tailwind.css";
 
 export const links: LinksFunction = () => [
   {

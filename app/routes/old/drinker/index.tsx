@@ -7,7 +7,7 @@ import { json } from "@remix-run/node";
 
 import config from "~/config";
 import { getDrinker } from "~/notion/notion";
-import tailwind from "~/tailwind.css";
+import tailwind from "~/styles/tailwind.css";
 
 export const links: LinksFunction = () => [
   {

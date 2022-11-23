@@ -10,7 +10,7 @@ import { getNotionDrivenPages, getTitle, slugify } from "~/notion/notion";
 import designTokens from "~/styles/design-tokens.json";
 import layoutCss from "~/styles/layout.css";
 import shikiCodeCss from "~/styles/shiki-code.css";
-import tailwind from "~/tailwind.css";
+import tailwind from "~/styles/tailwind.css";
 import { isDevMode } from "~/utils";
 
 export const links: LinksFunction = () => [
