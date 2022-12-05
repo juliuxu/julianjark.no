@@ -14,8 +14,18 @@ export interface Options {
   lineOptions?: LineOption[];
 }
 
+let highlighter: shiki.Highlighter;
 export default async function prepare(codeText: string, options: Options) {
-  const highlighter = await shiki.getHighlighter({ theme: options.theme });
+  if (!highlighter) {
+    highlighter = await shiki.getHighlighter({ theme: "dark-plus" });
+  }
+  if (options.theme && !highlighter.getLoadedThemes().includes(options.theme)) {
+    await highlighter.loadTheme(options.theme);
+  }
+  if (!highlighter.getLoadedLanguages().includes(options.lang)) {
+    await highlighter.loadLanguage(options.lang);
+  }
+
   return highlighter.codeToHtml(codeText, options);
 }
 
