@@ -28,10 +28,11 @@ export const loader = async ({ request }: LoaderArgs) => {
   const [age] = getAgeFromBirthDate(new Date("1992-11-02"));
   const f = (_blocks: typeof blocks) => {
     for (let block of _blocks) {
-      if ((block as any).code?.shikiCodeHtml) {
-        (block as any).code.shikiCodeHtml = (
-          block as any
-        ).code.shikiCodeHtml.replace("29 år gammel", `${age} år gammel`);
+      if ((block as any).code?.codeHtml) {
+        (block as any).code.codeHtml = (block as any).code.codeHtml.replace(
+          "29 år gammel",
+          `${age} år gammel`,
+        );
         return true;
       }
       if (block.has_children) {
