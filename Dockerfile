@@ -1,4 +1,4 @@
-FROM node:18-bullseye-slim as base
+FROM node:19-bullseye-slim as base
 
 RUN apt-get update && apt-get install -y -q --no-install-recommends libfontconfig1 fontconfig
 
