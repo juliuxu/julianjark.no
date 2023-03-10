@@ -1,3 +1,3 @@
-section {
+section:has(img) {
   height: 100%;
 }
