@@ -23,6 +23,8 @@ import NotionRender from "~/packages/notion-render";
 import type { Components as NotionRenderComponents } from "~/packages/notion-render/components";
 import type { SitemapHandle } from "~/packages/remix-sitemap/sitemap.server";
 import { databaseEntryToSitemapEntry } from "~/sitemap.server";
+import comicoFont from "~/styles/fonts/Comico-Regular.woff2";
+import satohshiFont from "~/styles/fonts/Satoshi-Variable.woff2";
 import { assertItemFound, optimizedImageUrl } from "~/utils";
 import { dranksClasses } from "../dranks";
 
@@ -38,8 +40,17 @@ export const handle: SitemapHandle = {
 export const links: LinksFunction = () => [
   {
     rel: "preload",
-    href: "/fonts/Comico-Regular.woff2",
-    as: "woff2",
+    href: comicoFont,
+    as: "font",
+    type: "font/woff2",
+    crossorigin: "",
+  },
+  {
+    rel: "preload",
+    href: satohshiFont,
+    as: "font",
+    type: "font/woff2",
+    crossorigin: "",
   },
 ];
 

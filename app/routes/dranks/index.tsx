@@ -21,14 +21,17 @@ import { getDrinker, getDrinkerDatabase, slugify } from "~/notion/notion";
 import { prepareFromPage } from "~/packages/notion-drinker/prepare.server";
 import type { Alcohol, DrinkHeader } from "~/packages/notion-drinker/types";
 import { assertDrinkHeader } from "~/packages/notion-drinker/types";
+import satohshiFont from "~/styles/fonts/Satoshi-Variable.woff2";
 import { debounce, optimizedImageUrl } from "~/utils";
 import { dranksClasses } from "../dranks";
 
 export const links: LinksFunction = () => [
   {
     rel: "preload",
-    href: "/fonts/Satoshi-Variable.woff2",
-    as: "woff2",
+    href: satohshiFont,
+    as: "font",
+    type: "font/woff2",
+    crossorigin: "",
   },
 ];
 
