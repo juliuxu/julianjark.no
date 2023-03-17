@@ -1,7 +1,10 @@
 import type { LoaderArgs } from "@remix-run/node";
 
 import { getNumberOrUndefined, getOneOfOrUndefined } from "~/utils";
-import { createReadableStreamLogger, purgeUpdatedPages } from "./cache-purge";
+import {
+  createReadableStreamLogger,
+  purgeUpdatedPages,
+} from "./api.cache-purge";
 
 const DEFAULT_WATCH_INTERVAL = 20 * 1000;
 export const loader = async ({ request }: LoaderArgs) => {

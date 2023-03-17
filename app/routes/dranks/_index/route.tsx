@@ -23,7 +23,7 @@ import type { Alcohol, DrinkHeader } from "~/packages/notion-drinker/types";
 import { assertDrinkHeader } from "~/packages/notion-drinker/types";
 import satohshiFont from "~/styles/fonts/Satoshi-Variable.woff2";
 import { debounce, optimizedImageUrl } from "~/utils";
-import { dranksClasses } from "../dranks";
+import { dranksClasses } from "../route";
 
 export const links: LinksFunction = () => [
   {
@@ -31,7 +31,7 @@ export const links: LinksFunction = () => [
     href: satohshiFont,
     as: "font",
     type: "font/woff2",
-    crossorigin: "anonymous",
+    crossOrigin: "anonymous",
   },
 ];
 

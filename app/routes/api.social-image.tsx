@@ -5,7 +5,7 @@ import type { ExportFormat } from "skia-canvas";
 import { Canvas, FontLibrary } from "skia-canvas";
 
 import designTokens from "~/styles/design-tokens.json";
-import { processImage } from "./image";
+import { processImage } from "./api.image";
 
 // https://www.scriptol.com/html5/canvas/rounded-rectangle.php
 const roundRect =

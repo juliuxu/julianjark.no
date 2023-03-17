@@ -34,7 +34,7 @@ import { getBlocksWithChildren } from "~/notion/notion-api.server";
 import NotionRender from "~/packages/notion-render";
 import { prepareNotionBlocks } from "~/packages/notion-shiki-code/prepare.server";
 import { formatDate } from "~/utils";
-import { commonTailwindStyles } from "./index";
+import { commonTailwindStyles } from "../_index/route";
 
 interface TodayILearnedEntry {
   title: string;

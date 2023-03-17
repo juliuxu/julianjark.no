@@ -9,7 +9,7 @@ import {
 } from "~/notion/notion";
 import type { SelectColor } from "~/notion/notion.types";
 import type { SitemapHandle } from "~/packages/remix-sitemap/sitemap.server";
-import type { Loader as TodayILearnedLoader } from "~/routes/__layout/today-i-learned";
+import type { Loader as TodayILearnedLoader } from "~/routes/_layout/today-i-learned/route";
 import { databaseEntryToSitemapEntry } from "~/sitemap.server";
 import { assertItemFound, socialImageUrlBuilder } from "~/utils";
 
@@ -24,10 +24,10 @@ export const handle: SitemapHandle = {
 export const meta: MetaFunction<
   {},
   {
-    "routes/__layout/today-i-learned": TodayILearnedLoader;
+    "routes/_layout/today-i-learned": TodayILearnedLoader;
   }
 > = ({ params, parentsData }) => {
-  const entry = parentsData["routes/__layout/today-i-learned"].entries.find(
+  const entry = parentsData["routes/_layout/today-i-learned"].entries.find(
     (x) => params.permalink === slugify(x.title),
   );
   assertItemFound(entry);

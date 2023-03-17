@@ -26,7 +26,7 @@ import { databaseEntryToSitemapEntry } from "~/sitemap.server";
 import comicoFont from "~/styles/fonts/Comico-Regular.woff2";
 import satohshiFont from "~/styles/fonts/Satoshi-Variable.woff2";
 import { assertItemFound, optimizedImageUrl } from "~/utils";
-import { dranksClasses } from "../dranks";
+import { dranksClasses } from "../route";
 
 export const notionRenderComponents: Partial<NotionRenderComponents> = {
   image: buildOptimizedNotionImage(),
@@ -43,14 +43,14 @@ export const links: LinksFunction = () => [
     href: comicoFont,
     as: "font",
     type: "font/woff2",
-    crossorigin: "anonymous",
+    crossOrigin: "anonymous",
   },
   {
     rel: "preload",
     href: satohshiFont,
     as: "font",
     type: "font/woff2",
-    crossorigin: "anonymous",
+    crossOrigin: "anonymous",
   },
 ];
 

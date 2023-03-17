@@ -2,8 +2,8 @@ import { getText } from "~/notion/notion";
 import { getCheckbox, getSelect, getTextFromRichText } from "~/notion/notion";
 import type { Block } from "~/notion/notion.types";
 import type { DatabasePage } from "~/notion/notion-api.server";
-import type { Theme } from "~/routes/presentasjoner.$presentasjon";
-import { getThemeOrDefault } from "~/routes/presentasjoner.$presentasjon";
+import type { Theme } from "~/routes/presentasjoner/$presentasjon/route";
+import { getThemeOrDefault } from "~/routes/presentasjoner/$presentasjon/route";
 
 export interface PreparedData {
   slides: Slide[];

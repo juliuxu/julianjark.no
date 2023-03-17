@@ -1,7 +1,7 @@
 import { getTextFromRichText } from "~/notion/notion";
 import type { Components as NotionRenderComponents } from "~/packages/notion-render/components";
 import { useNotionRenderContext as ctx } from "~/packages/notion-render/context";
-import type { ProccessingOptions } from "~/routes/api/image";
+import type { ProccessingOptions } from "~/routes/api/api.image";
 import {
   optimizedImageUrl,
   parseImageProccessingOptions,
