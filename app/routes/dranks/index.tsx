@@ -31,7 +31,7 @@ export const links: LinksFunction = () => [
     href: satohshiFont,
     as: "font",
     type: "font/woff2",
-    crossorigin: "",
+    crossorigin: "anonymous",
   },
 ];
 

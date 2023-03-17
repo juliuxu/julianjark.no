@@ -43,14 +43,14 @@ export const links: LinksFunction = () => [
     href: comicoFont,
     as: "font",
     type: "font/woff2",
-    crossorigin: "",
+    crossorigin: "anonymous",
   },
   {
     rel: "preload",
     href: satohshiFont,
     as: "font",
     type: "font/woff2",
-    crossorigin: "",
+    crossorigin: "anonymous",
   },
 ];
 
