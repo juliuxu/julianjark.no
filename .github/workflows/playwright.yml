@@ -17,8 +17,8 @@ jobs:
           node-version: 18
       - name: Install dependencies
         run: npm ci
-      - name: Run your tests
-        run: npx playwright test
+      - name: Run Playwright tests
+        run: HOME=/root npx playwright test
         env:
           NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
       - uses: actions/upload-artifact@v3
