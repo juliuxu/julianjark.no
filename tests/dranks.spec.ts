@@ -11,7 +11,7 @@ test("dranks", async ({ page }) => {
 
   // a single drank
   const drank = dranks.first().getByRole("link");
-  const drankTitle = await drank.innerText();
+  const drankTitle = (await drank.innerText()).trim();
 
   await drank.click();
   await expect(page).toHaveTitle(new RegExp(drankTitle));
