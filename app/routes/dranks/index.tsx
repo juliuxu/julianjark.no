@@ -10,8 +10,8 @@ import {
   Form,
   Link,
   useLoaderData,
+  useNavigation,
   useSubmit,
-  useTransition,
 } from "@remix-run/react";
 
 import Debug from "~/components/debug";
@@ -118,18 +118,16 @@ export let headers: HeadersFunction = ({ loaderHeaders }) => loaderHeaders;
 export default function Dranks() {
   const data = useLoaderData<typeof loader>();
   const submit = useSubmit();
-  const transition = useTransition();
+  const navigation = useNavigation();
 
   const submitDebounced = useMemo(() => debounce(submit, 200), []);
 
-  const isSubmitting = transition.state === "submitting";
-  const isLoading = transition.state === "loading";
+  const isSubmitting = navigation.state === "submitting";
+  const isLoading = navigation.state === "loading";
 
   const isAlcoholChecked = (alcohol: Alcohol) => {
-    if (transition.submission?.formData)
-      return transition.submission?.formData
-        .getAll("alcohols")
-        .includes(alcohol.title);
+    if (navigation.formData)
+      return navigation.formData.getAll("alcohols").includes(alcohol.title);
     else if (data.filterAlcohols.includes(alcohol.title)) return true;
     else return false;
   };
