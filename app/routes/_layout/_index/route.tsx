@@ -1,7 +1,7 @@
 import type {
   HeadersFunction,
   LoaderArgs,
-  MetaFunction,
+  V2_MetaFunction,
 } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
@@ -59,12 +59,17 @@ export const loader = async ({ request }: LoaderArgs) => {
 };
 export const headers: HeadersFunction = ({ loaderHeaders }) => loaderHeaders;
 
-export const meta: MetaFunction = () => {
+export const meta: V2_MetaFunction = () => {
   const [age] = getAgeFromBirthDate(new Date("1992-11-02"));
-  return {
-    title: "Julian Jark",
-    description: `${age} år gammel hundevenn, drinkmaker, turgåer, kodeskriver, musikkavspiller`,
-  };
+  return [
+    {
+      title: "Julian Jark",
+    },
+    {
+      name: "description",
+      content: `${age} år gammel hundevenn, drinkmaker, turgåer, kodeskriver, musikkavspiller`,
+    },
+  ];
 };
 
 export const commonTailwindStyles = /*tw*/ {

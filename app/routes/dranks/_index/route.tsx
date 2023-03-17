@@ -3,7 +3,7 @@ import type {
   HeadersFunction,
   LinksFunction,
   LoaderArgs,
-  MetaFunction,
+  V2_MetaFunction,
 } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import {
@@ -113,9 +113,12 @@ export const loader = async ({ request }: LoaderArgs) => {
   );
 };
 
-export const meta: MetaFunction = () => ({
-  title: "Dranks",
-});
+export const meta: V2_MetaFunction = () => [
+  {
+    title: "Dranks",
+  },
+];
+
 export let headers: HeadersFunction = ({ loaderHeaders }) => loaderHeaders;
 
 export default function Dranks() {

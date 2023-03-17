@@ -2,7 +2,7 @@ import { useLoaderData } from "@remix-run/react";
 import type {
   HeadersFunction,
   LoaderArgs,
-  MetaFunction,
+  V2_MetaFunction,
 } from "@remix-run/server-runtime";
 import { json } from "@remix-run/server-runtime";
 
@@ -46,22 +46,37 @@ export const loader = async ({
 };
 export let headers: HeadersFunction = ({ loaderHeaders }) => loaderHeaders;
 
-export const meta: MetaFunction<typeof loader> = ({ data }) => {
-  return {
+export const meta: V2_MetaFunction<typeof loader> = ({ data }) => [
+  {
     title: data.entry.title,
-    description: data.entry.ingress,
-    "og:title": data.entry.title,
-    "og:description": data.entry.ingress,
-
-    "og:image": data.entry.cover,
-    "twitter:card": "summary_large_image",
-
-    // Published date
-    publish_date: data.entry.created,
-    "og:publish_date": data.entry.created,
-    "article:published_time": data.entry.created,
-  };
-};
+  },
+  {
+    name: "description",
+    property: "og:description",
+    content: data.entry.ingress,
+  },
+  {
+    property: "og:title",
+    content: data.entry.title,
+  },
+  {
+    property: "og:image",
+    content: data.entry.cover,
+  },
+  {
+    name: "twitter:card",
+    content: "summary_large_image",
+  },
+  {
+    name: "publish_date",
+    property: "og:publish_date",
+    content: data.entry.created,
+  },
+  {
+    property: "article:published_time",
+    content: data.entry.created,
+  },
+];
 
 export default function Blogg() {
   const { entry } = useLoaderData<typeof loader>();

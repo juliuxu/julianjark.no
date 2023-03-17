@@ -1,4 +1,4 @@
-import type { LinksFunction, MetaFunction } from "@remix-run/node";
+import type { LinksFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { Link, NavLink, Outlet, useLoaderData } from "@remix-run/react";
 
@@ -24,10 +24,6 @@ export const links: LinksFunction = () => [
     href: fontSatoshi,
   },
 ];
-
-export const meta: MetaFunction = () => ({
-  // "theme-color": "#F9A613",
-});
 
 export const loader = async () => {
   const images = await fetchDranksImageResources([

@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import type { HeadersFunction, MetaFunction } from "@remix-run/node";
+import type { HeadersFunction, V2_MetaFunction } from "@remix-run/node";
 import { useLocation, useParams } from "@remix-run/react";
 
 import {
@@ -21,7 +21,7 @@ export const handle: SitemapHandle = {
 /**
  * Display nice OG and twitter meta tags
  */
-export const meta: MetaFunction<
+export const meta: V2_MetaFunction<
   {},
   {
     "routes/_layout/today-i-learned": TodayILearnedLoader;
@@ -58,14 +58,19 @@ export const meta: MetaFunction<
   // Version hack
   image += "&v=2";
 
-  return {
-    title: entry.title,
-    description: description,
-    "og:title": entry.title,
-    "og:description": description,
+  return [
+    {
+      title: entry.title,
+    },
+    { name: "description", property: "og:description", content: description },
+    { property: "og:title", content: entry.title },
+    { property: "og:description", content: description },
 
-    "og:image": image,
-    "twitter:card": image ? "summary_large_image" : "summary",
+    { property: "og:image", content: image },
+    {
+      name: "twitter:card",
+      content: image ? "summary_large_image" : "summary",
+    },
 
     // According to twitter, there is no need to duplicate Open Grap
     // attributes
@@ -83,19 +88,19 @@ export const meta: MetaFunction<
     // "twitter:data2": tags.join(", "),
 
     // Extra, unsure about the effect
-    "og:type": "article",
-    "article:tag": tags,
-    keywords: tags.join(", "),
+    { property: "og:type", content: "article" },
+    { name: "keywords", content: tags.join(", ") },
+    ...tags.map((tag) => ({ property: "article:tag", content: tag })),
 
     // Linkedin complained about this
-    author: "Julian Jark",
-    "article:byline": "Julian Jark",
+    { name: "author", content: "Julian Jark" },
+    { property: "article:byline", content: "Julian Jark" },
 
     // Published date
-    publish_date: entry.created,
-    "og:publish_date": entry.created,
-    "article:published_time": entry.created,
-  };
+    { name: "publish_date", content: entry.created },
+    { property: "og:publish_date", content: entry.created },
+    { property: "article:published_time", content: entry.created },
+  ];
 };
 
 export const headers: HeadersFunction = ({ parentHeaders }) => parentHeaders;

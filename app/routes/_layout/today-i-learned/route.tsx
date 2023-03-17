@@ -2,7 +2,7 @@ import { useCallback } from "react";
 import type {
   HeadersFunction,
   LoaderArgs,
-  MetaFunction,
+  V2_MetaFunction,
 } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { NavLink, Outlet, useLoaderData } from "@remix-run/react";
@@ -102,10 +102,12 @@ export const loader = async ({ request }: LoaderArgs) => {
 };
 export type Loader = typeof loader;
 
-export const meta: MetaFunction = () => ({
-  title: "I dag lærte jeg",
-  description: "Her publiserer jeg småting jeg lærer",
-});
+export const meta: V2_MetaFunction = () => [
+  {
+    title: "I dag lærte jeg",
+  },
+  { name: "description", content: "Her publiserer jeg småting jeg lærer" },
+];
 
 export default function TodayILearned() {
   const data = useLoaderData<typeof loader>();

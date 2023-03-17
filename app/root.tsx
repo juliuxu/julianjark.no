@@ -1,4 +1,4 @@
-import type { LinksFunction, MetaFunction } from "@remix-run/node";
+import type { LinksFunction } from "@remix-run/node";
 import {
   isRouteErrorResponse,
   Links,
@@ -9,12 +9,6 @@ import {
   ScrollRestoration,
   useRouteError,
 } from "@remix-run/react";
-
-export const meta: MetaFunction = () => ({
-  charset: "utf-8",
-  title: "Julian Jark",
-  viewport: "width=device-width,initial-scale=1",
-});
 
 export const links: LinksFunction = () => [
   { rel: "apple-touch-icon", sizes: "180x180", href: "/apple-touch-icon.png" },
@@ -37,6 +31,8 @@ export default function App() {
   return (
     <html lang="no" className="h-full">
       <head>
+        <meta charSet="utf-8" />
+        <meta name="viewport" content="width=device-width,initial-scale=1" />
         <Meta />
         <Links />
       </head>

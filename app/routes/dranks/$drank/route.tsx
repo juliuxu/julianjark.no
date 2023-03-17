@@ -2,7 +2,7 @@ import type {
   HeadersFunction,
   LinksFunction,
   LoaderArgs,
-  MetaFunction,
+  V2_MetaFunction,
 } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
@@ -81,11 +81,11 @@ export const loader = async ({ params }: LoaderArgs) => {
 };
 export let headers: HeadersFunction = ({ loaderHeaders }) => loaderHeaders;
 
-export const meta: MetaFunction = ({ data }) => {
-  return {
+export const meta: V2_MetaFunction = ({ data }) => [
+  {
     title: data.drink.Tittel,
-  };
-};
+  },
+];
 
 const notionRenderConfig = {
   classes: notionRenderClasses,

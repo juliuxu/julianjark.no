@@ -1,7 +1,7 @@
 import type {
   HeadersFunction,
   LoaderArgs,
-  MetaFunction,
+  V2_MetaFunction,
 } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
@@ -49,11 +49,11 @@ export const headers: HeadersFunction = ({ loaderHeaders }) => {
   return loaderHeaders;
 };
 
-export const meta: MetaFunction = ({ data }) => {
-  return {
+export const meta: V2_MetaFunction<typeof loader> = ({ data }) => [
+  {
     title: getTitle(data.page),
-  };
-};
+  },
+];
 
 export default function NotionDrivenPage() {
   const data = useLoaderData<typeof loader>();

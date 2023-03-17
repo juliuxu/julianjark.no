@@ -2,7 +2,7 @@ import type {
   HeadersFunction,
   LinksFunction,
   LoaderArgs,
-  MetaFunction,
+  V2_MetaFunction,
 } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
@@ -87,12 +87,15 @@ export const loader = async ({ params: { presentasjon = "" } }: LoaderArgs) => {
 
 export let headers: HeadersFunction = ({ loaderHeaders }) => loaderHeaders;
 
-export const meta: MetaFunction = ({ data }) => {
-  return {
+export const meta: V2_MetaFunction = ({ data }) => [
+  {
     title: getTitle(data.page),
-    description: data.properties.Ingress,
-  };
-};
+  },
+  {
+    name: "description",
+    content: data.properties.Ingress,
+  },
+];
 
 export default function Presentasjon() {
   const data = useLoaderData<typeof loader>();

@@ -6,6 +6,7 @@ module.exports = {
     unstable_tailwind: true,
     v2_errorBoundary: true,
     v2_routeConvention: true,
+    v2_meta: true,
   },
   ignoredRouteFiles: [".*"],
   // appDirectory: "app",

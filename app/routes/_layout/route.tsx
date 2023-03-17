@@ -1,4 +1,8 @@
-import type { LinksFunction, LoaderArgs, MetaFunction } from "@remix-run/node";
+import type {
+  LinksFunction,
+  LoaderArgs,
+  V2_MetaFunction,
+} from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { NavLink, Outlet, useLoaderData, useMatches } from "@remix-run/react";
 
@@ -28,9 +32,12 @@ export const links: LinksFunction = () => [
   },
 ];
 
-export const meta: MetaFunction = () => ({
-  "theme-color": designTokens.colors.dark,
-});
+export const meta: V2_MetaFunction = () => [
+  {
+    name: "theme-color",
+    content: designTokens.colors.dark,
+  },
+];
 
 const staticMenuItemStrings = ["Dranks", "🚧 Blogg", "Today I Learned"];
 export const loader = async ({ request }: LoaderArgs) => {
