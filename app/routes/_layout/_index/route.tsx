@@ -110,8 +110,8 @@ const getAgeFromBirthDate = (birthDate: Date) => {
     m2 = m2 + 12;
     y2 = y2 - 1;
   }
-  const d = d2 - d1;
-  const m = m2 - m1;
-  const y = y2 - y1;
-  return [y, m, d];
+  const days = d2 - d1;
+  const months = m2 - m1;
+  const years = y2 - y1;
+  return [years, months, days] as const;
 };
