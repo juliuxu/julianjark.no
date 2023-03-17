@@ -1,11 +1,13 @@
 import type { LinksFunction, MetaFunction } from "@remix-run/node";
 import {
+  isRouteErrorResponse,
   Links,
   LiveReload,
   Meta,
   Outlet,
   Scripts,
   ScrollRestoration,
+  useRouteError,
 } from "@remix-run/react";
 
 export const meta: MetaFunction = () => ({
@@ -45,5 +47,24 @@ export default function App() {
         <LiveReload />
       </body>
     </html>
+  );
+}
+
+export function ErrorBoundary() {
+  const error = useRouteError();
+
+  if (isRouteErrorResponse(error)) {
+    return (
+      <p>
+        {error.status} {error.data}
+      </p>
+    );
+  }
+
+  return (
+    <p>
+      Rendering error
+      <pre>{JSON.stringify(error, null, 2)}</pre>
+    </p>
   );
 }

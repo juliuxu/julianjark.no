@@ -207,18 +207,25 @@ export default function Dranks() {
             ))}
           </div>
         </Form>
-        <div
-          className={`grid grid-cols-2 gap-5 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-6 ${
-            (isSubmitting || isLoading) &&
-            "brightness-75 transition-[filter] delay-500 duration-500"
-          }`}
-        >
-          {data.drinkerByAlcoholOrder
-            .flatMap(({ drinker }) => drinker)
-            .map((drink) => (
-              <DrankCard key={drink.Tittel} drank={drink} />
-            ))}
-        </div>
+        <section id="drank-list">
+          <ul
+            className={`grid grid-cols-2 gap-5 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-6 ${
+              (isSubmitting || isLoading) &&
+              "brightness-75 transition-[filter] delay-500 duration-500"
+            }`}
+          >
+            {data.drinkerByAlcoholOrder
+              .flatMap(({ drinker }) => drinker)
+              .map((drink) => (
+                <li
+                  key={drink.Tittel}
+                  className="overflow-hidden rounded-md shadow"
+                >
+                  <DrankCard drank={drink} />
+                </li>
+              ))}
+          </ul>
+        </section>
       </div>
       <Debug debugData={data.debugData ?? ""} />
     </>
@@ -230,11 +237,7 @@ interface DrankCardProps {
 }
 const DrankCard = ({ drank }: DrankCardProps) => {
   return (
-    <Link
-      prefetch="intent"
-      to={`${slugify(drank.Tittel)}`}
-      className="overflow-hidden rounded-md shadow"
-    >
+    <Link prefetch="intent" to={`${slugify(drank.Tittel)}`}>
       <div className="group relative bg-gradient-to-b from-cyan-400 via-green-200 to-yellow-200 pb-[120%]">
         {/* <img
           className="absolute w-full h-full object-cover blur-xl"
