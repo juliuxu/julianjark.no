@@ -22,6 +22,7 @@ import { getBlocksWithChildren } from "~/notion/notion-api.server";
 import NotionRender from "~/packages/notion-render";
 import { prepareNotionBlocks } from "~/packages/notion-shiki-code/prepare.server";
 import { assertItemFound } from "~/utils";
+import { sharedMeta } from "../route";
 
 export const loader = async ({
   request,
@@ -50,6 +51,7 @@ export const headers: HeadersFunction = ({ loaderHeaders }) => {
 };
 
 export const meta: V2_MetaFunction<typeof loader> = ({ data }) => [
+  ...sharedMeta,
   {
     title: getTitle(data.page),
   },

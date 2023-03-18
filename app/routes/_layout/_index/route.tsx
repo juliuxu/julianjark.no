@@ -16,6 +16,7 @@ import config from "~/config";
 import { getBlocksWithChildren } from "~/notion/notion-api.server";
 import NotionRender from "~/packages/notion-render";
 import { prepareNotionBlocks } from "~/packages/notion-shiki-code/prepare.server";
+import { sharedMeta } from "../route";
 
 export const loader = async ({ request }: LoaderArgs) => {
   const startFetchTime = performance.now();
@@ -62,6 +63,7 @@ export const headers: HeadersFunction = ({ loaderHeaders }) => loaderHeaders;
 export const meta: V2_MetaFunction = () => {
   const [age] = getAgeFromBirthDate(new Date("1992-11-02"));
   return [
+    ...sharedMeta,
     {
       title: "Julian Jark",
     },

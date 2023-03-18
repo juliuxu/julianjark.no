@@ -12,6 +12,7 @@ import type { SitemapHandle } from "~/packages/remix-sitemap/sitemap.server";
 import type { Loader as TodayILearnedLoader } from "~/routes/_layout/today-i-learned/route";
 import { databaseEntryToSitemapEntry } from "~/sitemap.server";
 import { assertItemFound, socialImageUrlBuilder } from "~/utils";
+import { sharedMeta } from "../../route";
 
 export const handle: SitemapHandle = {
   getSitemapEntries: async () =>
@@ -59,6 +60,7 @@ export const meta: V2_MetaFunction<
   image += "&v=2";
 
   return [
+    ...sharedMeta,
     {
       title: entry.title,
     },

@@ -20,6 +20,7 @@ import { getBlocksWithChildren } from "~/notion/notion-api.server";
 import NotionRender from "~/packages/notion-render";
 import { prepareNotionBlocks } from "~/packages/notion-shiki-code/prepare.server";
 import { assertItemFound } from "~/utils";
+import { sharedMeta } from "../route";
 import type { BloggEntryWithContent } from ".";
 import { prepareBloggEntry } from ".";
 
@@ -47,6 +48,7 @@ export const loader = async ({
 export let headers: HeadersFunction = ({ loaderHeaders }) => loaderHeaders;
 
 export const meta: V2_MetaFunction<typeof loader> = ({ data }) => [
+  ...sharedMeta,
   {
     title: data.entry.title,
   },

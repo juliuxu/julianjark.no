@@ -1,9 +1,11 @@
 import type {
   LinksFunction,
   LoaderArgs,
+  V2_HtmlMetaDescriptor,
   V2_MetaFunction,
 } from "@remix-run/node";
 import { json } from "@remix-run/node";
+import type { ShouldRevalidateFunction } from "@remix-run/react";
 import { NavLink, Outlet, useLoaderData, useMatches } from "@remix-run/react";
 
 import { CachePurgeCurrentPageButton } from "~/components/cache-purge-button";
@@ -32,12 +34,13 @@ export const links: LinksFunction = () => [
   },
 ];
 
-export const meta: V2_MetaFunction = () => [
+export const sharedMeta: V2_HtmlMetaDescriptor[] = [
   {
     name: "theme-color",
     content: designTokens.colors.dark,
   },
 ];
+export const meta: V2_MetaFunction = () => sharedMeta;
 
 const staticMenuItemStrings = ["Dranks", "🚧 Blogg", "Today I Learned"];
 export const loader = async ({ request }: LoaderArgs) => {
@@ -55,8 +58,8 @@ export const loader = async ({ request }: LoaderArgs) => {
   return json({ menuItems });
 };
 
-// https://remix.run/docs/en/v1/api/conventions#never-reloading-the-root
-export const unstable_shouldReload = () => false;
+// https://remix.run/docs/en/1.14.3/route/should-revalidate
+export const shouldRevalidate: ShouldRevalidateFunction = () => false;
 
 export default function Layout() {
   const data = useLoaderData<typeof loader>();

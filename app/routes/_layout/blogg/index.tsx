@@ -1,5 +1,5 @@
 import { Link, useLoaderData } from "@remix-run/react";
-import type { LoaderArgs } from "@remix-run/server-runtime";
+import type { LoaderArgs, V2_MetaFunction } from "@remix-run/server-runtime";
 import { json } from "@remix-run/server-runtime";
 
 import Debug from "~/components/debug";
@@ -24,6 +24,7 @@ import {
   getOneOfOrUndefined,
   rewriteNotionImageUrl,
 } from "~/utils";
+import { sharedMeta } from "../route";
 
 export interface BloggEntry {
   title: string;
@@ -62,6 +63,8 @@ export const prepareBloggEntryWithContent = (
 ): BloggEntryWithContent => {
   return { ...prepareBloggEntry(page), notionBlocks: blocks };
 };
+
+export const meta: V2_MetaFunction = () => sharedMeta;
 
 export const loader = async ({ request }: LoaderArgs) => {
   const entryPages = await getBloggEntries(request);

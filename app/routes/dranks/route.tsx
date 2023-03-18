@@ -1,5 +1,6 @@
 import type { LinksFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
+import type { ShouldRevalidateFunction } from "@remix-run/react";
 import { Link, NavLink, Outlet, useLoaderData } from "@remix-run/react";
 
 import { OptimizedImage } from "~/components/optimized-image";
@@ -34,8 +35,8 @@ export const loader = async () => {
   return json({ images }, { headers: config.cacheControlHeaders });
 };
 
-// https://remix.run/docs/en/v1/api/conventions#never-reloading-the-root
-export const unstable_shouldReload = () => false;
+// https://remix.run/docs/en/1.14.3/route/should-revalidate
+export const shouldRevalidate: ShouldRevalidateFunction = () => false;
 
 export default function DranksLayout() {
   const data = useLoaderData<typeof loader>();

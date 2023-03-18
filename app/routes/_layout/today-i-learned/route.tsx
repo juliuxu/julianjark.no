@@ -35,6 +35,7 @@ import NotionRender from "~/packages/notion-render";
 import { prepareNotionBlocks } from "~/packages/notion-shiki-code/prepare.server";
 import { formatDate } from "~/utils";
 import { commonTailwindStyles } from "../_index/route";
+import { sharedMeta } from "../route";
 
 interface TodayILearnedEntry {
   title: string;
@@ -103,6 +104,7 @@ export const loader = async ({ request }: LoaderArgs) => {
 export type Loader = typeof loader;
 
 export const meta: V2_MetaFunction = () => [
+  ...sharedMeta,
   {
     title: "I dag lærte jeg",
   },
