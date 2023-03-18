@@ -46,9 +46,7 @@ export const loader = async ({
     { headers: config.cacheControlHeadersDynamic(page.last_edited_time) },
   );
 };
-export const headers: HeadersFunction = ({ loaderHeaders }) => {
-  return loaderHeaders;
-};
+export const headers: HeadersFunction = ({ loaderHeaders }) => loaderHeaders;
 
 export const meta: V2_MetaFunction<typeof loader> = ({ data }) => [
   ...sharedMeta,
@@ -61,7 +59,7 @@ export default function NotionDrivenPage() {
   const data = useLoaderData<typeof loader>();
   return (
     <>
-      <div className="prose prose-invert max-w-full">
+      <div className="prose !prose-invert prose-slate max-w-full">
         <NotionRender
           components={notionRenderComponents}
           classes={notionRenderClasses}

@@ -75,11 +75,9 @@ interface Props {
 export default function Debug({ debugData }: Props) {
   if (!debugData) return null;
   return (
-    // <OnlyDebugMode>
     <CollapsedShikiCode
       titleClassName="text-white"
       codeHtml={debugData ?? ""}
     />
-    // </OnlyDebugMode>
   );
 }

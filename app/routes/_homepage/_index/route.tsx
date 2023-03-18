@@ -31,7 +31,7 @@ export const loader = async ({ request }: LoaderArgs) => {
     for (let block of _blocks) {
       if ((block as any).code?.codeHtml) {
         (block as any).code.codeHtml = (block as any).code.codeHtml.replace(
-          "29 år gammel",
+          /\d+ år gammel/,
           `${age} år gammel`,
         );
         return true;

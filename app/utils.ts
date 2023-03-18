@@ -1,6 +1,6 @@
 import config from "./config";
-import type { SocialImageInput } from "./routes/api/api.social-image";
-import type { ProccessingOptions } from "./routes/api/api.image";
+import type { ProccessingOptions } from "./routes/api.image";
+import type { SocialImageInput } from "./routes/api.social-image";
 
 export function assertItemFound<T>(item: T | undefined): asserts item is T {
   if (item === undefined)

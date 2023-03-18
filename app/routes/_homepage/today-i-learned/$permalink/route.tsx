@@ -9,7 +9,7 @@ import {
 } from "~/notion/notion";
 import type { SelectColor } from "~/notion/notion.types";
 import type { SitemapHandle } from "~/packages/remix-sitemap/sitemap.server";
-import type { Loader as TodayILearnedLoader } from "~/routes/_layout/today-i-learned/route";
+import type { Loader as TodayILearnedLoader } from "~/routes/_homepage/today-i-learned/route";
 import { databaseEntryToSitemapEntry } from "~/sitemap.server";
 import { assertItemFound, socialImageUrlBuilder } from "~/utils";
 import { sharedMeta } from "../../route";
