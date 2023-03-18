@@ -16,13 +16,31 @@ import config from "~/config";
 import {
   findPageBySlugPredicate,
   getNotionDrivenPages,
+  getTextFromRichText,
   getTitle,
 } from "~/notion/notion";
+import type { Block } from "~/notion/notion.types";
 import { getBlocksWithChildren } from "~/notion/notion-api.server";
 import NotionRender from "~/packages/notion-render";
-import { prepareNotionBlocks } from "~/packages/notion-shiki-code/prepare.server";
+import { prepareNotionBlocksWithShiki } from "~/packages/notion-shiki-code/prepare.server";
 import { assertItemFound } from "~/utils";
 import { sharedMeta } from "../route";
+
+/**
+ * Skip notion heading blocks with the text Kladd
+ */
+const skipKladdNotionBlocks = (blocks: Block[]) =>
+  blocks.filter((block) => {
+    const headingBlockTypes: Block["type"][] = [
+      "heading_1",
+      "heading_2",
+      "heading_3",
+    ];
+    return !(
+      headingBlockTypes.includes(block.type) &&
+      getTextFromRichText((block as any)[block.type].rich_text) === "Kladd"
+    );
+  });
 
 export const loader = async ({
   request,
@@ -34,8 +52,9 @@ export const loader = async ({
   assertItemFound(page);
 
   // Get current page blocks
-  const blocks = await getBlocksWithChildren(page.id);
-  await prepareNotionBlocks(blocks, { theme: "dark-plus" });
+  let blocks = await getBlocksWithChildren(page.id);
+  blocks = skipKladdNotionBlocks(blocks);
+  await prepareNotionBlocksWithShiki(blocks, { theme: "dark-plus" });
 
   return json(
     {

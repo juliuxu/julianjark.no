@@ -15,7 +15,7 @@ import {
 import config from "~/config";
 import { getBlocksWithChildren } from "~/notion/notion-api.server";
 import NotionRender from "~/packages/notion-render";
-import { prepareNotionBlocks } from "~/packages/notion-shiki-code/prepare.server";
+import { prepareNotionBlocksWithShiki } from "~/packages/notion-shiki-code/prepare.server";
 import { sharedMeta } from "../route";
 
 export const loader = async ({ request }: LoaderArgs) => {
@@ -23,7 +23,7 @@ export const loader = async ({ request }: LoaderArgs) => {
   const blocks = await getBlocksWithChildren(config.forsidePageId);
   const fetchTime = Math.round(performance.now() - startFetchTime);
 
-  await prepareNotionBlocks(blocks, { theme: "dark-plus" });
+  await prepareNotionBlocksWithShiki(blocks, { theme: "dark-plus" });
 
   // Dynamic age
   const [age] = getAgeFromBirthDate(new Date("1992-11-02"));

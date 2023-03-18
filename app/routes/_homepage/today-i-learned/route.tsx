@@ -32,7 +32,7 @@ import type {
 import type { DatabasePage } from "~/notion/notion-api.server";
 import { getBlocksWithChildren } from "~/notion/notion-api.server";
 import NotionRender from "~/packages/notion-render";
-import { prepareNotionBlocks } from "~/packages/notion-shiki-code/prepare.server";
+import { prepareNotionBlocksWithShiki } from "~/packages/notion-shiki-code/prepare.server";
 import { formatDate } from "~/utils";
 import { commonTailwindStyles } from "../_index/route";
 import { sharedMeta } from "../route";
@@ -86,7 +86,7 @@ export const loader = async ({ request }: LoaderArgs) => {
   const entries = await Promise.all(
     entryPages.map(async (page) => {
       const blocks = await getBlocksWithChildren(page.id);
-      await prepareNotionBlocks(blocks, { theme: "dark-plus" });
+      await prepareNotionBlocksWithShiki(blocks, { theme: "dark-plus" });
       return prepareTodayILearendEntry(page, blocks);
     }),
   );

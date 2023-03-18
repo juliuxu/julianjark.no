@@ -100,14 +100,14 @@ const prepareNotionBlock = async (
 
 // Mutates the given list
 // TODO: Update psuedo ListBlock block.bullet_list.children instead of block.children
-export const prepareNotionBlocks = async (
+export const prepareNotionBlocksWithShiki = async (
   blocks: Block[],
   options: Omit<Options, "lang">,
 ) => {
   for (const block of blocks) {
     await prepareNotionBlock(block, options);
     if (block.has_children) {
-      await prepareNotionBlocks(
+      await prepareNotionBlocksWithShiki(
         (block as any)[block.type]?.children ?? [],
         options,
       );

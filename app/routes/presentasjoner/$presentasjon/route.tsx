@@ -33,7 +33,7 @@ import {
   prepareSlides,
 } from "~/packages/notion-reveal/prepare";
 import notionRevealStyles from "~/packages/notion-reveal/styles.css";
-import { prepareNotionBlocks } from "~/packages/notion-shiki-code/prepare.server";
+import { prepareNotionBlocksWithShiki } from "~/packages/notion-shiki-code/prepare.server";
 import capraRevealTheme from "~/styles/capraRevealTheme.css";
 import fontSourceSansPro from "~/styles/font-source-sans-pro.css";
 import codeStyles from "~/styles/shiki-code.css";
@@ -76,7 +76,7 @@ export const loader = async ({ params: { presentasjon = "" } }: LoaderArgs) => {
 
   const properties = parsePresentationProperties(page);
   const blocks = await getBlocksWithChildrenNoCache(page.id);
-  await prepareNotionBlocks(blocks, { theme: "dark-plus" });
+  await prepareNotionBlocksWithShiki(blocks, { theme: "dark-plus" });
   const slides = prepareSlides(blocks);
 
   return json(

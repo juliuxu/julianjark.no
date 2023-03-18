@@ -18,7 +18,7 @@ import {
 } from "~/notion/notion";
 import { getBlocksWithChildren } from "~/notion/notion-api.server";
 import NotionRender from "~/packages/notion-render";
-import { prepareNotionBlocks } from "~/packages/notion-shiki-code/prepare.server";
+import { prepareNotionBlocksWithShiki } from "~/packages/notion-shiki-code/prepare.server";
 import { assertItemFound } from "~/utils";
 import { sharedMeta } from "../route";
 import type { BloggEntryWithContent } from ".";
@@ -34,7 +34,7 @@ export const loader = async ({
   assertItemFound(page);
 
   const blocks = await getBlocksWithChildren(page.id);
-  await prepareNotionBlocks(blocks, { theme: "dark-plus" });
+  await prepareNotionBlocksWithShiki(blocks, { theme: "dark-plus" });
   const entry: BloggEntryWithContent = {
     ...prepareBloggEntry(page),
     notionBlocks: blocks,
