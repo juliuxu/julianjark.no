@@ -42,6 +42,14 @@ export default function App() {
         <Scripts />
         <LiveReload />
 
+        {/* Umami */}
+        <script
+          async
+          defer
+          data-website-id="fcf30463-79c0-4049-81a1-df59b1dde5f3"
+          src="https://umami.julianjark.no/umami.js"
+        />
+
         {/* Matomo */}
         <script
           dangerouslySetInnerHTML={{
