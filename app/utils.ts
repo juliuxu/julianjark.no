@@ -215,5 +215,4 @@ export const formatDate = (d: string | Date, language: "no" | "en" = "no") =>
   });
 
 export const isDevMode = (request?: Request) =>
-  (request && new URL(request?.url).searchParams.get("dev") !== null) ||
-  process.env.NODE_ENV === "development";
+  request && new URL(request?.url).searchParams.get("dev") !== null;
