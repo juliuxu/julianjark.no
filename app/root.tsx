@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import type { LinksFunction } from "@remix-run/node";
 import {
   isRouteErrorResponse,
@@ -66,40 +66,29 @@ export default function App() {
 
 function Matomo() {
   const location = useLocation();
-  const mounted = useRef<boolean>(false);
   useEffect(() => {
-    if (!mounted.current) {
-      mounted.current = true;
-      return;
+    // Initial render
+    if (!(window as any)._paq) {
+      const _paq = ((window as any)._paq ??= []);
+      _paq.push(["trackPageView"]);
+      _paq.push(["enableLinkTracking"]);
+      _paq.push([
+        "setTrackerUrl",
+        "https://analytics.julianjark.no/matomo.php",
+      ]);
+      _paq.push(["setSiteId", "1"]);
+    } else {
+      // Subsequent page loads
+      (window as any)._paq?.push([
+        "setCustomUrl",
+        location.pathname + location.search,
+      ]);
+      (window as any)._paq?.push(["setDocumentTitle", document.title]);
+      (window as any)._paq?.push(["trackPageView"]);
     }
-
-    (window as any)._paq?.push([
-      "setCustomUrl",
-      location.pathname + location.search,
-    ]);
-    (window as any)._paq?.push(["setDocumentTitle", document.title]);
-    (window as any)._paq?.push(["trackPageView"]);
   }, [location]);
 
-  return (
-    <script
-      dangerouslySetInnerHTML={{
-        __html: `
-  var _paq = window._paq = window._paq || [];
-  /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
-  _paq.push(['trackPageView']);
-  _paq.push(['enableLinkTracking']);
-  (function() {
-    var u="//analytics.julianjark.no/";
-    _paq.push(['setTrackerUrl', u+'matomo.php']);
-    _paq.push(['setSiteId', '1']);
-    var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
-    g.async=true; g.src=u+'matomo.js'; s.parentNode.insertBefore(g,s);
-  })();
-  `,
-      }}
-    />
-  );
+  return <script async defer src="https://analytics.julianjark.no/matomo.js" />;
 }
 
 export function ErrorBoundary() {
