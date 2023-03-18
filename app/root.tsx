@@ -62,6 +62,11 @@ export default function App() {
 function Matomo() {
   const location = useLocation();
   useEffect(() => {
+    (window as any)._paq?.push([
+      "setCustomUrl",
+      location.pathname + location.search,
+    ]);
+    (window as any)._paq?.push(["setDocumentTitle", document.title]);
     (window as any)._paq?.push(["trackPageView"]);
   }, [location]);
 
