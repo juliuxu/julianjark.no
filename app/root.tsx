@@ -66,27 +66,32 @@ export default function App() {
 
 function Matomo() {
   const location = useLocation();
+
+  // All page loads
+  // Including first
   useEffect(() => {
-    // Initial render
-    if (!(window as any)._paq) {
-      const _paq = ((window as any)._paq ??= []);
-      _paq.push(["trackPageView"]);
-      _paq.push(["enableLinkTracking"]);
-      _paq.push(["setTrackerUrl", "https://analytics.julianjark.no/popcorn"]);
-      _paq.push(["setSiteId", "1"]);
-    } else {
-      // Subsequent page loads
-      (window as any)._paq?.push([
-        "setCustomUrl",
-        location.pathname + location.search,
-      ]);
-      (window as any)._paq?.push(["setDocumentTitle", document.title]);
-      (window as any)._paq?.push(["trackPageView"]);
-    }
+    (window as any)._paq?.push([
+      "setCustomUrl",
+      location.pathname + location.search,
+    ]);
+    (window as any)._paq?.push(["setDocumentTitle", document.title]);
+    (window as any)._paq?.push(["trackPageView"]);
   }, [location]);
 
   return (
-    <script async defer src="https://analytics.julianjark.no/icecream.js" />
+    <>
+      <script
+        dangerouslySetInnerHTML={{
+          __html: `
+          const _paq = window._paq = window._paq || [];
+          _paq.push(["enableLinkTracking"]);
+          _paq.push(["setTrackerUrl", "https://analytics.julianjark.no/popcorn"]);
+          _paq.push(["setSiteId", "1"]);
+          `,
+        }}
+      />
+      <script async defer src="https://analytics.julianjark.no/icecream.js" />
+    </>
   );
 }
 
