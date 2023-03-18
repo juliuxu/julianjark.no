@@ -52,7 +52,7 @@ export default function App() {
               async
               defer
               data-website-id="fcf30463-79c0-4049-81a1-df59b1dde5f3"
-              src="https://umami.julianjark.no/umami.js"
+              src="https://umami.julianjark.no/icecream.js"
             />
 
             {/* Matomo */}
@@ -72,10 +72,7 @@ function Matomo() {
       const _paq = ((window as any)._paq ??= []);
       _paq.push(["trackPageView"]);
       _paq.push(["enableLinkTracking"]);
-      _paq.push([
-        "setTrackerUrl",
-        "https://analytics.julianjark.no/matomo.php",
-      ]);
+      _paq.push(["setTrackerUrl", "https://analytics.julianjark.no/popcorn"]);
       _paq.push(["setSiteId", "1"]);
     } else {
       // Subsequent page loads
@@ -88,7 +85,9 @@ function Matomo() {
     }
   }, [location]);
 
-  return <script async defer src="https://analytics.julianjark.no/matomo.js" />;
+  return (
+    <script async defer src="https://analytics.julianjark.no/icecream.js" />
+  );
 }
 
 export function ErrorBoundary() {
