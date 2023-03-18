@@ -83,10 +83,10 @@ function Matomo() {
       <script
         dangerouslySetInnerHTML={{
           __html: `
-          const _paq = window._paq = window._paq || [];
-          _paq.push(["enableLinkTracking"]);
-          _paq.push(["setTrackerUrl", "https://analytics.julianjark.no/popcorn"]);
-          _paq.push(["setSiteId", "1"]);
+          window._paq = window._paq || [];
+          window._paq.push(["enableLinkTracking"]);
+          window._paq.push(["setTrackerUrl", "https://analytics.julianjark.no/popcorn"]);
+          window._paq.push(["setSiteId", "1"]);
           `,
         }}
       />
