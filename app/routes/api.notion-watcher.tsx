@@ -42,7 +42,7 @@ export const loader: LoaderFunction = ({ request }) => {
           last_edited_time = entries
             .map((x) => x.last_edited_time)
             .sort()
-            .reverse()[0];
+            .at(-1)!;
         } else throw new Error("");
 
         const lastEditedTime = new Date(last_edited_time);

@@ -75,7 +75,7 @@ export const loader = async ({ request }: LoaderArgs) => {
   const lastUpdated = dranks
     .map((x) => x.lastUpdated)
     .sort()
-    .reverse()[0];
+    .at(-1)!;
 
   if (drinkerDatabase.properties["Alkohol"].type !== "select")
     throw new Error("Database mangler Alkohol");

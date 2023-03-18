@@ -1,4 +1,4 @@
-import { NavLink, useMatches } from "@remix-run/react";
+import { NavLink, useMatches, useSearchParams } from "@remix-run/react";
 
 import { CachePurgeCurrentPageButton } from "~/components/cache-purge-button";
 import { HiddenFeature } from "~/components/hidden-feature";
@@ -16,12 +16,13 @@ interface HeaderProps {
 }
 
 export const Header = ({ menuItems }: HeaderProps) => {
-  const lastMatch = useMatches().reverse()[0];
+  const lastMatch = useMatches().at(-1)!;
   const pageOrDatabaseId = {
     "/": { pageId: config.forsidePageId },
     "/blogg": { databaseId: config.bloggDatabaseId },
     "/today-i-learned": { databaseId: config.todayILearnedDatabaseId },
   }[lastMatch.pathname];
+  const [search] = useSearchParams();
 
   return (
     <nav className="flex h-full flex-wrap items-center gap-8 font-mono text-white">
@@ -32,7 +33,7 @@ export const Header = ({ menuItems }: HeaderProps) => {
         {menuItems.map(({ to, title }) => (
           <NavLink
             key={to}
-            to={to}
+            to={{ pathname: to, search: search.toString() }}
             prefetch="intent"
             className={({ isActive }) =>
               `rounded-2xl border-2 p-2 ${
