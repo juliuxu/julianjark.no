@@ -45,7 +45,7 @@ export default function App() {
         <LiveReload />
 
         {/* Analytics */}
-        {process.env.NODE_ENV === "production" && !process.env.CI && (
+        {process.env.NODE_ENV === "production" && (
           <>
             {/* Umami */}
             <script

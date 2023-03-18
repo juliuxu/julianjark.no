@@ -20,6 +20,7 @@ jobs:
       - name: Run Playwright tests
         run: HOME=/root npx playwright test
         env:
+          NODE_ENV: test
           NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
       - uses: actions/upload-artifact@v3
         if: always()

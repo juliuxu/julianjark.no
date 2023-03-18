@@ -9,7 +9,7 @@
     "build": "remix build",
     "dev": "remix dev",
     "start": "remix-serve build",
-    "test": "npx playwright test"
+    "test": "NODE_ENV=test npx playwright test"
   },
   "dependencies": {
     "@notionhq/client": "2.2.3",
