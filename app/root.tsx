@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import type { LinksFunction } from "@remix-run/node";
 import {
   isRouteErrorResponse,
@@ -44,16 +44,21 @@ export default function App() {
         <Scripts />
         <LiveReload />
 
-        {/* Umami */}
-        <script
-          async
-          defer
-          data-website-id="fcf30463-79c0-4049-81a1-df59b1dde5f3"
-          src="https://umami.julianjark.no/umami.js"
-        />
+        {/* Analytics */}
+        {process.env.NODE_ENV === "production" && !process.env.CI && (
+          <>
+            {/* Umami */}
+            <script
+              async
+              defer
+              data-website-id="fcf30463-79c0-4049-81a1-df59b1dde5f3"
+              src="https://umami.julianjark.no/umami.js"
+            />
 
-        {/* Matomo */}
-        <Matomo />
+            {/* Matomo */}
+            <Matomo />
+          </>
+        )}
       </body>
     </html>
   );
@@ -61,7 +66,13 @@ export default function App() {
 
 function Matomo() {
   const location = useLocation();
+  const mounted = useRef<boolean>(false);
   useEffect(() => {
+    if (!mounted.current) {
+      mounted.current = true;
+      return;
+    }
+
     (window as any)._paq?.push([
       "setCustomUrl",
       location.pathname + location.search,
