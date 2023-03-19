@@ -79,7 +79,8 @@ export const unpicTransformer: UrlTransformer = ({
   height && result.searchParams.set("height", height.toString());
   width && result.searchParams.set("width", width.toString());
 
-  // Blur the image on 24
+  // Add blur when used as a placeholder/background
+  // currently the magic width is 24
   if (width === 24) {
     result.searchParams.set("blur", "1");
   }
