@@ -13,6 +13,7 @@ import {
 type ImageParams = {
   unoptimized?: "true" | "false";
   loading?: "eager" | "lazy";
+  priority?: "true" | "false";
   caption?: string;
   alt?: string;
 };
@@ -37,7 +38,7 @@ export const OptimizedNotionImage: NotionRenderComponents["image"] = ({
   const options = Object.fromEntries(
     new URLSearchParams(getTextFromRichText(block.image.caption)),
   );
-  const { unoptimized, loading, caption, alt, ...rest } = {
+  const { unoptimized, priority, loading, caption, alt, ...rest } = {
     ...options,
   } as Partial<ImageParams & typeof options>;
   const proccessingOptions = parseImageProccessingOptions(rest);
@@ -45,16 +46,19 @@ export const OptimizedNotionImage: NotionRenderComponents["image"] = ({
   url = rewriteNotionImageUrl(url, block.id);
 
   let imgTag = (
-    <Image
-      layout="constrained"
-      transformer={unoptimized ? () => url : unpicTransformer}
-      className={ctx().classes.image.root}
-      src={url}
-      loading={loading}
-      alt={alt}
-      width={proccessingOptions.width!}
-      height={proccessingOptions.height!}
-    />
+    <>
+      <Image
+        layout="fixed"
+        transformer={unoptimized === "true" ? () => url : unpicTransformer}
+        className={ctx().classes.image.root}
+        src={url}
+        priority={priority === "true"}
+        loading={loading}
+        alt={alt}
+        width={proccessingOptions.width!}
+        height={proccessingOptions.height!}
+      />
+    </>
   );
 
   if (caption) {

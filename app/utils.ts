@@ -67,8 +67,14 @@ export const unpicTransformer: UrlTransformer = ({
   height,
   width,
 }) => {
+  const parsedUrl = new URL(url);
+  const isOptimizedImage = parsedUrl.pathname.startsWith("/api/image");
+  const src = isOptimizedImage
+    ? parsedUrl.searchParams.get("src")
+    : url.toString();
+
   const result = new URL("/api/image", config.baseUrl);
-  result.searchParams.set("src", url.toString());
+  result.searchParams.set("src", src!);
   format && result.searchParams.set("format", format);
   height && result.searchParams.set("height", height.toString());
   width && result.searchParams.set("width", width.toString());
