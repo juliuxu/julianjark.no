@@ -14,6 +14,8 @@ import {
   useSubmit,
 } from "@remix-run/react";
 
+import { Image } from "@unpic/react";
+
 import Debug from "~/components/debug";
 import { maybePrepareDebugData } from "~/components/debug.server";
 import config from "~/config";
@@ -22,7 +24,7 @@ import { prepareFromPage } from "~/packages/notion-drinker/prepare.server";
 import type { Alcohol, DrinkHeader } from "~/packages/notion-drinker/types";
 import { assertDrinkHeader } from "~/packages/notion-drinker/types";
 import satohshiFont from "~/styles/fonts/Satoshi-Variable.woff2";
-import { debounce, optimizedImageUrl } from "~/utils";
+import { debounce, unpicTransformer } from "~/utils";
 import { dranksClasses } from "../route";
 
 export const links: LinksFunction = () => [
@@ -221,12 +223,11 @@ export default function Dranks() {
             {data.drinkerByAlcoholOrder
               .flatMap(({ drinker }) => drinker)
               .map((drink) => (
-                <li
-                  key={drink.Tittel}
-                  className="overflow-hidden rounded-md shadow"
-                >
-                  <DrankCard drank={drink} />
-                </li>
+                <Fragment key={drink.Tittel}>
+                  <li className="overflow-hidden rounded-md shadow">
+                    <DrankCard drank={drink} />
+                  </li>
+                </Fragment>
               ))}
           </ul>
         </section>
@@ -242,19 +243,13 @@ interface DrankCardProps {
 const DrankCard = ({ drank }: DrankCardProps) => {
   return (
     <Link prefetch="intent" to={`${slugify(drank.Tittel)}`}>
-      <div className="group relative bg-gradient-to-b from-cyan-400 via-green-200 to-yellow-200 pb-[120%]">
-        {/* <img
-          className="absolute w-full h-full object-cover blur-xl"
-          src={optimizedImageUrl(drank.Illustrasjon, {
-            height: 10,
-            format: "webp",
-          })}
-          alt=""
-        /> */}
-        <img
-          className="absolute h-full w-full object-cover transition-all duration-500 ease-in-out group-hover:scale-[1.1]"
-          src={optimizedImageUrl(drank.Illustrasjon, { height: 400 })}
-          alt=""
+      <div className="group relative bg-gradient-to-b from-cyan-400 via-green-200 to-yellow-200">
+        <Image
+          layout="fullWidth"
+          aspectRatio={1 / 1.2}
+          src={drank.Illustrasjon}
+          transformer={unpicTransformer}
+          className="transition-all duration-300 ease-in-out group-hover:scale-[1.1]"
         />
         <span
           className="absolute bottom-0 p-4 text-2xl font-semibold text-white drop-shadow-lg"

@@ -1,3 +1,5 @@
+import type { UrlTransformer } from "unpic";
+
 import config from "./config";
 import type { ProccessingOptions } from "./routes/api.image";
 import type { SocialImageInput } from "./routes/api.social-image";
@@ -57,26 +59,20 @@ export const rewriteNotionImageUrl = (url: string, pageOrBlockId: string) => {
   return newUrl;
 };
 
+// Custom transformer for unpic
 // See api/image.ts
-export const optimizedImageUrl = (
-  url: string,
-  options: ProccessingOptions = {},
-) => {
-  const optionsWithDefaults: ProccessingOptions = {
-    // Webp is better for small images
-    // Jpeg with mozjpeg is about the same or better for larger images
-    // png and uncompressed images are terrible
-    format: "webp",
-    ...options,
-  };
-  const imageOptimizeUrl = `/api/image`;
-  const optionsParams = new URLSearchParams(
-    Object.entries(optionsWithDefaults)
-      .filter(([key, value]) => key && value !== undefined)
-      .map(([key, value]) => [key, String(value)]),
-  );
-
-  return `${imageOptimizeUrl}?src=${encodeURIComponent(url)}&${optionsParams}`;
+export const unpicTransformer: UrlTransformer = ({
+  url,
+  format = "webp",
+  height,
+  width,
+}) => {
+  const result = new URL("/api/image", config.baseUrl);
+  result.searchParams.set("src", url.toString());
+  format && result.searchParams.set("format", format);
+  height && result.searchParams.set("height", height.toString());
+  width && result.searchParams.set("width", width.toString());
+  return result;
 };
 
 export const parseImageProccessingOptions = (
@@ -92,7 +88,7 @@ export const parseImageProccessingOptions = (
     quality: getNumberOrUndefined(object["quality"]),
     blur: getNumberOrUndefined(object["blur"]),
     format: getOneOfOrUndefined(
-      ["avif", "webp", "png", "jpeg"],
+      ["auto", "avif", "webp", "png", "jpeg"],
       object["format"],
     ),
 

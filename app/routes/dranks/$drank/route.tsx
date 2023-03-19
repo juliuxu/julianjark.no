@@ -7,9 +7,10 @@ import type {
 import { json } from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 
-import { buildOptimizedNotionImage } from "~/components/notion-components";
+import { Image } from "@unpic/react";
+
+import { OptimizedNotionImage } from "~/components/notion-components";
 import { notionRenderClasses } from "~/components/notion-render-config";
-import { OptimizedImage } from "~/components/optimized-image";
 import config from "~/config";
 import {
   fetchDranksImageResources,
@@ -25,11 +26,11 @@ import type { SitemapHandle } from "~/packages/remix-sitemap/sitemap.server";
 import { databaseEntryToSitemapEntry } from "~/sitemap.server";
 import comicoFont from "~/styles/fonts/Comico-Regular.woff2";
 import satohshiFont from "~/styles/fonts/Satoshi-Variable.woff2";
-import { assertItemFound, optimizedImageUrl } from "~/utils";
+import { assertItemFound, unpicTransformer } from "~/utils";
 import { dranksClasses } from "../route";
 
 export const notionRenderComponents: Partial<NotionRenderComponents> = {
-  image: buildOptimizedNotionImage(),
+  image: OptimizedNotionImage,
 };
 
 export const handle: SitemapHandle = {
@@ -160,25 +161,13 @@ export default function DrinkView() {
           </div>
 
           <div className="relative w-1/3 overflow-visible">
-            <OptimizedImage
+            <Image
+              layout="fullWidth"
+              transformer={unpicTransformer}
               {...data.images.appelsiner}
-              className="-mt-12 max-w-full object-cover"
+              className="-mt-12"
             />
           </div>
-
-          {false && data.drink.Illustrasjon && (
-            <div className="relative h-72 w-1/2 lg:h-96 lg:w-2/3">
-              <img
-                className={`absolute inset-0 h-full w-full object-cover ${
-                  data.drink.IllustrasjonPosisjon === "top"
-                    ? "object-top"
-                    : "object-center"
-                }`}
-                src={optimizedImageUrl(data.drink.Illustrasjon)}
-                alt=""
-              />
-            </div>
-          )}
         </div>
 
         {data.drink.Referanser && (

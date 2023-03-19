@@ -2,7 +2,7 @@ import type { SelectColor } from "~/notion/notion.types";
 import type { Classes } from "~/packages/notion-render/classes";
 import type { Components } from "~/packages/notion-render/components";
 import { ShikiNotionCode } from "~/packages/notion-shiki-code/shiki-notion";
-import { buildOptimizedNotionImage } from "./notion-components";
+import { OptimizedNotionImage } from "./notion-components";
 
 const common = `py-1 px-2 rounded`;
 export const notionSelectClasses: Record<SelectColor, string> /*tw*/ = {
@@ -57,5 +57,5 @@ export const notionRenderClasses: Partial<Classes> /*tw*/ = {
 };
 export const notionRenderComponents: Partial<Components> = {
   code: ShikiNotionCode,
-  image: buildOptimizedNotionImage({ format: "webp" }),
+  image: OptimizedNotionImage,
 };

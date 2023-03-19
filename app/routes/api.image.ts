@@ -22,8 +22,19 @@ function badImageResponse() {
   });
 }
 
-const SUPPORTED_OUTPUT_FORMATS = ["avif", "webp", "png", "jpeg"] as const;
-const imageFormatToContentType = (s?: string) => (s ? `image/${s}` : undefined);
+const SUPPORTED_OUTPUT_FORMATS = [
+  "auto",
+  "avif",
+  "webp",
+  "png",
+  "jpeg",
+] as const;
+const imageFormatToContentType = (
+  s?: typeof SUPPORTED_OUTPUT_FORMATS[number],
+) => {
+  if (s === "auto") return "image/webp";
+  return s ? `image/${s}` : undefined;
+};
 
 export interface ProccessingOptions {
   fit?: keyof FitEnum;
@@ -74,7 +85,7 @@ export let processImage = async (
   upstreamContentType: string,
   options: ProccessingOptions,
 ) => {
-  // Don't proccess when original is requested
+  // Don't proccess when original is requested or svg
   if (options.original || upstreamContentType === SVG) {
     return {
       buffer: upstreamBuffer,

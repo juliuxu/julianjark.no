@@ -1,11 +1,9 @@
 import type { HeadersFunction, LinksFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import type { ShouldRevalidateFunction } from "@remix-run/react";
-import { Link, NavLink, Outlet, useLoaderData } from "@remix-run/react";
+import { Outlet, useLoaderData } from "@remix-run/react";
 
-import { OptimizedImage } from "~/components/optimized-image";
 import config from "~/config";
-import type { ImageResource } from "~/notion/notion";
 import { fetchDranksImageResources } from "~/notion/notion";
 import fontComico from "~/styles/font-comico.css";
 import fontSatoshi from "~/styles/font-satoshi.css";

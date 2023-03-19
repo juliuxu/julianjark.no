@@ -1,5 +1,5 @@
-import { OptimizedImage } from "~/components/optimized-image";
 import type { ImageResource } from "~/notion/notion";
+import { unpicTransformer } from "~/utils";
 import { dranksClasses } from "./route";
 
 interface FooterProps {
@@ -13,13 +13,19 @@ export const Footer = ({ images }: FooterProps) => {
       <div className="flex-grow" />
       <div className="flex flex-col justify-between">
         <div className="-mt-12">
-          <OptimizedImage
-            {...images["sitroner"]}
+          <img
+            src={unpicTransformer({ url: images["sitroner"].src })?.toString()}
+            alt={images["sitroner"].alt}
             className="-top-12 w-36 rotate-6"
           />
         </div>
         <a href="#todo-app-link" className="flex justify-center">
-          <OptimizedImage {...images["last-ned-fra-app-store"]} />
+          <img
+            src={unpicTransformer({
+              url: images["last-ned-fra-app-store"].src,
+            })?.toString()}
+            alt={images["last-ned-fra-app-store"].alt}
+          />
         </a>
         <div />
       </div>
