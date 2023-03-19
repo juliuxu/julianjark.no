@@ -57,6 +57,7 @@ export const OptimizedNotionImage: NotionRenderComponents["image"] = ({
         alt={alt}
         width={proccessingOptions.width!}
         height={proccessingOptions.height!}
+        background="auto"
       />
     </>
   );

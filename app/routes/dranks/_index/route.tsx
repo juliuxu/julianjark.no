@@ -250,6 +250,7 @@ const DrankCard = ({ drank }: DrankCardProps) => {
           src={drank.Illustrasjon}
           transformer={unpicTransformer}
           className="transition-all duration-300 ease-in-out group-hover:scale-[1.1]"
+          background="auto"
         />
         <span
           className="absolute bottom-0 p-4 text-2xl font-semibold text-white drop-shadow-lg"
