@@ -78,6 +78,11 @@ export const unpicTransformer: UrlTransformer = ({
   format && result.searchParams.set("format", format);
   height && result.searchParams.set("height", height.toString());
   width && result.searchParams.set("width", width.toString());
+
+  // Blur the image on 24
+  if (width === 24) {
+    result.searchParams.set("blur", "1");
+  }
   return result;
 };
 
