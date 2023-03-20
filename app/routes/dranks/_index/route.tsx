@@ -243,7 +243,7 @@ interface DrankCardProps {
 }
 const DrankCard = ({ drank, index }: DrankCardProps) => {
   return (
-    <Link prefetch="intent" to={`${slugify(drank.Tittel)}`}>
+    <Link prefetch="intent" to={`${slugify(drank.Tittel)}`} preventScrollReset>
       <div className="group relative bg-gradient-to-b from-cyan-400 via-green-200 to-yellow-200">
         <Image
           layout="fullWidth"
