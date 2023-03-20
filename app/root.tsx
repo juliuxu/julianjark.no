@@ -84,13 +84,19 @@ function Matomo() {
         dangerouslySetInnerHTML={{
           __html: `
           var _paq = window._paq = window._paq || [];
-          _paq.push(["enableLinkTracking"]);
-          _paq.push(["setTrackerUrl", "https://analytics.julianjark.no/popcorn"]);
-          _paq.push(["setSiteId", "1"]);
+          /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+          _paq.push(['trackPageView']);
+          _paq.push(['enableLinkTracking']);
+          (function() {
+            var u="//analytics.julianjark.no/";
+            _paq.push(['setTrackerUrl', u+'popcorn']);
+            _paq.push(['setSiteId', '1']);
+            var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+            g.async=true; g.src=u+'icecream.js'; s.parentNode.insertBefore(g,s);
+          })();
           `,
         }}
       />
-      <script async defer src="https://analytics.julianjark.no/icecream.js" />
     </>
   );
 }
