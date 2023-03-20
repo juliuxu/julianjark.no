@@ -14,6 +14,8 @@ type ImageParams = {
   unoptimized?: "true" | "false";
   loading?: "eager" | "lazy";
   priority?: "true" | "false";
+  layout?: "fixed" | "constrained" | "fullWidth";
+  aspectRatio?: string;
   caption?: string;
   alt?: string;
 };
@@ -38,17 +40,27 @@ export const OptimizedNotionImage: NotionRenderComponents["image"] = ({
   const options = Object.fromEntries(
     new URLSearchParams(getTextFromRichText(block.image.caption)),
   );
-  const { unoptimized, priority, loading, caption, alt, ...rest } = {
+  const {
+    unoptimized,
+    priority,
+    loading,
+    caption,
+    alt,
+    aspectRatio,
+    layout,
+    ...rest
+  } = {
     ...options,
   } as Partial<ImageParams & typeof options>;
   const proccessingOptions = parseImageProccessingOptions(rest);
 
   url = rewriteNotionImageUrl(url, block.id);
 
+  const parsedAspectRatio = Number(aspectRatio);
   let imgTag = (
     <>
       <Image
-        layout="fixed"
+        layout={(layout as any) ?? "fixed"}
         transformer={unoptimized === "true" ? () => url : unpicTransformer}
         className={ctx().classes.image.root}
         src={url}
@@ -57,6 +69,9 @@ export const OptimizedNotionImage: NotionRenderComponents["image"] = ({
         alt={alt}
         width={proccessingOptions.width!}
         height={proccessingOptions.height!}
+        aspectRatio={
+          Number.isNaN(parsedAspectRatio) ? undefined : parsedAspectRatio
+        }
         background="auto"
       />
     </>
