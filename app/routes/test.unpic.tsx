@@ -15,7 +15,7 @@ export default function Component() {
         width={800}
         height={1200}
         alt="Varg"
-        loading="eager"
+        background="auto"
       />
     </div>
   );

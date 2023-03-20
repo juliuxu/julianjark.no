@@ -246,13 +246,14 @@ const DrankCard = ({ drank, index }: DrankCardProps) => {
     <Link prefetch="intent" to={`${slugify(drank.Tittel)}`} preventScrollReset>
       <div className="group relative bg-gradient-to-b from-cyan-400 via-green-200 to-yellow-200">
         <Image
-          layout="fullWidth"
+          width={300}
           aspectRatio={1 / 1.2}
           src={drank.Illustrasjon}
           transformer={unpicTransformer}
+          priority={index < 6}
           className="transition-all duration-300 ease-in-out group-hover:scale-[1.1]"
           background="auto"
-          priority={index < 6}
+          style={{ backgroundPosition: "center" }}
         />
         <span
           className="absolute bottom-0 p-4 text-2xl font-semibold text-white drop-shadow-lg"
