@@ -222,10 +222,10 @@ export default function Dranks() {
           >
             {data.drinkerByAlcoholOrder
               .flatMap(({ drinker }) => drinker)
-              .map((drink) => (
+              .map((drink, index) => (
                 <Fragment key={drink.Tittel}>
                   <li className="overflow-hidden rounded-md shadow">
-                    <DrankCard drank={drink} />
+                    <DrankCard drank={drink} index={index} />
                   </li>
                 </Fragment>
               ))}
@@ -239,8 +239,9 @@ export default function Dranks() {
 
 interface DrankCardProps {
   drank: DrinkHeader;
+  index: number;
 }
-const DrankCard = ({ drank }: DrankCardProps) => {
+const DrankCard = ({ drank, index }: DrankCardProps) => {
   return (
     <Link prefetch="intent" to={`${slugify(drank.Tittel)}`}>
       <div className="group relative bg-gradient-to-b from-cyan-400 via-green-200 to-yellow-200">
@@ -251,6 +252,7 @@ const DrankCard = ({ drank }: DrankCardProps) => {
           transformer={unpicTransformer}
           className="transition-all duration-300 ease-in-out group-hover:scale-[1.1]"
           background="auto"
+          priority={index < 6}
         />
         <span
           className="absolute bottom-0 p-4 text-2xl font-semibold text-white drop-shadow-lg"
