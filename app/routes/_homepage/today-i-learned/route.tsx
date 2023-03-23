@@ -1,4 +1,3 @@
-import { useCallback } from "react";
 import type {
   HeadersFunction,
   LoaderArgs,
@@ -34,7 +33,7 @@ import { getBlocksWithChildren } from "~/notion/notion-api.server";
 import NotionRender from "~/packages/notion-render";
 import { prepareNotionBlocksWithShiki } from "~/packages/notion-shiki-code/prepare.server";
 import { formatDate } from "~/utils";
-import { commonTailwindStyles } from "../_index/route";
+import { commonTailwindStyles } from "../$notionDrivenPage/route";
 import { sharedMeta } from "../route";
 
 interface TodayILearnedEntry {

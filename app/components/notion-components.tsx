@@ -73,6 +73,7 @@ export const OptimizedNotionImage: NotionRenderComponents["image"] = ({
           Number.isNaN(parsedAspectRatio) ? undefined : parsedAspectRatio
         }
         background="auto"
+        style={{ backgroundPosition: "center" }}
       />
     </>
   );

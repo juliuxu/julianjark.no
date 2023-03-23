@@ -26,22 +26,6 @@ import { prepareNotionBlocksWithShiki } from "~/packages/notion-shiki-code/prepa
 import { assertItemFound } from "~/utils";
 import { sharedMeta } from "../route";
 
-/**
- * Skip notion heading blocks with the text Kladd
- */
-const skipKladdNotionBlocks = (blocks: Block[]) =>
-  blocks.filter((block) => {
-    const headingBlockTypes: Block["type"][] = [
-      "heading_1",
-      "heading_2",
-      "heading_3",
-    ];
-    return !(
-      headingBlockTypes.includes(block.type) &&
-      getTextFromRichText((block as any)[block.type].rich_text) === "Kladd"
-    );
-  });
-
 export const loader = async ({
   request,
   params: { notionDrivenPage: requestedNotionDrivenPageSlug = "" },
@@ -51,9 +35,8 @@ export const loader = async ({
   );
   assertItemFound(page);
 
-  // Get current page blocks
-  let blocks = await getBlocksWithChildren(page.id);
-  blocks = skipKladdNotionBlocks(blocks);
+  const blocks = await getBlocksWithChildren(page.id);
+  prepareSkipKladdBlocks(blocks);
   await prepareNotionBlocksWithShiki(blocks, { theme: "dark-plus" });
 
   return json(
@@ -74,18 +57,54 @@ export const meta: V2_MetaFunction<typeof loader> = ({ data }) => [
   },
 ];
 
-export default function NotionDrivenPage() {
+export default function Component() {
   const data = useLoaderData<typeof loader>();
   return (
-    <>
-      <div className="prose !prose-invert prose-slate max-w-full">
-        <NotionRender
-          components={notionRenderComponents}
-          classes={notionRenderClasses}
-          blocks={data.blocks}
-        />
-      </div>
+    <HorizontalLayout className={commonTailwindStyles.prose}>
+      <NotionRender
+        components={notionRenderComponents}
+        classes={notionRenderClasses}
+        blocks={data.blocks}
+      />
       <Debug debugData={data.debugData} />
-    </>
+    </HorizontalLayout>
   );
 }
+
+export const commonTailwindStyles = /*tw*/ {
+  prose: "prose prose-slate !prose-invert [&_figure_pre]:mb-0 max-w-full",
+};
+
+export const HorizontalLayout = ({
+  className,
+  children,
+}: React.PropsWithChildren<{ className?: string }>) => {
+  return (
+    <div className={`mx-[5vw] mt-4 ${className}`}>
+      <div className="mx-auto">{children}</div>
+    </div>
+  );
+};
+
+/**
+ * Skip notion heading blocks with the text Kladd
+ */
+export const prepareSkipKladdBlocks = (blocks: Block[]) => {
+  const headingBlockTypes: Block["type"][] = [
+    "heading_1",
+    "heading_2",
+    "heading_3",
+  ];
+
+  // Iterate in reverse order in order to be able to
+  // remove the array as we go through
+  for (let i = blocks.length - 1; i >= 0; i -= 1) {
+    const block = blocks[i];
+    if (
+      headingBlockTypes.includes(block.type) &&
+      getTextFromRichText((block as any)[block.type].rich_text) === "Kladd"
+    ) {
+      blocks.splice(i, 1);
+    }
+  }
+};

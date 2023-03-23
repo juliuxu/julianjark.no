@@ -16,6 +16,11 @@ import config from "~/config";
 import { getBlocksWithChildren } from "~/notion/notion-api.server";
 import NotionRender from "~/packages/notion-render";
 import { prepareNotionBlocksWithShiki } from "~/packages/notion-shiki-code/prepare.server";
+import {
+  commonTailwindStyles,
+  HorizontalLayout,
+  prepareSkipKladdBlocks,
+} from "../$notionDrivenPage/route";
 import { sharedMeta } from "../route";
 import { getAgeFromBirthDate, prepareDynamicAge } from "./dynamic-age";
 
@@ -25,6 +30,7 @@ export const loader = async ({ request }: LoaderArgs) => {
   const fetchTime = Math.round(performance.now() - startFetchTime);
 
   await prepareNotionBlocksWithShiki(blocks, { theme: "dark-plus" });
+  prepareSkipKladdBlocks(blocks);
   prepareDynamicAge(blocks);
 
   return json(
@@ -56,25 +62,16 @@ export const meta: V2_MetaFunction = () => {
   ];
 };
 
-export const commonTailwindStyles = /*tw*/ {
-  prose: "prose prose-slate !prose-invert [&_figure_pre]:mb-0",
-};
-export default function Index() {
+export default function Component() {
   const data = useLoaderData<typeof loader>();
   return (
-    <>
-      <div className="mx-[5vw]">
-        <div
-          className={`mx-auto mt-4 max-w-full ${commonTailwindStyles.prose}`}
-        >
-          <NotionRender
-            components={notionRenderComponents}
-            classes={notionRenderClasses}
-            blocks={data.blocks}
-          />
-        </div>
-      </div>
+    <HorizontalLayout className={commonTailwindStyles.prose}>
+      <NotionRender
+        components={notionRenderComponents}
+        classes={notionRenderClasses}
+        blocks={data.blocks}
+      />
       <Debug debugData={data.debugData} />
-    </>
+    </HorizontalLayout>
   );
 }

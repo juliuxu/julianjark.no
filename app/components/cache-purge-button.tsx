@@ -12,7 +12,7 @@ export function CachePurgeCurrentPageButton() {
     document.cookie = "no_cache=1;max-age=15";
     window.location.reload();
   };
-  useShortcut("rr", reloadWithoutCache);
+  useShortcut("r", reloadWithoutCache);
   return (
     <button
       type="button"
