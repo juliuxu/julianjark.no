@@ -25,10 +25,10 @@ export const handle: SitemapHandle = {
 export const meta: V2_MetaFunction<
   {},
   {
-    "routes/_layout/today-i-learned": TodayILearnedLoader;
+    "routes/_homepage/today-i-learned": TodayILearnedLoader;
   }
 > = ({ params, parentsData }) => {
-  const entry = parentsData["routes/_layout/today-i-learned"].entries.find(
+  const entry = parentsData["routes/_homepage/today-i-learned"].entries.find(
     (x) => params.permalink === slugify(x.title),
   );
   assertItemFound(entry);
