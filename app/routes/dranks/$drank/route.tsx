@@ -162,6 +162,7 @@ export default function DrinkView() {
 
           <div className="relative w-1/3 overflow-visible">
             <Image
+              priority
               layout="fullWidth"
               transformer={unpicTransformer}
               {...data.images.appelsiner}
