@@ -16,6 +16,8 @@ test("today i learned", async ({ page }) => {
     .getByRole("heading", { level: 2 })
     .innerText();
 
-  await article.click();
+  await article.getByRole("link").filter({ hasText: articleTitle }).click();
+  await new Promise((r) => setTimeout(r, 200));
+
   await expect(page).toHaveTitle(new RegExp(articleTitle));
 });

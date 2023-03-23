@@ -14,6 +14,8 @@ test("dranks", async ({ page }) => {
   const drankTitle = (await drank.innerText()).trim();
 
   await drank.click();
+  await new Promise((r) => setTimeout(r, 200));
+
   await expect(page).toHaveTitle(new RegExp(drankTitle));
   await expect(page.getByRole("heading", { level: 1 })).toHaveText(
     new RegExp(drankTitle),
