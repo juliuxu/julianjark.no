@@ -75,7 +75,7 @@ export const meta: V2_MetaFunction = () => {
 };
 
 export const commonTailwindStyles = /*tw*/ {
-  prose: "prose prose-slate !prose-invert", // prose-figure:my-0 prose-pre:my-0
+  prose: "prose prose-slate !prose-invert [&_figure_pre]:mb-0",
 };
 export default function Index() {
   const data = useLoaderData<typeof loader>();
