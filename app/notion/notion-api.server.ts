@@ -1,6 +1,7 @@
 import { Client } from "@notionhq/client";
 import type { ListBlockChildrenResponse } from "@notionhq/client/build/src/api-endpoints";
 import LRU from "lru-cache";
+import type { MemoizerOptions } from "memoize-fs";
 import memoizeFs from "memoize-fs";
 import { join as pathJoin } from "path";
 
@@ -177,11 +178,11 @@ if (process.env.NODE_ENV === "development") {
     cachePath,
   });
   const memoFsAsync = (
-    fn: memoizeFs.FnToMemoize,
-    opts: memoizeFs.Options = {},
+    fn: (...args: never) => unknown,
+    memoizerOptions: Partial<MemoizerOptions> = {},
   ) => {
-    const p = memoizer.fn(fn, opts);
-    let mfn: memoizeFs.FnToMemoize | undefined = undefined;
+    const p = memoizer.fn(fn, memoizerOptions);
+    let mfn: any = undefined;
     return async (...args: any) => {
       if (!mfn) {
         mfn = await p;

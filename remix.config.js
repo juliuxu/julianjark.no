@@ -2,6 +2,7 @@
  * @type {import('@remix-run/dev').AppConfig}
  */
 module.exports = {
+  serverDependenciesToBundle: ["memoize-fs"],
   future: {
     unstable_tailwind: true,
     v2_errorBoundary: true,
