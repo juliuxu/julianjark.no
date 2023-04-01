@@ -25,7 +25,7 @@ import type { Alcohol, DrinkHeader } from "~/packages/notion-drinker/types";
 import { assertDrinkHeader } from "~/packages/notion-drinker/types";
 import satohshiFont from "~/styles/fonts/Satoshi-Variable.woff2";
 import { debounce, unpicTransformer } from "~/utils";
-import { dranksClasses } from "../route";
+import { dranksClasses } from "../dranks/route";
 
 export const links: LinksFunction = () => [
   {

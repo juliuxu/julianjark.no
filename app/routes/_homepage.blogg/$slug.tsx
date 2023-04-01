@@ -20,7 +20,7 @@ import { getBlocksWithChildren } from "~/notion/notion-api.server";
 import NotionRender from "~/packages/notion-render";
 import { prepareNotionBlocksWithShiki } from "~/packages/notion-shiki-code/prepare.server";
 import { assertItemFound } from "~/utils";
-import { sharedMeta } from "../route";
+import { sharedMeta } from "../_homepage/route";
 import type { BloggEntryWithContent } from ".";
 import { prepareBloggEntry } from ".";
 

@@ -32,9 +32,9 @@ import type { DatabasePage } from "~/notion/notion-api.server";
 import { getBlocksWithChildren } from "~/notion/notion-api.server";
 import NotionRender from "~/packages/notion-render";
 import { prepareNotionBlocksWithShiki } from "~/packages/notion-shiki-code/prepare.server";
+import { commonTailwindStyles } from "~/routes/_homepage.$notionDrivenPage/route";
+import { sharedMeta } from "~/routes/_homepage/route";
 import { formatDate } from "~/utils";
-import { commonTailwindStyles } from "../$notionDrivenPage/route";
-import { sharedMeta } from "../route";
 
 interface TodayILearnedEntry {
   title: string;

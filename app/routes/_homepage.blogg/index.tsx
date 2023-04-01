@@ -24,7 +24,7 @@ import {
   getOneOfOrUndefined,
   rewriteNotionImageUrl,
 } from "~/utils";
-import { sharedMeta } from "../route";
+import { sharedMeta } from "../_homepage/route";
 
 export interface BloggEntry {
   title: string;

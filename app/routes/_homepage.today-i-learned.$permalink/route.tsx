@@ -9,10 +9,10 @@ import {
 } from "~/notion/notion";
 import type { SelectColor } from "~/notion/notion.types";
 import type { SitemapHandle } from "~/packages/remix-sitemap/sitemap.server";
-import type { Loader as TodayILearnedLoader } from "~/routes/_homepage/today-i-learned/route";
+import type { Loader as TodayILearnedLoader } from "~/routes/_homepage.today-i-learned/route";
 import { databaseEntryToSitemapEntry } from "~/sitemap.server";
 import { assertItemFound, socialImageUrlBuilder } from "~/utils";
-import { sharedMeta } from "../../route";
+import { sharedMeta } from "../_homepage/route";
 
 export const handle: SitemapHandle = {
   getSitemapEntries: async () =>
@@ -25,12 +25,13 @@ export const handle: SitemapHandle = {
 export const meta: V2_MetaFunction<
   {},
   {
-    "routes/_homepage/today-i-learned": TodayILearnedLoader;
+    "routes/_homepage.today-i-learned": TodayILearnedLoader;
   }
-> = ({ params, parentsData }) => {
-  const entry = parentsData["routes/_homepage/today-i-learned"].entries.find(
-    (x) => params.permalink === slugify(x.title),
-  );
+> = ({ params, matches }) => {
+  const data = matches.find(
+    (match) => match.id === "routes/_homepage.today-i-learned",
+  )!.data;
+  const entry = data.entries.find((x) => params.permalink === slugify(x.title));
   assertItemFound(entry);
 
   // Get first paragraph and use as description/ingress

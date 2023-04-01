@@ -20,8 +20,8 @@ import {
   commonTailwindStyles,
   HorizontalLayout,
   prepareSkipKladdBlocks,
-} from "../$notionDrivenPage/route";
-import { sharedMeta } from "../route";
+} from "~/routes/_homepage.$notionDrivenPage/route";
+import { sharedMeta } from "../_homepage/route";
 import { getAgeFromBirthDate, prepareDynamicAge } from "./dynamic-age";
 
 export const loader = async ({ request }: LoaderArgs) => {

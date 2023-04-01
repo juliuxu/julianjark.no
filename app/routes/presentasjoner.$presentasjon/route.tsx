@@ -34,7 +34,7 @@ import {
 } from "~/packages/notion-reveal/prepare";
 import notionRevealStyles from "~/packages/notion-reveal/styles.css";
 import { prepareNotionBlocksWithShiki } from "~/packages/notion-shiki-code/prepare.server";
-import { prepareSkipKladdBlocks } from "~/routes/_homepage/$notionDrivenPage/route";
+import { prepareSkipKladdBlocks } from "~/routes/_homepage.$notionDrivenPage/route";
 import capraRevealTheme from "~/styles/capraRevealTheme.css";
 import fontSourceSansPro from "~/styles/font-source-sans-pro.css";
 import codeStyles from "~/styles/shiki-code.css";

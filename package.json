@@ -13,9 +13,9 @@
   },
   "dependencies": {
     "@notionhq/client": "2.2.3",
-    "@remix-run/node": "1.14.3",
-    "@remix-run/react": "1.14.3",
-    "@remix-run/serve": "1.14.3",
+    "@remix-run/node": "1.15.0",
+    "@remix-run/react": "1.15.0",
+    "@remix-run/serve": "1.15.0",
     "@tailwindcss/typography": "0.5.9",
     "@unpic/react": "0.0.20",
     "cachified": "3.1.0",
@@ -34,8 +34,8 @@
   },
   "devDependencies": {
     "@playwright/test": "1.32.1",
-    "@remix-run/dev": "1.14.3",
-    "@remix-run/eslint-config": "1.14.3",
+    "@remix-run/dev": "1.15.0",
+    "@remix-run/eslint-config": "1.15.0",
     "@types/react": "18.0.31",
     "@types/react-dom": "18.0.11",
     "@types/serialize-javascript": "5.0.2",
@@ -48,7 +48,7 @@
     "eslint-plugin-simple-import-sort": "10.0.0",
     "patch-package": "6.5.1",
     "prettier-plugin-tailwindcss": "0.2.6",
-    "tailwindcss": "3.3.0",
+    "tailwindcss": "3.3.1",
     "typescript": "4.9.5"
   },
   "engines": {

@@ -23,8 +23,8 @@ import type { Block } from "~/notion/notion.types";
 import { getBlocksWithChildren } from "~/notion/notion-api.server";
 import NotionRender from "~/packages/notion-render";
 import { prepareNotionBlocksWithShiki } from "~/packages/notion-shiki-code/prepare.server";
+import { sharedMeta } from "~/routes/_homepage/route";
 import { assertItemFound } from "~/utils";
-import { sharedMeta } from "../route";
 
 export const loader = async ({
   request,

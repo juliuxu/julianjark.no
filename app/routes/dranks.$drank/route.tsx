@@ -27,7 +27,7 @@ import { databaseEntryToSitemapEntry } from "~/sitemap.server";
 import comicoFont from "~/styles/fonts/Comico-Regular.woff2";
 import satohshiFont from "~/styles/fonts/Satoshi-Variable.woff2";
 import { assertItemFound, unpicTransformer } from "~/utils";
-import { dranksClasses } from "../route";
+import { dranksClasses } from "../dranks/route";
 
 export const notionRenderComponents: Partial<NotionRenderComponents> = {
   image: OptimizedNotionImage,
