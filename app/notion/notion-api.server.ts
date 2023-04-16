@@ -1,6 +1,6 @@
 import { Client } from "@notionhq/client";
 import type { ListBlockChildrenResponse } from "@notionhq/client/build/src/api-endpoints";
-import LRU from "lru-cache";
+import { LRUCache } from "lru-cache";
 import type { MemoizerOptions } from "memoize-fs";
 import memoizeFs from "memoize-fs";
 import { join as pathJoin } from "path";
@@ -150,7 +150,7 @@ export const getBlocksWithChildrenNoCache = getBlocksWithChildren;
  */
 export let notionCachePurgeEverything = async () => {};
 if (process.env.NODE_ENV === "production") {
-  const inMemoryCache = new LRU({ max: 500, ttl: 1000 * 60 });
+  const inMemoryCache = new LRUCache({ max: 500, ttl: 1000 * 60 });
   const inMemoryMemo = (fn: (...args: any[]) => Promise<any>) => {
     return async (...args: any) => {
       const key = fn.name + JSON.stringify(args);
