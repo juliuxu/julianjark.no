@@ -1,4 +1,4 @@
-FROM node:19-bullseye-slim as base
+FROM node:20-bullseye-slim as base
 
 RUN apt-get update && apt-get install -y -q --no-install-recommends libfontconfig1 fontconfig
 
@@ -42,7 +42,7 @@ COPY --from=production-deps /myapp/node_modules /myapp/node_modules
 
 COPY --from=build /myapp/build /myapp/build
 COPY --from=build /myapp/public /myapp/public
-ADD . .
+COPY --from=build /myapp/package.json /myapp/package.json
 
 CMD ["npm", "start"]
 
