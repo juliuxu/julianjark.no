@@ -226,15 +226,16 @@ export const getBloggEntries = async (request?: Request) =>
   );
 
 // ENV stuff
-type PublishedEnv = "PUBLISHED" | "DEV" | "UNPUBLISHED";
+type PublishedEnv = "PUBLISHED" | "DEV" | "DRAFT" | "UNPUBLISHED";
 const getPublisedProperty = (fromPage: DatabasePage): PublishedEnv => {
   const property = getSelect("Published", fromPage);
   if (property === "PUBLISHED") return property;
   if (property === "DEV") return property;
+  if (property === "DRAFT") return property;
   if (property === "UNPUBLISHED") return property;
 
   // Default
-  return "PUBLISHED";
+  return "UNPUBLISHED";
 };
 
 export const filterPublishedPredicate =
