@@ -47,9 +47,11 @@ export const loader = async ({ request }: LoaderArgs) => {
     .map((x) => x.replace("🚧", "").trim())
     .map((x): MenuItem => ({ title: x, to: slugify(x) }));
 
-  const dynamicMenuItems = (await getNotionDrivenPages(request)).map(
-    (x): MenuItem => ({ title: getTitle(x), to: slugify(getTitle(x)) }),
-  );
+  // Disabled as I'm migrating to new site
+  // const dynamicMenuItems = (await getNotionDrivenPages(request)).map(
+  //   (x): MenuItem => ({ title: getTitle(x), to: slugify(getTitle(x)) }),
+  // );
+  const dynamicMenuItems: MenuItem[] = [];
 
   const menuItems = [...dynamicMenuItems, ...staticMenuItems];
 
